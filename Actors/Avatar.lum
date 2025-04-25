@@ -1,0 +1,25 @@
+
+
+Avatar = _class('Avatar', UObject)
+
+function Avatar:_init()
+
+end
+
+function Avatar:enter_level()
+	print(_text('avatar enter level'))
+end
+
+function Avatar:leave_level()
+
+end
+
+local _plugins = {
+	_text('Plugins.input'),
+	_text('Plugins.fashion'),
+	_text('Plugins.friend'),
+}
+
+basic_funs = {'_init', 'enter_level'}
+reverse_funs = {'leave_level'}
+Avatar._install_plugins(_plugins, basic_funs, reverse_funs)
