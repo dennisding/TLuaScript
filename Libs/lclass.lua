@@ -1,6 +1,6 @@
 
-function _class(name, super)
-	local _new_class = {_type = name or "<unknown>", _super = super}
+function _class(name)
+	local _new_class = {_type = name or "<unknown>"}
 	_new_class.__index = _new_class
 
 	local function _new(type, ...)
@@ -16,6 +16,5 @@ function _class(name, super)
 	end
 
 	setmetatable(_new_class, {__call = _new})
-
 	return _new_class
 end

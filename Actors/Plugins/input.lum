@@ -1,10 +1,5 @@
 
 depends = {}  -- depends
-overloads = {
-	'_init',
-	'enter_level',
-	'leave_level'
-}
 
 function _init(self)
 	print('plugin input init')

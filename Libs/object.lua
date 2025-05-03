@@ -4,13 +4,6 @@
 -- table for c++ object
 local _cpp_objects = _ENV._cpp_objects or {}
 
-UObject = _class('UObject')
-
-function UObject:__index(obj, name)
-	-- find in cpp
-	print(_text('UObject:__index'))
-end
-
 function _lua_bind_cpp_object(cpp_obj, cpp_type, lua_type)
 	assert(_cpp_objects[cpp_obj] == nil)
 	
