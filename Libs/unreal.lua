@@ -1,3 +1,3 @@
 
 
-print(_text("unreal module中文说明"))
+-- print(_text("unreal module中文说明"))

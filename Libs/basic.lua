@@ -22,11 +22,12 @@ end
 
 function trace_call(fun, ...)
 	local function _handler(msg)
-		return debug.traceback(msg)
+		return debug.traceback(msg, 2)
 	end
 
 	local ok, msg = xpcall(fun, _handler, ...)
 	if not ok then
-		_log.warning(utf8_to_utf16(msg))
+		_cpp_log(4, utf8_to_utf16(msg))
+		-- _log.warning(utf8_to_utf16(msg))
 	end
 end

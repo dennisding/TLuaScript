@@ -1,4 +1,3 @@
-
 if _ENV._sys == nil then
 	_sys = {}
 	_sys.root = _text('')
@@ -8,6 +7,8 @@ if _ENV._sys == nil then
 	_sys.loaded = {} -- use for require
 	_sys.modules = {} -- use for _import
 	_sys.read_file = _cpp_read_file
+	_sys.reloading = false
+	_sys.reload_table = function(name, old, new) end  -- do nothing, update by reload.lua
 end
 
 -- modify the require
@@ -43,33 +44,49 @@ utf16_to_utf8 = _cpp_utf16_to_utf8
 -- modify the default behavior
 function require(name)
 	local module = _sys.loaded[name]
+	
 	if module ~= nil then
 		return module
+	end
+
+	local env = _ENV
+	if _sys.reloading then
+		env = {}
+		setmetatable(env, {__index = _ENV})
 	end
 
 	local display_name = utf16_to_utf8(name .. _sys.suffix)
 	for _, path in ipairs(_sys.paths) do
 		local file_name = _sys.root .. path .. name .. _sys.suffix
 
-		local module = dofile(file_name, display_name)
+		local module = dofile(file_name, display_name, env)
 		if module ~= nil then
-			_sys.modules[name] = module
+			module._name = name
+			module._file_name = file_name
+			_sys.loaded[name] = module
+
+			-- 
+			if _sys.reloading then
+				_sys.reload_table(display_name, _ENV, env)
+			end
 		end
 	end
 end
 
-function dofile(file_name, display_name)
+function dofile(file_name, display_name, env)
+	env = env or _ENV
 	local content = _cpp_read_file(file_name)
 	if content == nil then
 		return nil
 	end
-	local chunk, msg = load(content, display_name, 'bt')
+
+	local chunk, msg = load(content, display_name, 'bt', env)
 	if not chunk then
 		_log.warning(utf8_to_utf16(msg))
 	end
-	
-	local result = chunk() or {}
-	return result
+
+	chunk()
+	return {}
 end
 
 function _init_sys(root, dirs)

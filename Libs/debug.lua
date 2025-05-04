@@ -31,13 +31,14 @@ function _lua_process_console_command(utf16_cmd)
 	cmd_string = string.gsub(cmd_string, '%$(%w+)', _console_commands)
 	-- execute cmd
 	local fun = load(cmd_string, 'cmd from editor', 't', _console_commands)
-	fun()
+	_ = fun()
 end
 
 -- test code
 local commands = {}
 function commands.reload()
-	print(_text('reload lua code!!!'))
+	require(_text('reload'))
+	reload()
 end
 
 commands.r = 'reload()'
