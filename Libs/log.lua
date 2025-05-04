@@ -1,8 +1,4 @@
 
-if _ENV._log ~= nil then
-	return
-end
-
 _log = {}
 -- log type
 _log.display_type = 1
