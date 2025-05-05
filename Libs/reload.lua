@@ -25,7 +25,7 @@ local _reload_table = nil
 local function _reload_attr(name, old, new)
 	-- 解决循环引用的问题
 	if _sys.reloading[old] then
-		return
+		return old
 	end
 
 	if type(old) ~= 'table' then

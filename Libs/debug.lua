@@ -1,5 +1,4 @@
 
-require('reload')
 require('stringex')
 
 -- console commands
@@ -30,14 +29,25 @@ function _lua_process_console_command(utf16_cmd)
 
 	-- cmd = _process_command(cmd)
 	cmd_string = string.gsub(cmd_string, '%$(%w+)', _console_commands)
+	return_cmd = string.format('return %s', cmd_string)
 	-- execute cmd
-	local fun = load(cmd_string, 'cmd from editor', 't', _console_commands)
-	_ = fun()
+	local chunk, msg = load(return_cmd, 'cmd from editor', 't', _console_commands)
+	if not chunk then
+		chunk, msg = load(cmd_string, 'cmd from editor', 't', _console_commands)
+		if not chunk then
+			print(_text(msg))
+		end
+	end
+	_ = chunk()
+	if _ ~= nil then
+		print(_text(tostring(_)))
+	end
 end
 
 -- test code
 local commands = {}
 function commands.reload()
+	require('reload')
 	_reload()
 end
 
