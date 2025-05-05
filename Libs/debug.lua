@@ -1,5 +1,6 @@
 
-require(_text('stringex'))
+require('reload')
+require('stringex')
 
 -- console commands
 _console_commands = {}		-- {name:function}
@@ -37,8 +38,7 @@ end
 -- test code
 local commands = {}
 function commands.reload()
-	require(_text('reload'))
-	reload()
+	_reload()
 end
 
 commands.r = 'reload()'

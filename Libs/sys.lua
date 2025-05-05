@@ -9,6 +9,7 @@ if _ENV._sys == nil then
 	_sys.read_file = _cpp_read_file
 	_sys.reloading = false
 	_sys.reload_table = function(name, old, new) end  -- do nothing, update by reload.lua
+	_sys.search_file = nil -- setup later
 end
 
 -- modify the require
@@ -49,31 +50,35 @@ function require(name)
 		return module
 	end
 
-	local env = _ENV
+	module = {}
+	module._name = name
+	module._loaded = false
+	_sys.loaded[name] = module
+
+	local env = _ENV			-- _ENV == _G here
 	if _sys.reloading then
 		env = {}
 		setmetatable(env, {__index = _ENV})
 	end
 
-	local display_name = utf16_to_utf8(name .. _sys.suffix)
-	for _, path in ipairs(_sys.paths) do
-		local file_name = _sys.root .. path .. name .. _sys.suffix
+	local file_name = utf8_to_utf16(name) .. _sys.suffix
+	local content = _sys.search_file(file_name)
 
-		local module = dofile(file_name, display_name, env)
-		if module ~= nil then
-			module._name = name
-			module._file_name = file_name
-			_sys.loaded[name] = module
+	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', env)
+	if not chunk then
+		_log.warning(utf8_to_utf16(msg))
+	end
 
-			-- 
-			if _sys.reloading then
-				_sys.reload_table(display_name, _ENV, env)
-			end
-		end
+	chunk()
+	module._file_name = file_name
+	module._loaded = true
+
+	if _sys.reloading then
+		_sys.reload_table(file_name, _ENV, env)
 	end
 end
 
-function dofile(file_name, display_name, env)
+function _lua_dofile(file_name, display_name, env)
 	env = env or _ENV
 	local content = _cpp_read_file(file_name)
 	if content == nil then
@@ -87,6 +92,18 @@ function dofile(file_name, display_name, env)
 
 	chunk()
 	return {}
+end
+
+function _sys.search_file(name)
+	for k, path in ipairs(_sys.paths) do
+		local file_name = _sys.root .. path .. name
+		local content = _sys.read_file(file_name)
+		if content ~= nil then
+			return content
+		end
+	end
+
+	return nil
 end
 
 function _init_sys(root, dirs)

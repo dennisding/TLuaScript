@@ -1,9 +1,28 @@
 
-require(_text('log'))
-require(_text('debug'))
-require(_text('class'))
-require(_text('object'))
-require(_text('module'))
-require(_text('stringex'))
+function _set_upvalue_by_name(name, value, fun)
+	fun = fun or 3
+	local info = debug.getinfo(fun, "f")
+	local i = 1
+	while true do 
+		local upname, upvalue = debug.getupvalue(info.func, i)
+		if not upname then
+			break
+		end
+		if upname == '_ENV' then
+			upvalue[name] = value
+			break
+		end
+		i = i + 1
+	end
+end
 
-require(_text('test'))
+-- import basic module
+require('log')
+require('debug')
+require('class')
+require('object')
+require('module')
+require('stringex')
+
+require('test')
+

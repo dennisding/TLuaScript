@@ -1,5 +1,5 @@
 
-Avatar = _class('Avatar')
+class('Avatar')
 
 function Avatar:_init()
 

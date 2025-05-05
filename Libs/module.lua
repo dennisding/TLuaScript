@@ -1,18 +1,20 @@
 
-function _import(name)
-	if _sys.modules[name] ~= nil then
-		return _sys.modules[name]
-	end
-
-	local file_name = _text(name) .. _sys.module_suffix
+local function _read_file(file_name)
 	local file_path = file_name
 	local content = nil
 	for _, path in ipairs(_sys.paths) do
 		file_path = _sys.root .. path .. file_name
 		content = _sys.read_file(file_path)
 		if content ~= nil then
-			break
+			return content
 		end
+	end
+	return nil
+end
+
+function import(name, shotcut_name)
+	if _sys.modules[name] ~= nil then
+		return _sys.modules[name]
 	end
 
 	-- load the module
@@ -20,7 +22,9 @@ function _import(name)
 	setmetatable(module, {__index = _ENV})
 	_sys.modules[name] = module
 
-	local is_ok, chunk = trace_call(load, content, file_path, 'bt', module)
+	local file_name = _text(name) .. _sys.module_suffix
+	local content = _read_file(file_name)
+	local is_ok, chunk = trace_call(load, content, utf16_to_utf8(file_name), 'bt', module)
 	if not is_ok then
 		error(chunk)
 	end
