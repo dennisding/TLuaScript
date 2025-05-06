@@ -1,0 +1,5 @@
+
+
+function test()
+    print(_text('test function in test.lum'))
+end

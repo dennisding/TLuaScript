@@ -1,0 +1,14 @@
+
+depends = {}  -- depends
+
+function _init(self)
+	print('plugin input init')
+end
+
+function enter_level(self)
+	print('plugin enter_level')
+end
+
+function leave_level(self)
+	print('plugin leave_level')
+end

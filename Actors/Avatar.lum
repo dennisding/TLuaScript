@@ -1,0 +1,31 @@
+
+class('Avatar')
+
+function Avatar:_init()
+
+end
+
+function Avatar:enter_level()
+	print(_text('avatar enter level'))
+end
+
+function Avatar:leave_level()
+	self:say_hello()
+	self._input.say_hello(self)
+end
+
+local _plugins = {
+	_text('Plugins.input'),
+	_text('Plugins.fashion'),
+	_text('Plugins.friend'),
+}
+
+local overloads = {
+	'_init',
+	'enter_level',
+	'leave_level'
+}
+
+local reverses = {'leave_level'}
+
+Avatar._install_plugins(_plugins, overloads, reverses)
