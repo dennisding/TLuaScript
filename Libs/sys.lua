@@ -55,16 +55,11 @@ function require(name)
 	module._loaded = false
 	_sys.loaded[name] = module
 
-	local env = _ENV			-- _ENV == _G here
-	if _sys.reloading then
-		env = {}
-		setmetatable(env, {__index = _ENV})
-	end
 
 	local file_name = utf8_to_utf16(name) .. _sys.suffix
 	local content = _sys.search_file(file_name)
 
-	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', env)
+	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt')
 	if not chunk then
 		_log.warning(utf8_to_utf16(msg))
 	end
@@ -72,10 +67,6 @@ function require(name)
 	chunk()
 	module._file_name = file_name
 	module._loaded = true
-
-	if _sys.reloading then
-		_sys.reload_table(file_name, _ENV, env)
-	end
 end
 
 function _lua_dofile(file_name, display_name, env)

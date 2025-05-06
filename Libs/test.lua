@@ -9,7 +9,7 @@ function Test:_init()
 end
 
 function Test:say_hello()
-	print(_text('say_hello from test class123'))
+	print(_text('say_hello from test reloaded'))
 end
 
 function new_obj()
@@ -21,11 +21,11 @@ function test_obj_say_hello()
 end
 
 function test2()
-	print(_text('reload test2222'), towstring(value))
+	print(_text('reload test444'), towstring(value))
 end
 
 function test()
 	-- _sys.loading and test2()
-	print(_text('reload test11111'))
+	print(_text('reload test1'))
 	test2()
 end

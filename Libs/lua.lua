@@ -18,11 +18,11 @@ end
 
 -- import basic module
 require('log')
-require('debug')
 require('class')
 require('object')
 require('module')
 require('stringex')
 
+require('console_command')
 require('test')
 

@@ -4,18 +4,6 @@
 
 require('tableex')
 
--- 需要处理
--- global function
--- global table
--- global class
-local function process_require_module()
-	local loaded = tableex.copy(_sys.loaded)
-	tableex.clear(_sys.loaded)
-	for name, module in pairs(loaded) do
-		require(name)
-	end
-end
-
 local function process_import_module()
 	print(_text("process_import_module"))
 end
@@ -37,13 +25,33 @@ end
 
 -- 主要更新: 增, 删, 改
 function _reload_table(name, old, new)
+	if old == new then
+		return old
+	end
 	-- update attribute
 	local new_copy = tableex.copy(new)
-	for k, v in pairs(new_copy) do
-		old[k] = _reload_attr(k, old[k], v)
+	for key, value in pairs(new_copy) do
+		local result = _reload_attr(key, old[key], value)
+		old[key] = result
+		new[key] = result
 	end
 
 	return old
+end
+
+-- 需要处理
+-- global function
+-- global table
+-- global class
+local function process_require_module()
+	local old_env = tableex.copy(_ENV)
+	local loaded = tableex.copy(_sys.loaded)
+	tableex.clear(_sys.loaded)
+
+	for name, module in pairs(loaded) do
+		require(name)
+	end
+	_reload_table('global', old_env, _ENV)
 end
 
 local function do_reload()
