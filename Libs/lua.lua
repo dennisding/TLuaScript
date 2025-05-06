@@ -26,3 +26,4 @@ require('stringex')
 require('console_command')
 require('test')
 
+import('tablex')

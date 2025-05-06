@@ -1,0 +1,17 @@
+
+function to_set(t)
+    local result = {}
+    for _, value in ipairs(t) do
+        result[value] = true
+    end
+
+    return result
+end
+
+function reverse(t)
+    local len = #t
+    for index = 1, len/2 do
+        t[index], t[len - index + 1] = t[len - index + 1], t[index]
+    end
+    return t
+end

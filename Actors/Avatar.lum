@@ -2,22 +2,21 @@
 class('Avatar')
 
 function Avatar:_init()
-
+	print(_text('avatar:_init'))
 end
 
 function Avatar:enter_level()
-	print(_text('avatar enter level'))
+	print(_text('avatar:enter_level'))
 end
 
 function Avatar:leave_level()
-	self:say_hello()
+	print(_text('avatar:leave_level'))
 	self._input.say_hello(self)
 end
 
 local _plugins = {
-	_text('Plugins.input'),
-	_text('Plugins.fashion'),
-	_text('Plugins.friend'),
+	'Plugins.input',
+	'Plugins.friend',
 }
 
 local overloads = {

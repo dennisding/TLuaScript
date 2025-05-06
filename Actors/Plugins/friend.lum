@@ -1,0 +1,5 @@
+
+
+function friend_hello(self)
+    print(_text('say hello from friend'))
+end

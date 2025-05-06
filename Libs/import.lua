@@ -52,5 +52,5 @@ function import(name, shortcut, silent)
 end
 
 function silent_import(name)
-	import(name, nil, true)
+	return import(name, nil, true)
 end
