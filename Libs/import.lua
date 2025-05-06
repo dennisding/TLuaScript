@@ -23,8 +23,7 @@ end
 
 function import(name, shortcut, silent)
 	local module = _sys.modules[name]
-	module = nil
-	if module then
+	if (not _sys.reloading) and module then
 		if not silent then
 			_set_upvalue_by_name(shortcut or module._shortcut, module)
 		end
@@ -32,9 +31,18 @@ function import(name, shortcut, silent)
 	end
 
 	-- load the module
-	module = {}
+	module = module or {}
+
 	setmetatable(module, {__index = _ENV})
 	_sys.modules[name] = module
+
+	local old_module = nil
+	if _sys.reloading then
+		if _sys.reloading[name] ~= nil then
+			return module
+		end
+		old_module = tablex.copy(module)
+	end
 
 	local name_tokens, file_name = _format_module_name(name)
 	local content = _sys.search_file(file_name)
@@ -47,6 +55,9 @@ function import(name, shortcut, silent)
 
 	if not silent then
 		_set_upvalue_by_name(module._shortcut, module)
+	end
+	if _sys.reloading then
+		_sys.reload_table('import', old_module, module)
 	end
 	return module
 end

@@ -2,10 +2,12 @@
 -- 1. basic.lua 和 sys.lua 不进行reload
 -- 3. 已经构建好的table, 只更新table里面的内容, 不更新table本身
 
-require('tableex')
-
 local function process_import_module()
 	print(_text("process_import_module"))
+	local modules = tablex.copy(_sys.modules)
+	for name, _ in pairs(modules) do
+		silent_import(name)
+	end
 end
 
 local _reload_table = nil
@@ -29,7 +31,7 @@ function _reload_table(name, old, new)
 		return old
 	end
 	-- update attribute
-	local new_copy = tableex.copy(new)
+	local new_copy = tablex.copy(new)
 	for key, value in pairs(new_copy) do
 		local result = _reload_attr(key, old[key], value)
 		old[key] = result
@@ -44,9 +46,9 @@ end
 -- global table
 -- global class
 local function process_require_module()
-	local old_env = tableex.copy(_ENV)
-	local loaded = tableex.copy(_sys.loaded)
-	tableex.clear(_sys.loaded)
+	local old_env = tablex.copy(_ENV)
+	local loaded = tablex.copy(_sys.loaded)
+	tablex.clear(_sys.loaded)
 
 	for name, module in pairs(loaded) do
 		require(name)

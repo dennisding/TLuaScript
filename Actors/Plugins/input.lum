@@ -2,6 +2,7 @@
 depends = {}  -- depends
 
 function _init(self)
+	self.input_value = 1234
 	print(_text('plugin input init'))
 end
 
@@ -14,5 +15,5 @@ function leave_level(self)
 end
 
 function input_hello(self)
-	print(_text('say hello from input'))
+	print(_text('say hello from input222'))
 end
