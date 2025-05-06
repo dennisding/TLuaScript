@@ -19,9 +19,9 @@ function class(name)
 	end
 
 	local function _new(type, ...)
-			local instance = _new_instance()
-			_call_init(instance, ...)
-			return instance
+		local instance = _new_instance()
+		_call_init(instance, ...)
+		return instance
 	end
 
 	local metatable = {}
