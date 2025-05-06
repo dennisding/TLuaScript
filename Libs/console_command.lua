@@ -2,8 +2,8 @@
 require('stringex')
 
 -- console commands
-_console_commands = _ENV._console_command or {}			-- {name:command}
-
+-- _console_commands = _ENV._console_command or {}			-- {name:command}
+_console_commands = {}
 setmetatable(_console_commands, {__index = _ENV})
 
 function add_console_command(cmds)

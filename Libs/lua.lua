@@ -20,7 +20,7 @@ end
 require('log')
 require('class')
 require('object')
-require('module')
+require('import')
 require('stringex')
 
 require('console_command')
