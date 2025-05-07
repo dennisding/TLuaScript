@@ -70,6 +70,24 @@ function class(name)
 		return instance
 	end
 
+	local function _index(self, name)
+		local attr = rawget(_new_class, name)
+		if attr ~= nil then
+			return attr
+		end
+		_update_vtable(_new_class, name)
+		return _new_class._vtable[name][1](self, name)
+	end
+	
+	local function _newindex(self, name, value)
+		local attr_info = _new_class._vtable[name]
+		if attr_info == nil then
+			_update_vtable(_new_class, name)
+			attr_info = _new_class._vtable[name]
+		end
+		return attr_info[2](self, name, value)
+	end
+
 	local function _install_plugins(plugins, overloads, reverses)
 		local methods = _gen_plugin_method(_new_class, plugins, overloads, reverses)
 		for name, fun in pairs(methods) do
@@ -77,12 +95,20 @@ function class(name)
 		end
 	end
 
-	local metatable = {}
-	metatable.__call = _new
+	local function _have_cpp_obj()
+		_new_class._vtable = {}
+		_new_class.__index = _index
+		_new_class.__newindex = _newindex
+	end
+	-- class setup
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._install_plugins = _install_plugins
+	_new_class._have_cpp_obj = _have_cpp_obj
 
+	-- metatable setup
+	local metatable = {}
+	metatable.__call = _new
 	setmetatable(_new_class, metatable)
 	return _new_class
 end

@@ -47,7 +47,7 @@ function import(name, shortcut, silent)
 	local name_tokens, file_name = _format_module_name(name)
 	local content = _sys.search_file(file_name)
 
-	local chunk, msg = load(content, file_name, 'bt', module)
+	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
 	chunk()
 
 	module._shortcut = shortcut or name_tokens[#name_tokens]

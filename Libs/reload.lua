@@ -37,6 +37,11 @@ function _reload_table(name, old, new)
 		old[key] = result
 		new[key] = result
 	end
+	for index, value in pairs(new_copy) do
+		local result = _reload_attr(index, old[index], value)
+		old[index] = result
+		new[index] = result
+	end
 
 	return old
 end

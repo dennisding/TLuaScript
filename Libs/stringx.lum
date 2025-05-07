@@ -1,7 +1,4 @@
 
-
-stringex = {}
-
-function stringex.strip(s)
+function strip(s)
 	return string.match(s, "^%s*(.-)%s*$")
 end

@@ -2,7 +2,6 @@
 
 -- replace this in your cpp code
 -- table for c++ object
-local _cpp_objects = _ENV._cpp_objects or {}
 
 function _lua_bind_cpp_object(cpp_obj, cpp_type, lua_type)
 	assert(_cpp_objects[cpp_obj] == nil)

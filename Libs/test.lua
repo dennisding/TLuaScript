@@ -1,4 +1,6 @@
 
+import('Test.test')
+
 local value = 1356
 
 class('Test')

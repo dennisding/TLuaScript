@@ -1,8 +1,23 @@
 
 class('Avatar')
+Avatar._have_cpp_obj()
 
 function Avatar:_init()
 	print(_text('avatar:_init'))
+	self.cpp_int_value = 1234
+
+	self.value_in_cpp = 1234
+
+	-- self.ValueInCpp = 1234
+	-- print(self.ValueInCpp)
+	-- self:MethodInCpp()
+
+	go = self
+end
+
+function Avatar:hello(msg)
+	print(_text('hello msg from cpp'), msg)
+	return 1
 end
 
 function Avatar:enter_level()
@@ -27,4 +42,5 @@ local overloads = {
 
 local reverses = {'leave_level'}
 
+-- finish setup
 Avatar._install_plugins(_plugins, overloads, reverses)

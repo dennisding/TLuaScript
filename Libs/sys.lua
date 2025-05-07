@@ -10,6 +10,10 @@ if _ENV._sys == nil then
 	_sys.reloading = false
 	_sys.reload_table = function(name, old, new) end  -- do nothing, update by reload.lua
 	_sys.search_file = nil -- setup later
+	_sys.cpp_objects = {} -- {cpp_obj:lua_obj}
+	_sys.vtables = {} -- {cpp_type_name: vtable}
+	_sys.cpp_funs = {}
+	_sys.texts = {}
 end
 
 -- modify the require

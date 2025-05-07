@@ -1,6 +1,4 @@
 
-require('stringex')
-
 -- console commands
 -- _console_commands = _ENV._console_command or {}			-- {name:command}
 _console_commands = {}
@@ -32,7 +30,7 @@ end
 function _lua_process_console_command(utf16_cmd)
 	local cmd_string = utf16_to_utf8(utf16_cmd)
 	cmd_string = string.sub(cmd_string, 5) -- skip the 'lua '
-	cmd_string = stringex.strip(cmd_string) -- remove first and last white space
+	cmd_string = stringx.strip(cmd_string) -- remove first and last white space
 
 	local cmd = _console_commands[cmd_string]
 	if type(cmd) ~= 'function' then
