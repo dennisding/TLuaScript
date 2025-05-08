@@ -1,19 +1,21 @@
 
-function to_set(t)
-    local result = {}
-    for _, value in ipairs(t) do
-        result[value] = true
-    end
+local gprint = print
 
-    return result
+function to_set(t)
+	local result = {}
+	for _, value in ipairs(t) do
+		result[value] = true
+	end
+
+	return result
 end
 
 function reverse(t)
-    local len = #t
-    for index = 1, len/2 do
-        t[index], t[len - index + 1] = t[len - index + 1], t[index]
-    end
-    return t
+	local len = #t
+	for index = 1, len/2 do
+		t[index], t[len - index + 1] = t[len - index + 1], t[index]
+	end
+	return t
 end
 
 function copy(table)
@@ -38,4 +40,23 @@ function clear(table_value)
 		table_value[key] = nil
 	end
 	return table_value
+end
+
+function find(t, value_to_find)
+	for index, value in ipairs(t) do
+		if value == value_to_find then
+			return index
+		end
+	end
+	return nil
+end
+
+function print(t)
+	gprint(_text("print table:"), _text(tostring(t)))
+	for k, v in pairs(t) do
+		print(k, v)
+	end
+	for k, v in ipairs(t) do
+		print(k, v)
+	end
 end

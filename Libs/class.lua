@@ -13,21 +13,28 @@ local function _build_plugin_method(method_map, overloads, reverses)
 	local result = {} -- {name:fun}
 	overloads = tablex.to_set(overloads)
 	reverses = tablex.to_set(reverses)
+
+	local function _gen_list_method(name, methods)
+		if reverses[name] ~= nil then
+			tablex.reverse(methods)
+		end
+
+		local function _fun(...)
+			for _, method in pairs(methods) do
+				method(...)
+			end
+		end
+
+		return _fun
+	end
+
 	for name, methods in pairs(method_map) do
 		if #methods == 1 then
 			result[name] = methods[1]
 		elseif overloads[name] == nil then
 			error(string.format("invalid overload method:<%s>", name))
 		else
-			if reverses[name] ~= nil then
-				tablex.reverse(methods)
-			end
-
-			result[name] = function(...)
-				for _, method in pairs(methods) do
-					method(...)
-				end
-			end
+			result[name] = _gen_list_method(name, methods)
 		end
 	end
 
@@ -76,7 +83,7 @@ function class(name)
 			return attr
 		end
 		_update_vtable(_new_class, name)
-		return _new_class._vtable[name][1](self, name)
+		return _new_class._vtable[name][1](self._cpp_obj, name)
 	end
 	
 	local function _newindex(self, name, value)
@@ -85,7 +92,10 @@ function class(name)
 			_update_vtable(_new_class, name)
 			attr_info = _new_class._vtable[name]
 		end
-		return attr_info[2](self, name, value)
+		if attr_info == nil then
+			return rawset(self, name, value)
+		end
+		return attr_info[2](self._cpp_obj, name, value)
 	end
 
 	local function _install_plugins(plugins, overloads, reverses)
@@ -100,11 +110,20 @@ function class(name)
 		_new_class.__index = _index
 		_new_class.__newindex = _newindex
 	end
+
+	local function _set_hint(...)
+		local args = {...}
+		if tablex.find(args, 'have_cpp_obj') then
+			_have_cpp_obj()
+		end
+	end
+
 	-- class setup
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._install_plugins = _install_plugins
 	_new_class._have_cpp_obj = _have_cpp_obj
+	_new_class._set_hint = _set_hint
 
 	-- metatable setup
 	local metatable = {}

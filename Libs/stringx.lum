@@ -2,3 +2,23 @@
 function strip(s)
 	return string.match(s, "^%s*(.-)%s*$")
 end
+
+function split(str, seperator)
+	local tokens = {}
+
+	local index = 1
+	local last = 1
+	while index ~= nil do
+		index = string.find(str, seperator, index, true)
+		if index == nil then
+			table.insert(tokens, string.sub(str, last))
+			break
+		end
+
+		table.insert(tokens, string.sub(str, last, index - 1))
+		index = index + #seperator -- skip the .
+		last = index
+	end
+
+	return tokens
+end

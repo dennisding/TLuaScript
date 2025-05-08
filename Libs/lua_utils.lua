@@ -15,3 +15,7 @@ function _set_upvalue_by_name(name, value, fun)
 		i = i + 1
 	end
 end
+
+function _set_global(name, value)
+	_G[name] = value
+end

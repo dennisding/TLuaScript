@@ -1,0 +1,28 @@
+
+
+class('CppLuaCharacter')
+CppLuaCharacter._set_hint('have_cpp_obj')
+
+function CppLuaCharacter:_init()
+	print(_text('CppLuaCharacter:_init'))
+	-- local value_in_cpp = self.ValueInCpp
+	-- print(_text('value in cpp'), _text(tostring(value_in_cpp)))
+	self.ValueInCpp = 3.14
+end
+
+function CppLuaCharacter:hello(msg)
+	print(_text("CppLuaCharacter:hello"), msg)
+end
+
+local _plugins = {
+	'Plugins.input',
+}
+
+local overloads = {
+	'_init',
+}
+
+local reverses = {}
+
+-- finish setup
+CppLuaCharacter._install_plugins(_plugins, overloads, reverses)
