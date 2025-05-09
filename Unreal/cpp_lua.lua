@@ -47,7 +47,8 @@ local function _set_local_attr(lua_class, lua_attr_name)
 	lua_class._vtable[lua_attr_name] = {_getter, _setter}
 end
 
-function _lua_update_vtable(cpp_type_id, attr_name, attr, gp, getter, sp, setter)
+-- function _lua_update_vtable(cpp_type_id, attr_name, attr, gp, getter, sp, setter)
+function _lua_update_vtable(cpp_type_id, attr_name, attr)
 	local lua_attr_name = utf16_to_utf8(attr_name)
 	local lua_type_id = utf16_to_utf8(cpp_type_id)
 	-- teset code
@@ -64,11 +65,13 @@ function _lua_update_vtable(cpp_type_id, attr_name, attr, gp, getter, sp, setter
 	end
 
 	local function _getter(self)
-		return _cpp_callback(gp, getter, self._cpp_obj, attr)
+		-- return _cpp_callback(gp, getter, self._cpp_obj, attr)
+		return _cpp_get_attr(self._cpp_obj, attr)
 	end
 
 	local function _setter(self, value)
-		_cpp_callback(sp, setter, self._cpp_obj, attr, value)
+		-- _cpp_callback(sp, setter, self._cpp_obj, attr, value)
+		_cpp_set_attr(self._cpp_obj, attr, value)
 	end
 	lua_class._vtable[lua_attr_name] = {_getter, _setter}
 end
