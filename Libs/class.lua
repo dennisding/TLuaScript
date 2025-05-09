@@ -82,8 +82,11 @@ function class(name)
 		if attr ~= nil then
 			return attr
 		end
-		_update_vtable(_new_class, name)
-		return _new_class._vtable[name][1](self._cpp_obj, name)
+
+		if _new_class._vtable[name] == nil then
+			_update_vtable(_new_class, name)
+		end
+		return _new_class._vtable[name][1](self)
 	end
 	
 	local function _newindex(self, name, value)
@@ -95,7 +98,7 @@ function class(name)
 		if attr_info == nil then
 			return rawset(self, name, value)
 		end
-		return attr_info[2](self._cpp_obj, name, value)
+		return attr_info[2](self, value)
 	end
 
 	local function _install_plugins(plugins, overloads, reverses)

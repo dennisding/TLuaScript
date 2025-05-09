@@ -8,6 +8,8 @@ function CppLuaCharacter:_init()
 	-- local value_in_cpp = self.ValueInCpp
 	-- print(_text('value in cpp'), _text(tostring(value_in_cpp)))
 	self.ValueInCpp = 3.14
+
+	print(_text('value from cpp'), _text(tostring(self.ValueInCpp)))
 end
 
 function CppLuaCharacter:hello(msg)
