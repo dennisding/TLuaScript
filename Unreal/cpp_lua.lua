@@ -32,7 +32,7 @@ function _lua_unbind(obj)
 end
 
 function _lua_call_method(obj, name, ...)
-	print(_text('_lua_call_method'), _text(name))
+	print(_text('_lua_call_method'), _text(tostring(obj)), _text(name))
 	local instance = _sys.cpp_objects[obj]
 	return instance[name](instance, ...)
 end
@@ -47,8 +47,46 @@ local function _set_local_attr(lua_class, lua_attr_name)
 	lua_class._vtable[lua_attr_name] = {_getter, _setter}
 end
 
+local function _get_lua_info(cpp_type_id, attr_name)
+	local lua_attr_name = utf16_to_utf8(attr_name)
+	local lua_type_id = utf16_to_utf8(cpp_type_id)
+	-- teset code
+	local tokens = stringx.split(lua_type_id, '.')
+	local class_name = tokens[#tokens]
+	local module = silent_import(class_name)
+	local lua_class = module[class_name]
+
+	return lua_attr_name, lua_class
+end
+
+function _lua_update_vtable_fun(cpp_type_id, attr_name, attr)
+	local lua_attr_name, lua_class = _get_lua_info(cpp_type_id, attr_name)
+	print(_text('lua_update_vtable_fun'), cpp_type_id, attr_name, _text(tostring(attr)))
+
+	if attr == 0 then
+		-- not a valid cpp attribute
+		_set_local_attr(lua_class, lua_attr_name)
+		-- lua_class._vtable[lua_attr_name] = {false, false}
+		return
+	end
+
+	local function _getter(self)
+		-- return _cpp_callback(gp, getter, self._cpp_obj, attr)
+		-- return _cpp_get_attr(self._cpp_obj, attr)
+		local function _call_helper(self, ...)
+			print(_text('call helper!!!'))
+			_cpp_get_attr(self._cpp_obj, attr, ...)
+		end
+
+		print(_text('get caller'))
+		return _call_helper
+	end
+
+	lua_class._vtable[lua_attr_name] = {_getter, _getter}
+end
+
 -- function _lua_update_vtable(cpp_type_id, attr_name, attr, gp, getter, sp, setter)
-function _lua_update_vtable(cpp_type_id, attr_name, attr)
+function _lua_update_vtable_attr(cpp_type_id, attr_name, attr)
 	local lua_attr_name = utf16_to_utf8(attr_name)
 	local lua_type_id = utf16_to_utf8(cpp_type_id)
 	-- teset code

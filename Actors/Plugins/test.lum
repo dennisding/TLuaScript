@@ -1,9 +1,11 @@
 
 
 function _init(self)
-    self.IntValue = 1234
-    print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
-    self.StringValue = _text('从脚本来的中文')
+	self.IntValue = 1234
+	print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
+	self.StringValue = _text('从脚本来的中文')
 
-    print(_text('string value from cpp'), self.StringValue)
+	print(_text('string value from cpp'), self.StringValue)
+
+	self:SayHello(42)
 end

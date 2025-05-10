@@ -28,6 +28,5 @@ function trace_call(fun, ...)
 	local ok, msg = xpcall(fun, _handler, ...)
 	if not ok then
 		_cpp_log(4, utf8_to_utf16(msg))
-		-- _log.warning(utf8_to_utf16(msg))
 	end
 end
