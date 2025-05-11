@@ -65,7 +65,7 @@ function require(name)
 
 	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt')
 	if not chunk then
-		_log.warning(utf8_to_utf16(msg))
+		warning(utf8_to_utf16(msg))
 	end
 
 	chunk()
@@ -76,13 +76,14 @@ end
 function _lua_dofile(file_name, display_name, env)
 	env = env or _ENV
 	local content = _cpp_read_file(file_name)
+
 	if content == nil then
 		return nil
 	end
 
 	local chunk, msg = load(content, display_name, 'bt', env)
 	if not chunk then
-		_log.warning(utf8_to_utf16(msg))
+		warning(utf8_to_utf16(msg))
 	end
 
 	chunk()

@@ -45,7 +45,7 @@ local function _gen_plugin_method(type, plugins, overloads, reverses)
 	local methods = {} -- {name:{method1, method2, method3}}
 	_gather_method(methods, type)
 	for _, plugin_name in ipairs(plugins) do
-		local plugin = silent_import(plugin_name)
+		local plugin = safe_import(plugin_name)
 		_gather_method(methods, plugin)
 	end
 

@@ -21,12 +21,29 @@ local function _format_module_name(name)
 	return tokens, file_name
 end
 
-function import(name, shortcut, silent)
+local function _to_set(t)
+	local result = {}
+	for _, value in ipairs(t) do
+		result[value] = true
+	end
+
+	return result
+end
+
+-- 默认import的行为
+-- 在当前ENV引入name 或 shortcut, 
+-- 
+function import(name, shortcut, ...)
+	local hints = _to_set({...})
+
 	local module = _sys.modules[name]
 	if (not _sys.reloading) and module then
-		if not silent then
+		if not hints.clean then
 			_set_upvalue_by_name(shortcut or module._shortcut, module)
 		end
+		-- if not silent then
+		-- 	_set_upvalue_by_name(shortcut or module._shortcut, module)
+		-- end
 		return module
 	end
 
@@ -47,21 +64,51 @@ function import(name, shortcut, silent)
 	local name_tokens, file_name = _format_module_name(name)
 	local content = _sys.search_file(file_name)
 
-	local chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
-	chunk()
+	local chunk, msg = nil, nil
+	-- print(_text('import111'), _text(name), file_name, _text(tostring(#content)))
+	-- if (not hints.silent) or (content ~= nil) then
+	-- 	chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
+	-- 	if chunk then
+	-- 		chunk()
+	-- 	else
+	-- 		error(msg)
+	-- 	end
+	-- end
+
+	if hints.silent and content == nil then -- 什么都不用做
+	else
+		chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
+		if chunk then
+			chunk()
+		else
+			error(msg)
+		end
+	end
 
 	module._shortcut = shortcut or name_tokens[#name_tokens]
 	module._file_name = file_name
 
-	if not silent then
+	-- if not silent then
+	-- 	_set_upvalue_by_name(module._shortcut, module)
+	-- end
+	if not hints.clean then
 		_set_upvalue_by_name(module._shortcut, module)
 	end
+
 	if _sys.reloading then
 		_sys.reload_table('import', old_module, module)
 	end
 	return module
 end
 
-function silent_import(name)
-	return import(name, nil, true)
+function silent_import(name, shortcut, ...)
+	return import(name, shortcut, 'silent', ...)
+end
+
+function clean_import(name, shortcut, ...)
+	return import(name, shortcut, 'clean', ...)
+end
+
+function safe_import(name, shortcut, ...)
+	return import(name, shortcut, 'silent', 'clean')
 end

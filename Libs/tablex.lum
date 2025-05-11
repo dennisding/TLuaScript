@@ -54,9 +54,9 @@ end
 function print(t)
 	gprint(_text("print table:"), _text(tostring(t)))
 	for k, v in pairs(t) do
-		print(k, v)
+		gprint(k, v)
 	end
 	for k, v in ipairs(t) do
-		print(k, v)
+		gprint(k, v)
 	end
 end

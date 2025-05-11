@@ -1,4 +1,5 @@
 
+-- 小心使用, 有可能导致reload失效
 function _set_upvalue_by_name(name, value, fun)
 	fun = fun or 3
 	local info = debug.getinfo(fun, "f")
@@ -16,6 +17,7 @@ function _set_upvalue_by_name(name, value, fun)
 	end
 end
 
+-- 小心使用, 有可能导致reload失效
 function _set_global(name, value)
 	_G[name] = value
 end

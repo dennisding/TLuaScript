@@ -1,0 +1,41 @@
+
+import('cpp_lua_types')
+
+function clone_type_info(instance)
+	local ins = { _ctype = instance._ctype }
+	setmetatable(ins, getmetatable(instance))
+	return ins
+end
+
+function clone(instance)
+	local copy = tablex.copy(instance)
+	setmetatable(ins, getmetatable(instance))
+	return copy
+end
+
+local function _reset_metatable(self)
+	local ctype_name = rawget(self, '_ctype')
+	local type_name = cpp_lua_types[ctype_name] or ('Types.' .. ctype_name)
+
+	local module = safe_import(type_name)
+	setmetatable(self, module[ctype_name])
+
+	if self._init then
+		self._init()
+	end
+end
+
+class('ctype')
+_set_global('_ctype', ctype)
+
+function ctype.__index(self, name)
+	print(_text('ctype:__index'))
+	_reset_metatable(self)
+	return self[name]
+end
+
+function ctype.__newindex(self, name, value)
+	print(_text('ctype:__newindex'))
+	_reset_metatable(self)
+	self[name] = value
+end

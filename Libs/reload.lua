@@ -6,7 +6,7 @@ local function process_import_module()
 	print(_text("process_import_module"))
 	local modules = tablex.copy(_sys.modules)
 	for name, _ in pairs(modules) do
-		silent_import(name)
+		safe_import(name)
 	end
 end
 
