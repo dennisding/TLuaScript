@@ -10,10 +10,10 @@ function _init(self)
 	self:SayHello(42, _text('请说句话'))
 end
 
-function test_hello(self, msg, pos)
-	local mt = getmetatable(pos)
-	print(_text('test_hello'), _text(pos.__tostring(pos)))
-	pos = pos + pos
-	print(_text("msg from cpp"), msg, _text(tostring(pos)), _text(pos.x))
---	tablex.print(pos)
+function pass_struct(self, channel)
+	-- channel:say_hi()
+	print(_text('struct channel from c++'), _text(tostring(channel)))
+	print(_text('channel int value'), _text(tostring(channel.X)))
+	--print(_text('channel string value'), channel.StringValue)
+--	tablex.print(channel)
 end

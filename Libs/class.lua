@@ -52,7 +52,7 @@ local function _gen_plugin_method(type, plugins, overloads, reverses)
 	return _build_plugin_method(methods, overloads, reverses)
 end
 
-function class(name)
+function class(name, parent, ...)
 	local _new_class = {_type = name}
 	_new_class.__index = _new_class
 	_set_upvalue_by_name(name, _new_class)
@@ -127,10 +127,12 @@ function class(name)
 	_new_class._install_plugins = _install_plugins
 	_new_class._have_cpp_obj = _have_cpp_obj
 	_new_class._set_hint = _set_hint
+	_new_class._super = parent
 
 	-- metatable setup
 	local metatable = {}
 	metatable.__call = _new
+	metatable.__index = parent
 	setmetatable(_new_class, metatable)
 	return _new_class
 end

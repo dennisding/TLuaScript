@@ -1,6 +1,8 @@
 
 import('cpp_lua_types')
 
+ctype_prefix = 'Types.'
+
 function clone_type_info(instance)
 	local ins = { _ctype = instance._ctype }
 	setmetatable(ins, getmetatable(instance))
@@ -13,11 +15,12 @@ function clone(instance)
 	return copy
 end
 
-local function _reset_metatable(self)
-	local ctype_name = rawget(self, '_ctype')
-	local type_name = cpp_lua_types[ctype_name] or ('Types.' .. ctype_name)
+function reset_metatable(self, prefix, default_type)
+	local ctype_name = rawget(self, '_ct')
+	local type_name = cpp_lua_types[ctype_name] or (prefix .. ctype_name)
 
 	local module = safe_import(type_name)
+	default = module[ctype_name] or default_type
 	setmetatable(self, module[ctype_name])
 
 	if self._init then
@@ -25,17 +28,40 @@ local function _reset_metatable(self)
 	end
 end
 
+class('vtable')
+
+function vtable._init(self, _ct)
+	rawset(self, '_ct', _ct)
+end
+
+function vtable.__index(self, name)
+	local attr = _cpp_get_attr(rawget(self, '_ct'), name)
+	
+	rawset(self, name, attr)
+	return attr
+end
+
 class('ctype')
-_set_global('_ctype', ctype)
 
 function ctype.__index(self, name)
-	print(_text('ctype:__index'))
-	_reset_metatable(self)
-	return self[name]
+	local attr = rawget(self, '_vtable')[name]
+	return attr[1](self)
 end
 
 function ctype.__newindex(self, name, value)
-	print(_text('ctype:__newindex'))
-	_reset_metatable(self)
+	local attr = rawget(self, '_vtable')[name]
+	return attr[2](self, name)
+end
+
+class('ctype_proxy')
+_set_global('_ctype', ctype_proxy)
+
+function ctype_proxy.__index(self, name)
+	reset_metatable(self, ctype_prefix)
+	return self[name]
+end
+
+function ctype_proxy.__newindex(self, name, value)
+	reset_metatable(self, ctype_prefix)
 	self[name] = value
 end

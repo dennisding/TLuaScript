@@ -19,5 +19,9 @@ end
 
 -- 小心使用, 有可能导致reload失效
 function _set_global(name, value)
-	_G[name] = value
+	if _G[name] ~= nil then
+		warning(_text('global varaible already exist'))
+	else
+		_G[name] = value
+	end
 end

@@ -52,11 +52,11 @@ function find(t, value_to_find)
 end
 
 function print(t)
-	gprint(_text("print table:"), _text(tostring(t)))
-	for k, v in pairs(t) do
-		gprint(k, v)
-	end
-	for k, v in ipairs(t) do
-		gprint(k, v)
-	end
+	-- gprint(_text("print table:"), _text(tostring(t)))
+	-- for k, v in pairs(t) do
+	-- 	gprint(_text(tostring(k)), _text(tostring(v)))
+	-- end
+	-- for k, v in ipairs(t) do
+	-- 	gprint(_text(tostring(k)), _text(tostring(v)))
+	-- end
 end
