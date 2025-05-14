@@ -7,7 +7,13 @@ function _init(self)
 
 	print(_text('string value from cpp'), self.StringValue)
 
-	self:SayHello(42, _text('请说句话'))
+	self:say_hi()
+
+--	self:SayHello(42, _text('请说句话'))
+end
+
+function say_hi(self)
+	print(_text('say_hi'))
 end
 
 function pass_struct(self, channel)
@@ -21,8 +27,11 @@ end
 function pass_component(self, com)
 	print(_text('component Mesh from c++'), _text(tostring(com)))
 	print(_text(tostring(com.CastShadow)))
-	com.bCastDynamicShadow = true
-	com.CastShadow = true
-
-	print(_text(tostring(com.CastShadow)))
+	
+	local mesh = self.Mesh1P
+	-- com.bCastDynamicShadow = true
+	-- com.CastShadow = true
+	mesh.bCastDynamicShadow = true
+	mesh.CastShadow = true
+	print(_text('mesh'), _text(tostring(mesh)))
 end

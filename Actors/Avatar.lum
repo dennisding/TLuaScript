@@ -1,6 +1,6 @@
 
 class('Avatar')
-Avatar._have_cpp_obj()
+--Avatar._have_cpp_obj()
 
 function Avatar:_init()
 	print(_text('avatar:_init'))

@@ -4,7 +4,6 @@
 -- import basic module
 require('log')
 require('class')
-require('object')
 require('import')
 require('lua_utils')
 
@@ -13,3 +12,4 @@ require('test')
 
 import('tablex')
 import('stringx')
+import('debugx')

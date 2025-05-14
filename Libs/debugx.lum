@@ -1,0 +1,7 @@
+
+
+function print_stack(msg, level)
+	level = level or 2
+	local trace = debug.traceback(msg, level)
+	print(_text(trace))
+end

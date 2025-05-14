@@ -1,0 +1,31 @@
+
+import('object')
+
+import('CppLuaCharacter')
+
+class('FirstPersonCharacter', CppLuaCharacter.CppLuaCharacter)
+--CppLuaCharacter._set_hint('have_cpp_obj')
+
+function FirstPersonCharacter:_init()
+	self._super._init(self)
+	print(_text('FirstPersonCharacter:_init'))
+end
+
+function FirstPersonCharacter:hello(msg)
+	self._super._hello(self, msg)
+	print(_text("FirstPersonCharacter:hello"), msg)
+end
+
+local _plugins = {
+	'Plugins.input',
+	'Plugins.test'
+}
+
+local overloads = {
+	'_init',
+}
+
+local reverses = {}
+
+-- finish setup
+FirstPersonCharacter._install_plugins(_plugins, overloads, reverses)

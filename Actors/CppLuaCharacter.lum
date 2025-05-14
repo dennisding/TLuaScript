@@ -1,7 +1,8 @@
 
+import('object')
 
-class('CppLuaCharacter')
-CppLuaCharacter._set_hint('have_cpp_obj')
+class('CppLuaCharacter', object.object)
+--CppLuaCharacter._set_hint('have_cpp_obj')
 
 function CppLuaCharacter:_init()
 	print(_text('CppLuaCharacter:_init'))

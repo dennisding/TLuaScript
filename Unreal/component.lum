@@ -1,113 +1,130 @@
 
-import('ctype')
+--import('ctype')
+import('object')
 import('component_map')
 
--- class vtable
-class('vtable')
+-- -- class vtable
+-- class('vtable')
 
-function vtable._init(self, _ct)
---	self._ct = _ct
-	rawset(self, '_ct', _ct)
-end
+-- function vtable._init(self, _ct)
+-- --	self._ct = _ct
+-- 	rawset(self, '_ct', _ct)
+-- end
 
-local function _gen_property(property, cpp_getter, cpp_setter)
-	local function _getter(self)
-		return cpp_getter(rawget(self, '_co'), property)
-	end
+-- local function _gen_property(property, cpp_getter, cpp_setter)
+-- 	local function _getter(self)
+-- 		return cpp_getter(rawget(self, '_co'), property)
+-- 	end
 
-	local function _setter(self, value)
-		return cpp_setter(rawget(self, '_co'), property, value)
-	end
+-- 	local function _setter(self, value)
+-- 		return cpp_setter(rawget(self, '_co'), property, value)
+-- 	end
 
-	return {_getter, _setter}
-end
+-- 	return {_getter, _setter}
+-- end
 
-local function _gen_function(property, getter)
+-- local function _gen_function(property, getter)
 
-end
+-- end
 
-function vtable.__index(self, name)
-	-- get the attribute from c++
-	local ctype = rawget(self, '_ct')
-	print(_text('vtable.__index'), _text(tostring(ctype)), _text(tostring(name)))
-	local property, getter, setter = _cpp_object_get_info(ctype, name)
-	-- update the vtable
-	print(_text('_gen_property'), _text(tostring(property)), _text(tostring(getter)))
-	local attr = nil
-	if property ~= nil then
-		attr = _gen_property(property, getter, setter)
-	elseif getter ~= nil then
-		attr = _gen_function(property, getter)
-	else
-		local function _nil_fun(...)
-			return nil
-		end
-		attr = {_nil_fun, _nil_fun}
-	end
+-- function vtable.__index(self, name)
+-- 	-- get the attribute from c++
+-- 	local ctype = rawget(self, '_ct')
+-- 	local property, getter, setter = _cpp_object_get_info(ctype, name)
+-- 	-- update the vtable
+-- 	local attr = nil
+-- 	if property ~= nil then
+-- 		attr = _gen_property(property, getter, setter)
+-- 	elseif getter ~= nil then
+-- 		attr = _gen_function(property, getter)
+-- 	else
+-- 		local function _nil_fun(...)
+-- 			return nil
+-- 		end
+-- 		attr = {_nil_fun, _nil_fun}
+-- 	end
 
-	rawset(self, name, attr)
-	return attr
-end
+-- 	rawset(self, name, attr)
+-- 	return attr
+-- end
 
-function vtable.__newindex(self, name, value)
-	assert(false, "can not set the vtable directly")
-end
+-- function vtable.__newindex(self, name, value)
+-- 	assert(false, "can not set the vtable directly")
+-- end
 
--- class struct
-class('component')
+-- -- class struct
+-- class('component')
 
-function component.__index(self, name)
-	print(_text('component.__index'), _text(name))
-	local vtable = rawget(self, '_vtable')
-	local attr = vtable[name]
-	return attr[1](self)
-end
+-- function component.__index(self, name)
+-- 	local vtable = rawget(self, '_vtable')
+-- 	local attr = vtable[name]
+-- 	return attr[1](self)
+-- end
 
-function component.__newindex(self, name, value)
-	local vtable = rawget(self, '_vtable')
-	local attr = vtable[name]
-	return attr[2](self, value)
-end
+-- function component.__newindex(self, name, value)
+-- 	local vtable = rawget(self, '_vtable')
+-- 	local attr = vtable[name]
+-- 	return attr[2](self, value)
+-- end
 
-local function _gen_vtable(ctype)
-	local result = vtable(ctype)
-	_sys.vtables[ctype] = result
-	return result
-end
+-- local function _gen_vtable(ctype)
+-- 	local result = vtable(ctype)
+-- 	_sys.vtables[ctype] = result
+-- 	return result
+-- end
 
-local function _reset_metatable(self)
-	local ctype = rawget(self, '_ct')
+-- local function _reset_metatable(self)
+-- 	local ctype = rawget(self, '_ct')
 
-	local lua_type = _sys.ctypes[ctype]
-	local vtable = _sys.vtables[ctype] or _gen_vtable(ctype)
+-- 	local lua_type = _sys.ctypes[ctype]
+-- 	local vtable = _sys.vtables[ctype] or _gen_vtable(ctype)
 
-	if lua_type == nil then
-		local ctype_name = _cpp_object_get_name(ctype)
+-- 	if lua_type == nil then
+-- 		local ctype_name = _cpp_object_get_name(ctype)
 
-		local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
-		local module = safe_import(type_name)
-		lua_type = module[ctype_name] or component
+-- 		local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
+-- 		local module = safe_import(type_name)
+-- 		lua_type = module[ctype_name] or component
 		
-		_sys.ctypes[ctype] = lua_type
-	end
+-- 		_sys.ctypes[ctype] = lua_type
+-- 	end
 
-	rawset(self, '_vtable', vtable)
-	setmetatable(self, lua_type)
-	if self._init then
-		self:_init()
-	end
+-- 	rawset(self, '_vtable', vtable)
+-- 	setmetatable(self, lua_type)
+-- 	if self._init then
+-- 		self:_init()
+-- 	end
+-- end
+
+-- local function _gen_actor_lua_type(ctype)
+-- 		local ctype_name = _cpp_object_get_name(ctype)
+
+-- 		local type_name = actor_map[ctype_name] or ctype_name
+-- 		local module = safe_import(type_name)
+-- 		return module[type_name]
+-- end
+local function _gen_component_lua_type(ctype)
+	local ctype_name = _cpp_object_get_name(ctype)
+	local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
+	local module = safe_import(type_name)
+
+	return module[type_name]
 end
 
-class('proxy')
--- '_lc' = lua_component
-_set_global('_lc', proxy)
+local context = {}
+context.gen_lua_type = _gen_component_lua_type
+context.get_info = _cpp_object_get_info
 
-function proxy.__index(self, name)
-	_reset_metatable(self)
+class('component_proxy')
+-- '_lc' = lua_component
+_set_global('_lc', component_proxy)
+
+function component_proxy.__index(self, name)
+	object.reset_metatable(self, context)
 	return self[name]
 end
 
-function proxy.__newindex(self, name, value)
-	_reset_metatable(self)
+function component_proxy.__newindex(self, name, value)
+	object.reset_metatable(self, context)
 	self[name] = value
 end
