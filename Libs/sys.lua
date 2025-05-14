@@ -11,7 +11,7 @@ if _ENV._sys == nil then
 	_sys.reload_table = function(name, old, new) end  -- do nothing, update by reload.lua
 	_sys.search_file = nil -- setup later
 	_sys.cpp_objects = {} -- {cpp_obj:lua_obj}
---	_sys.vtables = {} -- { cpp_type: vtable}
+	_sys.vtables = {} -- { cpp_type: vtable}
 	_sys.ctypes = {} -- {cpp_type: lua_type}
 	_sys.texts = {}
 end

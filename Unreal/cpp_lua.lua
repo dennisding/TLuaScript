@@ -32,6 +32,7 @@ function _lua_unbind(obj)
 end
 
 function _lua_call_method(obj, name, ...)
+--	print(_text('_lua_call_method'), _text(tostring(obj)), _text(tostring(name)), _text(tostring(arg)))
 	local instance = _sys.cpp_objects[obj]
 	return instance[name](instance, ...)
 end

@@ -17,3 +17,12 @@ function pass_struct(self, channel)
 	--print(_text('channel string value'), channel.StringValue)
 --	tablex.print(channel)
 end
+
+function pass_component(self, com)
+	print(_text('component Mesh from c++'), _text(tostring(com)))
+	print(_text(tostring(com.CastShadow)))
+	com.bCastDynamicShadow = true
+	com.CastShadow = true
+
+	print(_text(tostring(com.CastShadow)))
+end
