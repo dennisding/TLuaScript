@@ -1,6 +1,10 @@
 
--- 小心使用, 有可能导致reload失效
+-- 危险函数, 会污染调用环境, 请小心使用
 function _set_upvalue_by_name(name, value, fun)
+	-- if _sys.reloading then
+	-- 	return
+	-- end
+
 	fun = fun or 3
 	local info = debug.getinfo(fun, "f")
 	local i = 1
@@ -10,6 +14,14 @@ function _set_upvalue_by_name(name, value, fun)
 			break
 		end
 		if upname == '_ENV' then
+			if _sys.reloading then
+				upvalue[name] = value
+				break
+			end
+			if upvalue[name] and upvalue[name] ~= value then
+				error(string.format('upvalue [%s] already exist.', name))
+			end
+
 			upvalue[name] = value
 			break
 		end
@@ -17,11 +29,15 @@ function _set_upvalue_by_name(name, value, fun)
 	end
 end
 
--- 小心使用, 有可能导致reload失效
+-- 危险函数, 会污染调用环境, 请小心使用
 function _set_global(name, value)
-	if _G[name] ~= nil then
-		warning(_text('global varaible already exist'))
-	else
+	if _sys.reloading then
 		_G[name] = value
+		return
 	end
+
+	if _G[name] ~= nil then
+		error(string.format('global variable [%s] already exist!', name))
+	end
+	_G[name] = value
 end

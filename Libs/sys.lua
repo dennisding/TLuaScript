@@ -8,7 +8,7 @@ if _ENV._sys == nil then
 	_sys.modules = {} -- use for _import
 	_sys.read_file = _cpp_read_file
 	_sys.reloading = false
-	_sys.reload_table = function(name, old, new) end  -- do nothing, update by reload.lua
+	_sys.update_module = function(name, old, new) end  -- do nothing, update by reload.lua
 	_sys.search_file = nil -- setup later
 	_sys.cpp_objects = {} -- {cpp_obj:lua_obj}
 	_sys.vtables = {} -- { cpp_type: vtable}

@@ -27,6 +27,21 @@ function copy(table)
 	return new_table
 end
 
+-- 不会触发__index函数
+function raw_copy(table)
+	local new_table = {}
+	local key = nil
+	repeat
+		key = next(table, key)
+		if key == nil then
+			break
+		end
+		new_table[key] = rawget(table, key)
+	until not key
+
+	return new_table
+end
+
 function clear(table_value)
 	local keys = {}
 	for key, _ in pairs(table_value) do

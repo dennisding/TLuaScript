@@ -1,12 +1,25 @@
 
 local function _gather_method(result, t)
-	for name, value in pairs(t) do
-		if type(value) == 'function' then
-			container = result[name] or {}
-			table.insert(container, value)
-			result[name] = container
+	-- for name, value in pairs(t) do
+	-- 	if type(value) == 'function' then
+	-- 		container = result[name] or {}
+	-- 		table.insert(container, value)
+	-- 		result[name] = container
+	-- 	end
+	-- end
+	local key = nil
+	repeat
+		key = next(t, key)
+		if not key then
+			break
 		end
-	end
+		local value = rawget(t, key)
+		if type(value) == 'function' then
+			container = result[key] or {}
+			table.insert(container, value)
+			result[key] = container
+		end
+	until not key
 end
 
 local function _build_plugin_method(method_map, overloads, reverses)
@@ -32,7 +45,7 @@ local function _build_plugin_method(method_map, overloads, reverses)
 		if #methods == 1 then
 			result[name] = methods[1]
 		elseif overloads[name] == nil then
-			error(string.format("invalid overload method:<%s>", name))
+			error(string.format("invalid overload method:[%s]", name))
 		else
 			result[name] = _gen_list_method(name, methods)
 		end
@@ -116,3 +129,5 @@ function class(name, parent, ...)
 	setmetatable(_new_class, metatable)
 	return _new_class
 end
+
+_set_global('class', class)

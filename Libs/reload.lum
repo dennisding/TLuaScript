@@ -1,0 +1,249 @@
+-- 0. reload不是银弹, 不能解决所有问题, reload解决不了的, 请重启
+-- 1. basic.lua 和 sys.lua 不进行reload
+-- 3. 已经构建好的table, 只更新table里面的内容, 不更新table本身
+
+-- local function process_import_module()
+-- 	print(_text("process_import_module"))
+-- 	local modules = tablex.copy(_sys.modules)
+-- --	tablex.clear(_sys.modules)
+
+-- 	safe_import('reload')
+
+-- 	for name, _ in pairs(modules) do
+-- 		-- safe_import(name)
+-- 		trace_call(safe_import, name)
+-- 	end
+-- end
+
+-- local _reload_table = nil
+
+-- local function _reload_attr(name, old, new)
+-- 	-- 解决循环引用和避免多次更新的问题
+-- 	if _sys.reloading[old] then
+-- 		return old
+-- 	end
+
+-- 	if type(old) ~= 'table' then
+-- 		return new
+-- 	end
+-- 	_sys.reloading[old] = true
+-- 	return _reload_table(name, old, new)
+-- end
+
+-- -- 主要更新: 增, 删, 改
+-- function _reload_table(name, old, new)
+-- 	if old == new then
+-- 		return old
+-- 	end
+-- 	-- update attribute
+-- 	-- local new_copy = tablex.copy(new)
+-- 	-- for key, value in pairs(new_copy) do
+-- 	-- 	local result = _reload_attr(key, old[key], value)
+-- 	-- 	old[key] = result
+-- 	-- 	new[key] = result
+-- 	-- end
+-- 	-- for index, value in pairs(new_copy) do
+-- 	-- 	local result = _reload_attr(index, old[index], value)
+-- 	-- 	old[index] = result
+-- 	-- 	new[index] = result
+-- 	-- end
+-- 	local new_copy = tablex.copy(new)
+-- 	local key = nil
+-- 	repeat
+-- 		key = next(new_copy, key)
+-- 		if key then
+-- 			local new_value = rawget(new, key)
+-- 			local old_value = rawget(old, key)
+-- 			local value = _update_attr(key, old_value, new_value)
+-- 			rawset(old, key, value)
+-- 			-- update the key
+-- 			-- rawset(old, key, rawget(new, key))
+-- 		end
+-- 	until not key
+
+-- 	-- del the old key
+-- 	local old_copy = tablex.copy(old)
+-- 	key = nil
+-- 	repeat
+-- 		key = next(old_copy, key)
+-- 		if key and new[key] == nil then
+-- 			old[key] = nil		-- del the old key
+-- 		end
+-- 	until not key
+
+-- 	return old
+-- end
+
+-- -- 需要处理
+-- -- global function
+-- -- global table
+-- -- global class
+-- local function process_require_module()
+-- 	local old_env = tablex.copy(_ENV)
+-- 	local loaded = tablex.copy(_sys.loaded)
+-- 	tablex.clear(_sys.loaded)
+
+-- 	for name, module in pairs(loaded) do
+-- --		require(name)
+-- 		trace_call(require, name)
+-- 	end
+-- 	_reload_table('global', old_env, _ENV)
+-- end
+
+local function print_info(names, filter, info)
+	filter = filter or ''
+	if tablex.find(names, filter) == nil then
+		return
+	end
+	local msg = table.concat(names, '.')
+	print(_text('print_info'), _text(msg), _text(tostring(info)))
+end
+
+local _update_table = nil
+
+local function _update_attr(names, old, new)
+	if old == new then
+		return new
+	end
+	-- type changed
+	if type(old) ~= type(new) then
+		return new
+	end
+	
+	-- not a table, update directly
+	if type(old) ~= 'table' then
+		return new
+	end
+
+	return _update_table(names, old, new)
+end
+
+function _update_table(names, old, new)
+	-- object value no changed, return the old one
+	if old == new then
+		return old
+	end
+	-- old value is reloading
+	if _sys.reloading[old] then
+		return old
+	end
+
+	_sys.reloading[old] = true
+
+	-- 删除新表中不存在的数据, 最顶层的数据不删除(_G 和 module)
+	local key = nil
+	local old_copy = tablex.raw_copy(old)
+	repeat
+		key = next(old_copy, key)
+		if not key then
+			break
+		end
+		-- the del action
+		local new_value = rawget(new, key)
+		if new_value == nil then
+			rawset(old, key, nil)	-- del the old attr
+		end
+	until not key
+
+	-- 添加旧表中不存在的数据
+	key = nil
+	local new_copy = tablex.raw_copy(new)
+	repeat
+		key = next(new_copy, key)
+		if not key then
+			break
+		end
+		-- the add action
+		if rawget(old, key) == nil then
+			local new_value = rawget(new, key)
+			rawset(old, key, new_value)
+		end
+	until not key
+	
+	-- 修改旧表和新表都存在的数据
+	key = nil
+	old_copy = tablex.raw_copy(old)		-- 有些key被删了, 这里要重新copy
+	repeat
+		key = next(old_copy, key)
+		if not key then
+			break
+		end
+		-- update the value
+		local old_value = rawget(old, key)
+		local new_value = rawget(new, key)
+		table.insert(names, key)
+		local update_value = _update_attr(names, old_value, new_value)
+--		print_info(names, 'hello', update_value)
+		rawset(old, key, update_value)
+		table.remove(names)
+	until not key
+
+	_sys.reloading[old] = false
+	return old
+end
+
+-- 让旧表和新表reload后保持对象id一致, 用的是旧对象的id
+local function _restore_table(old, new)
+	local key = nil
+	repeat
+		key = next(old, key)
+		if not key then
+			break
+		end
+		local old_value = rawget(old, key)
+		rawset(new, key, old_value)
+	until not key
+end
+
+local function _reload_require()
+	-- 每次执行完requie后, 更新一下_G表就可以了.
+	local loaded_copy = tablex.raw_copy(_sys.loaded)
+	-- 这里需要clear是因为_sys.loaded里面只存了一个标志, 不是require模块本身
+	-- import哪里不可以 clear, 因为要保持新函数和旧函数有相同的_ENV
+	tablex.clear(_sys.loaded)
+	for key, value in pairs(loaded_copy) do
+		local origin_g = tablex.raw_copy(_G)
+		-- do the reload
+		print(_text('reload requied'), _text(key))
+		trace_call(require, key)
+		_update_table( {'require', key, '_G'}, origin_g, _G)
+		_restore_table(origin_g, _G)
+	end
+end
+
+local function _reload_import()
+	local modules = tablex.raw_copy(_sys.modules)
+	-- 需要更新_G表和module本身, 
+	-- module的更新在import函数里面进行, 这里只更新_G表
+	for name, module in pairs(modules) do
+		local origin_g = tablex.raw_copy(_G)
+		-- do the reload
+		trace_call(safe_import, name)
+		_update_table({'import', name, '_G'}, origin_g, _G)
+		_restore_table(origin_g, _G)
+	end
+end
+
+local function _do_reload()
+	_reload_require()
+	_reload_import()
+end
+
+local function _update_module(names, old, new)
+	_update_table(names, old, new)
+	_restore_table(old, new)
+end
+
+-- 需要处理
+-- 1. 处理require引入的模块
+-- 2. 处理_import引入的模块
+-- 3. 处理_class对象
+function reload()
+	_sys.reloading = {}
+	_sys.update_module = _update_module
+
+	print(_text('reload lua code'))
+	_do_reload()
+
+	_sys.reloading = false
+end

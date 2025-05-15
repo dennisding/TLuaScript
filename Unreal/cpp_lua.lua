@@ -1,6 +1,7 @@
 
 
 function _lua_bind_obj(obj)
+	print(_text('lua_bind_obj'), _text(tostring(obj)))
 	local cpp_obj = rawget(obj, '_co')
 	assert(_sys.cpp_objects[cpp_obj] == nil)
 	_sys.cpp_objects[cpp_obj] = obj

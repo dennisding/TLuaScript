@@ -46,10 +46,13 @@ end
 -- test code
 local commands = {}
 function commands.reload()
-	require('reload')
-	_reload()
+	local reload = silent_import('reload')
+	reload.reload()
 end
 
 commands.r = 'reload()'
 
 add_console_command(commands)
+
+_set_global('add_console_command', add_console_command)
+_set_global('_lua_process_console_command', _lua_process_console_command)

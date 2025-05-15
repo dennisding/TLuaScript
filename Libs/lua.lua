@@ -1,11 +1,14 @@
 -- import basic module
-require('log')
-require('class')
-require('import')
 require('lua_utils')
+require('import')
 
-require('console_command')
+-- 以下模块都可以改成module
+clean_import('class')
+import('log')
+
+import('console_command')
 
 import('tablex')
 import('stringx')
 import('debugx')
+

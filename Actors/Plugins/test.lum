@@ -3,13 +3,18 @@
 function _init(self)
 	self.IntValue = 1234
 	print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
-	self.StringValue = _text('从脚本来的中文')
+	self.StringValue = _text('从脚本来的中文22')
 
 	print(_text('string value from cpp'), self.StringValue)
 
 	self:say_hi()
+	self:say_it()
 
 --	self:SayHello(42, _text('请说句话'))
+end
+
+function say_it()
+	print(_text('say_it'))
 end
 
 function say_hi(self)
@@ -31,8 +36,8 @@ function pass_component(self, com)
 	local mesh = self.Mesh1P
 	-- com.bCastDynamicShadow = true
 	-- com.CastShadow = true
-	mesh.bCastDynamicShadow = true
-	mesh.CastShadow = true
+	-- mesh.bCastDynamicShadow = true
+	-- mesh.CastShadow = true
 	print(_text('mesh'), _text(tostring(mesh)))
 
 	self:SayHi()

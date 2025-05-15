@@ -108,7 +108,6 @@ context.get_info = _cpp_object_get_info
 
 -- class proxy begin
 class('proxy')
-_set_global('_lo', proxy)       -- _log = lua_object
 
 function proxy.__init(self, name)
 	_reset_metatable(self, context)
@@ -120,3 +119,5 @@ function proxy.__newindex(self, name, value)
 	self[name] = value
 end
 -- class proxy end
+
+_set_global('_lo', proxy)       -- _log = lua_object

@@ -37,12 +37,16 @@ function import(name, shortcut, ...)
 	local hints = _to_set({...})
 
 	local module = _sys.modules[name]
-	if (not _sys.reloading) and module then
-		if not hints.clean then
-			_set_upvalue_by_name(shortcut or module._shortcut, module)
+	if _sys.reloading then
+		-- reload logic
+	else
+		-- normal logic
+		if module then
+			if not hints.clean then
+				_set_upvalue_by_name(shortcut or module._shortcut, module)
+			end
+			return module
 		end
-
-		return module
 	end
 
 	-- load the module
@@ -53,10 +57,14 @@ function import(name, shortcut, ...)
 
 	local old_module = nil
 	if _sys.reloading then
-		if _sys.reloading[name] ~= nil then
+		-- reloading 逻辑
+		if _sys.reloading[module] ~= nil then
+			-- 正在import, 有可能出现循环import的情况
 			return module
 		end
-		old_module = tablex.copy(module)
+		-- 设置reloading
+		_sys.reloading[module] = true
+		old_module = tablex.raw_copy(module)
 	end
 
 	local name_tokens, file_name = _format_module_name(name)
@@ -81,7 +89,8 @@ function import(name, shortcut, ...)
 	end
 
 	if _sys.reloading then
-		_sys.reload_table('import', old_module, module)
+		_sys.update_module({'import', name}, old_module, module)
+		_sys.reloading[module] = nil
 	end
 	return module
 end

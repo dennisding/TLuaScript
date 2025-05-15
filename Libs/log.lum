@@ -1,0 +1,30 @@
+-- log type
+display_type = 1
+warning_type = 2
+error_type = 4
+
+function tostring(obj)
+	if type(obj) == 'string' then
+		return obj
+	end
+	
+	return tostring(obj)
+end
+
+function display(msg)
+	local text = tostring(msg)
+	_cpp_log(display_type, text)
+end
+
+ function warning(msg)
+	local text = tostring(msg)
+	_cpp_log(warning_type, text)
+end
+
+function error(msg)
+	local text = tostring(msg)
+	_cpp_log(error_type, text)
+end
+
+-- replace the default print
+

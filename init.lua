@@ -1,7 +1,7 @@
 
 require('lua')
 require('unreal')
-require('gameplay')
+--require('gameplay')
 
 function init()
 	print(_text("hello unreal!!!"))
