@@ -20,8 +20,16 @@ local function _gen_property(property, cpp_getter, cpp_setter)
 	return {_getter, _setter}
 end
 
-local function _gen_function(property, getter)
+local function _gen_function(fun_context)
+	local function _fun(self, ...)
+		return _cpp_object_call_fun(rawget(self, '_co'), fun_context, ...)
+	end
 
+	local function _index()
+		return _fun
+	end
+	
+	return {_index, _index}
 end
 
 function vtable.__index(self, name)
@@ -36,7 +44,7 @@ function vtable.__index(self, name)
 	if property ~= nil then
 		attr = _gen_property(property, getter, setter)
 	elseif getter ~= nil then
-		attr = _gen_function(property, getter)
+		attr = _gen_function(getter)
 	else
 		local function _nil_fun(...)
 			return nil

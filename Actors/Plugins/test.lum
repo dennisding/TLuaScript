@@ -34,4 +34,8 @@ function pass_component(self, com)
 	mesh.bCastDynamicShadow = true
 	mesh.CastShadow = true
 	print(_text('mesh'), _text(tostring(mesh)))
+
+	self:SayHi()
+	local result = self:SayHello(1234, _text("你好吗?"))
+	print(_text('result'), _text(tostring(result)))
 end
