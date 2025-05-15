@@ -4,7 +4,6 @@ import('object')
 import('CppLuaCharacter')
 
 class('FirstPersonCharacter', CppLuaCharacter.CppLuaCharacter)
---CppLuaCharacter._set_hint('have_cpp_obj')
 
 function FirstPersonCharacter:_init()
 	self._super._init(self)

@@ -41,9 +41,7 @@ function import(name, shortcut, ...)
 		if not hints.clean then
 			_set_upvalue_by_name(shortcut or module._shortcut, module)
 		end
-		-- if not silent then
-		-- 	_set_upvalue_by_name(shortcut or module._shortcut, module)
-		-- end
+
 		return module
 	end
 
@@ -64,15 +62,6 @@ function import(name, shortcut, ...)
 	local name_tokens, file_name = _format_module_name(name)
 	local content = _sys.search_file(file_name)
 
-	-- print(_text('import111'), _text(name), file_name, _text(tostring(#content)))
-	-- if (not hints.silent) or (content ~= nil) then
-	-- 	chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
-	-- 	if chunk then
-	-- 		chunk()
-	-- 	else
-	-- 		error(msg)
-	-- 	end
-	-- end
 	local chunk, msg = nil, nil
 	if hints.silent and content == nil then -- 什么都不用做
 	else
@@ -87,9 +76,6 @@ function import(name, shortcut, ...)
 	module._shortcut = shortcut or name_tokens[#name_tokens]
 	module._file_name = file_name
 
-	-- if not silent then
-	-- 	_set_upvalue_by_name(module._shortcut, module)
-	-- end
 	if not hints.clean then
 		_set_upvalue_by_name(module._shortcut, module)
 	end

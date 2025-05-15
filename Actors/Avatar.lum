@@ -1,16 +1,11 @@
 
 class('Avatar')
---Avatar._have_cpp_obj()
 
 function Avatar:_init()
 	print(_text('avatar:_init'))
 	self.cpp_int_value = 1234
 
 	self.value_in_cpp = 1234
-
-	-- self.ValueInCpp = 1234
-	-- print(self.ValueInCpp)
-	-- self:MethodInCpp()
 
 	go = self
 end
