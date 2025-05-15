@@ -1,33 +1,32 @@
 
 
 function _init(self)
-	self.IntValue = 1234
-	print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
-	self.StringValue = _text('从脚本来的中文22')
+	-- self.IntValue = 1234
+	-- print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
+	-- self.StringValue = _text('从脚本来的中文22')
 
-	print(_text('string value from cpp'), self.StringValue)
+	-- print(_text('string value from cpp'), self.StringValue)
 
-	self:say_hi()
-	self:say_it()
-
+	-- self:say_hi()
+	-- self:say_it()
 --	self:SayHello(42, _text('请说句话'))
 end
 
-function say_it()
-	print(_text('say_it'))
-end
+-- function say_it()
+-- 	print(_text('say_it'))
+-- end
 
-function say_hi(self)
-	print(_text('say_hi'))
-end
+-- function say_hi(self)
+-- 	print(_text('say_hi'))
+-- end
 
-function pass_struct(self, channel)
-	-- channel:say_hi()
-	print(_text('struct channel from c++'), _text(tostring(channel)))
-	print(_text('channel int value'), _text(tostring(channel.X)))
-	--print(_text('channel string value'), channel.StringValue)
---	tablex.print(channel)
-end
+-- function pass_struct(self, channel)
+-- 	-- channel:say_hi()
+-- 	print(_text('struct channel from c++'), _text(tostring(channel)))
+-- 	print(_text('channel int value'), _text(tostring(channel.X)))
+-- 	--print(_text('channel string value'), channel.StringValue)
+-- --	tablex.print(channel)
+-- end
 
 function pass_component(self, com)
 	print(_text('component Mesh from c++'), _text(tostring(com)))
@@ -43,4 +42,6 @@ function pass_component(self, com)
 	self:SayHi()
 	local result = self:SayHello(1234, _text("你好吗?"))
 	print(_text('result'), _text(tostring(result)))
+	result.bCastDynamicShadow = true
+	result.CastShadow = true
 end

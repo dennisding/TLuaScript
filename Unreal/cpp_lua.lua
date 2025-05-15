@@ -17,5 +17,9 @@ end
 function _lua_call(cpp_obj, name, ...)
 	local lua_obj = _sys.cpp_objects[cpp_obj]
 	assert(lua_obj ~= nil)
-	return lua_obj[name](lua_obj, ...)
+	local method = lua_obj[name]
+	if method == nil then
+		error(string.format('Invalid call from c++[%s:%s]', lua_obj, name))
+	end
+	return method(lua_obj, ...)
 end

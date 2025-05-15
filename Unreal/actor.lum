@@ -4,17 +4,21 @@ import('actor_map')
 
 local function _format_actor_name(name)
 	-- convert BP_FirstPersonCharacter_C to FirstPersonCharacter
-	local tokens = stringx.split(name, '_')
-	return tokens[2]
+	if stringx.start_with(name, 'BP_') then
+		local tokens = stringx.split(name, '_')
+		return tokens[2]
+	end
+
+	return name
 end
 
 local function _gen_actor_lua_type(ctype)
-		local ctype_name = _cpp_object_get_name(ctype)
-		ctype_name = _format_actor_name(ctype_name)
+	local ctype_name = _cpp_object_get_name(ctype)
+	ctype_name = _format_actor_name(ctype_name)
 
-		local type_name = actor_map[ctype_name] or ctype_name
-		local module = safe_import(type_name)
-		return module[type_name]
+	local type_name = actor_map[ctype_name] or ctype_name
+	local module = safe_import(type_name)
+	return module[type_name]
 end
 
 local context = {}
@@ -25,11 +29,13 @@ context.get_info = _cpp_object_get_info
 class('actor_proxy')
 
 function actor_proxy.__index(self, name)
+--	_lua_bind_obj(self)
 	object.reset_metatable(self, context)
 	return self[name]
 end
 
 function actor_proxy.__newindex(self, name, value)
+--	_lua_bind_obj(self)
 	object.reset_metatable(self, context)
 	self[name] = value
 end

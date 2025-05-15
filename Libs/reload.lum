@@ -237,7 +237,6 @@ end
 -- 需要处理
 -- 1. 处理require引入的模块
 -- 2. 处理_import引入的模块
--- 3. 处理_class对象
 function reload()
 	_sys.reloading = {}
 	_sys.update_module = _update_module

@@ -30,6 +30,24 @@ local function _to_set(t)
 	return result
 end
 
+local function _load_chunk(name, env, hints)
+	local name_tokens, file_name = _format_module_name(name)
+	local content = _sys.search_file(file_name)
+
+	local chunk, msg = nil, nil
+	if hints.silent and content == nil then -- 什么都不用做
+	else
+		chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', env)
+		if chunk then
+			chunk()
+		else
+			error(msg)
+		end
+	end
+
+	return name_tokens, file_name
+end
+
 -- 默认import的行为
 -- 在当前ENV引入name 或 shortcut, 
 -- 
@@ -67,19 +85,7 @@ function import(name, shortcut, ...)
 		old_module = tablex.raw_copy(module)
 	end
 
-	local name_tokens, file_name = _format_module_name(name)
-	local content = _sys.search_file(file_name)
-
-	local chunk, msg = nil, nil
-	if hints.silent and content == nil then -- 什么都不用做
-	else
-		chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', module)
-		if chunk then
-			chunk()
-		else
-			error(msg)
-		end
-	end
+	local name_tokens, file_name = _load_chunk(name, module, hints)
 
 	module._shortcut = shortcut or name_tokens[#name_tokens]
 	module._file_name = file_name

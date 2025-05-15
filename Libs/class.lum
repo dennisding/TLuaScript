@@ -1,12 +1,5 @@
 
 local function _gather_method(result, t)
-	-- for name, value in pairs(t) do
-	-- 	if type(value) == 'function' then
-	-- 		container = result[name] or {}
-	-- 		table.insert(container, value)
-	-- 		result[name] = container
-	-- 	end
-	-- end
 	local key = nil
 	repeat
 		key = next(t, key)

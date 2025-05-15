@@ -3,6 +3,14 @@ function strip(s)
 	return string.match(s, "^%s*(.-)%s*$")
 end
 
+function start_with(s, pattern)
+	return string.find(s, string.format('^%s', pattern))
+end
+
+function end_with(s, pattern)
+	return string.find(s, string.format('%s$', pattern))
+end
+
 function split(str, seperator)
 	local tokens = {}
 
