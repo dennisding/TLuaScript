@@ -42,4 +42,4 @@ end
 
 -- class actor end
 -- set global
-_set_global('_la', actor_proxy)
+-- _set_global('_la', actor_proxy)

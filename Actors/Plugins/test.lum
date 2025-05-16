@@ -30,18 +30,20 @@ end
 
 function pass_component(self, com)
 	print(_text('component Mesh from c++'), _text(tostring(com)))
-	print(_text(tostring(com.CastShadow)))
-	
-	local mesh = self.Mesh1P
+
+	print(_text(tostring(self)))
+	print(_text(tostring(com)))
+
+	local mesh = com.Mesh1P
 	-- com.bCastDynamicShadow = true
 	-- com.CastShadow = true
-	-- mesh.bCastDynamicShadow = true
-	-- mesh.CastShadow = true
+	mesh.bCastDynamicShadow = true
+	mesh.CastShadow = true
 	print(_text('mesh'), _text(tostring(mesh)))
 
 	self:SayHi()
 	local result = self:SayHello(1234, _text("你好吗?"))
 	print(_text('result'), _text(tostring(result)))
-	result.bCastDynamicShadow = true
-	result.CastShadow = true
+	-- result.bCastDynamicShadow = true
+	-- result.CastShadow = true
 end
