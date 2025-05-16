@@ -20,13 +20,13 @@ end
 -- 	print(_text('say_hi'))
 -- end
 
--- function pass_struct(self, channel)
--- 	-- channel:say_hi()
--- 	print(_text('struct channel from c++'), _text(tostring(channel)))
--- 	print(_text('channel int value'), _text(tostring(channel.X)))
--- 	--print(_text('channel string value'), channel.StringValue)
--- --	tablex.print(channel)
--- end
+function pass_struct(self, channel)
+	print(_text('struct channel from c++'), _text(tostring(channel)))
+	local t = channel._type
+	local result = channel + channel
+	tablex.print_table(result)
+	print(_text('channel int value'), _text(tostring(channel.X)))
+end
 
 function pass_component(self, com)
 	print(_text('component Mesh from c++'), _text(tostring(com)))
