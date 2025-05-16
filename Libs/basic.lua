@@ -20,6 +20,10 @@ function _text(str)
 	return text
 end
 
+function _nil_fun(...)
+	return nil
+end
+
 function trace_call(fun, ...)
 	local function _handler(msg)
 		return debug.traceback(msg, 2)

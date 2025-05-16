@@ -34,11 +34,11 @@ function pass_component(self, com)
 	print(_text(tostring(self)))
 	print(_text(tostring(com)))
 
-	local mesh = com.Mesh1P
-	-- com.bCastDynamicShadow = true
-	-- com.CastShadow = true
-	mesh.bCastDynamicShadow = true
-	mesh.CastShadow = true
+	-- local mesh = com.Mesh1P
+	-- -- com.bCastDynamicShadow = true
+	-- -- com.CastShadow = true
+	-- mesh.bCastDynamicShadow = true
+	-- mesh.CastShadow = true
 	print(_text('mesh'), _text(tostring(mesh)))
 
 	self:SayHi()
@@ -46,4 +46,5 @@ function pass_component(self, com)
 	print(_text('result'), _text(tostring(result)))
 	-- result.bCastDynamicShadow = true
 	-- result.CastShadow = true
+	return com
 end

@@ -1,13 +1,6 @@
 
 local actor = silent_import('actor')
 
--- function _lua_bind_obj(obj)
--- 	print(_text('lua_bind_obj'), _text(tostring(obj)))
--- 	local cpp_obj = rawget(obj, '_co')
--- 	assert(_sys.cpp_objects[cpp_obj] == nil)
--- 	_sys.cpp_objects[cpp_obj] = obj
--- end
-
 -- 在bind_object之前, 只能单向操作, 
 -- 即只能通过lua操作c++对象.
 -- 这个对象通过c++调用lua函数的参数
