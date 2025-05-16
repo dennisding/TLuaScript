@@ -26,6 +26,8 @@ function pass_struct(self, channel)
 	local result = channel + channel
 	tablex.print_table(result)
 	print(_text('channel int value'), _text(tostring(channel.X)))
+
+	return result
 end
 
 function pass_component(self, com)

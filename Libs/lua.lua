@@ -2,7 +2,6 @@
 require('lua_utils')
 require('import')
 
--- 以下模块都可以改成module
 clean_import('class')
 import('log')
 
