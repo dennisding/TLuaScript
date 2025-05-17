@@ -35,6 +35,8 @@ function pass_component(self)
 
 	local capsule = self.CapsuleComponent
 	print(_text(tostring(capsule.CapsuleRadius)))
+	capsule:InitCapsuleSize(100, 200)
+
 	print(_text('capsule component'), _text(tostring(capsule)))
 	tablex.print_table(getmetatable(capsule))
 	print(_text(capsule:_get_type_name()))

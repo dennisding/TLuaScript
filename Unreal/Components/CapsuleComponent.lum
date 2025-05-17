@@ -1,0 +1,16 @@
+
+import('object')
+
+class('CapsuleComponent', object.object)
+
+function CapsuleComponent:InitCapsuleSize(radius, half_height)
+	print(_text('capsule_component:InitCapsuleSize'))
+	self.CapsuleRadius = radius
+	self.CapsuleHalfHeight = half_height
+end
+
+function CapsuleComponent:init_size(radius, half_height)
+	print(_text('capsule_component:init_size'))
+	self.CapsuleRadius = radius
+	self.CapsuleHalfHeight = half_height
+end

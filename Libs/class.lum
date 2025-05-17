@@ -105,13 +105,6 @@ function class(name, parent, ...)
 			return method(self, name)
 		end
 
-		-- if parent then
-		-- 	pindex = parent.__index
-		-- end
-		-- if pindex ~= nil then
-		-- 	return pindex(self, name)
-		-- end
-		
 		return nil
 	end
 

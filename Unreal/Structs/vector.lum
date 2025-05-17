@@ -2,6 +2,12 @@
 
 class('vector')
 
+function vector._init(self, X, Y, Z)
+	self.X = X or 0
+	self.Y = Y or 0
+	self.Z = Z or 0
+end
+
 function vector.__add(a, b)
 	local tmp = vector._new_instance()
 	tmp.X = a.X + b.X
