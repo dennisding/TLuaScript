@@ -25,6 +25,11 @@ local function _format_args(...)
 	return table.concat(t, _text('    '))
 end
 
+function printf(format, ...)
+	local msg = string.format(format, ...)
+	print(_text(msg))
+end
+
 -- redefined in Libs/log.lua
 function print(...)
 	_cpp_log(1, _format_args(...))
