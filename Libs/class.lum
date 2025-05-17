@@ -91,13 +91,26 @@ function class(name, parent, ...)
 		if value ~= nil then
 			return value
 		end
-		local pindex = nil
-		if parent then
-			pindex = parent.__index
+		if parent == nil then
+			return nil
 		end
-		if pindex ~= nil then
-			return pindex(self, name)
+
+		local method = rawget(parent, name)
+		if method then
+			return method
 		end
+
+		method = parent.__index
+		if method then
+			return method(self, name)
+		end
+
+		-- if parent then
+		-- 	pindex = parent.__index
+		-- end
+		-- if pindex ~= nil then
+		-- 	return pindex(self, name)
+		-- end
 		
 		return nil
 	end

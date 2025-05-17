@@ -72,6 +72,10 @@ function object.__newindex(self, name, value)
 	rawget(self, '_vtable')[name][2](self, value)
 end
 
+function object._get_type_name(self)
+	return _cpp_object_get_name(rawget(self, '_ct'))
+end
+
 local function _gen_object_type(ctype)
 	return object
 end

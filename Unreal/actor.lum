@@ -2,6 +2,11 @@
 import('object')
 import('actor_map')
 
+-- class actor
+class('actor', object.object)
+
+-- class actor end
+
 local function _format_actor_name(name)
 	-- convert BP_FirstPersonCharacter_C to FirstPersonCharacter
 	if stringx.start_with(name, 'BP_') then
@@ -37,3 +42,7 @@ function actor_proxy.__newindex(self, name, value)
 	object.reset_metatable(self, context)
 	self[name] = value
 end
+
+-- class actor end
+-- set global
+-- _set_global('_la', actor_proxy)

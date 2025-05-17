@@ -36,10 +36,11 @@ function _lua_unbind_obj(cpp_obj)
 	_sys.cpp_objects[cpp_obj] = nil
 end
 
-function _lua_call(self, name, ...)
+function _lua_call(cobject, name, ...)
+	local self = _lua_get_obj(cobject)
 	local method = self[name]
 	if method == nil then
-		error(string.format('Invalid call from c++[%s:%s]', name))
+		error(string.format('Invalid call from c++[%s:%s]', tostring(name)))
 	end
 	return method(self, ...)
 end

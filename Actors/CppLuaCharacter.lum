@@ -1,7 +1,7 @@
 
-import('object')
+import('actor')
 
-class('CppLuaCharacter', object.object)
+class('CppLuaCharacter', actor.actor)
 
 function CppLuaCharacter:_init()
 	print(_text('CppLuaCharacter:_init'))

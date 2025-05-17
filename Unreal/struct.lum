@@ -1,8 +1,8 @@
 
-import('ctype')
+-- import('ctype')
 import('struct_map')
 
-class('cstruct')
+class('struct')
 
 local function _reset_metatable(self)
 	local ctype = rawget(self, '_ct')
@@ -16,7 +16,7 @@ local function _reset_metatable(self)
 		local type_name = names[#names]
 		local module = safe_import(module_name)
 
-		lua_type = module[type_name] or cstruct
+		lua_type = module[type_name] or struct
 		_sys.ctypes[ctype] = lua_type
 	end
 
@@ -37,7 +37,6 @@ function cstruct_proxy.__newindex(self, name, value)
 	_reset_metatable(self, type_prefix)
 	self[name] = value
 end
-
 
 -- _ls means lua struct for c++
 _set_global('_ls', cstruct_proxy)

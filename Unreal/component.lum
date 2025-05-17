@@ -3,12 +3,14 @@
 import('object')
 import('component_map')
 
+class('component', object.object)
+
 local function _gen_component_lua_type(ctype)
 	local ctype_name = _cpp_object_get_name(ctype)
 	local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
 	local module = safe_import(type_name)
 
-	return module[type_name]
+	return module[type_name] or component
 end
 
 local context = {}

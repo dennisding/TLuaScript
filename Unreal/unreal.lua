@@ -2,7 +2,7 @@
 
 require('cpp_lua')
 import('object')
-import('ctype')
+-- import('ctype')
 import('struct')
 import('component')
 import('actor')

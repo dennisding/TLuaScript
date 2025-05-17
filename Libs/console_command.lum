@@ -12,11 +12,11 @@ end
 
 local function generate_command(cmd_string)
 	cmd_string = string.gsub(cmd_string, '%$(%w+)', _console_commands)
-	return_cmd = string.format('return %s', cmd_string)
+	local return_cmd = string.format('return %s', cmd_string)
 	-- execute cmd
-	local chunk, msg = load(return_cmd, 'cmd from editor', 't', _console_commands)
+	local chunk, msg = load(return_cmd, 'cmd from console', 't', _console_commands)
 	if not chunk then
-		chunk, msg = load(cmd_string, 'cmd from editor', 't', _console_commands)
+		chunk, msg = load(cmd_string, 'cmd from console', 't', _console_commands)
 		if not chunk then
 			print(_text(msg))
 		end
