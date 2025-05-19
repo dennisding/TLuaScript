@@ -2,14 +2,14 @@
 -- _cpp_create_object(parent, name, type)
 
 function create_component(self, name, type)
-	return _cpp_create_object(self, name, type)
+	return _cpp_object_create(self, name, type)
 end
 
-function creat_camera_component(self, name)
+function create_camera_component(self, name)
 	local type = _text('/Script/Engine.CameraComponent')
 	return self:create_component(name, type)
 end
 
-function add_component(self, com)
+function create_mesh_component(self, name)
 
 end

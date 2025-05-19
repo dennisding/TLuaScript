@@ -1,0 +1,87 @@
+
+-- enum manager
+class('enum_mgr')
+
+function enum_mgr._init(self)
+	self._ctypes = {}  -- {ctype : enum_type}
+end
+
+function enum_mgr.__index(self, name)
+	local method = rawget(enum_mgr, name)
+	if method ~= nil then
+		return method
+	end
+
+	local ctype = _cpp_enum_get_type(name)
+
+	local lua_type = self:_get_enum_type(ctype)
+
+	return lua_type:get_enum_by_name(name)
+end
+
+function enum_mgr._get_enum_type(self, ctype)
+	local lua_type = self._ctypes[ctype]
+	if lua_type ~= nil then
+		return lua_type
+	end
+
+	lua_type = enum_type(ctype)
+	self._ctypes[ctype] = lua_type
+	rawset(self, lua_type._name, lua_type)
+
+	return lua_type
+end
+
+function enum_mgr._get_enum_value(self, ctype, value)
+	local lua_type = self:_get_enum_type(ctype)
+
+	return lua_type:get_enum_by_value(value)
+end
+
+-- enum class begin
+class('enum_type')
+
+function enum_type._init(self, ctype)
+	self._ct = ctype
+	self._name = _cpp_enum_get_type_name(ctype)
+end
+
+function enum_type.get_enum_by_name(self, name)
+	local ctype = rawget(self, '_ct')
+	local value = _cpp_enum_get_value(ctype, name)
+	
+	return self:new_enum(name, value)
+end
+
+function enum_type.get_enum_by_value(self, value)
+	local ctype = rawget(self, '_ct')
+	local name = _cpp_enum_get_name(ctype, value)
+
+	return self:new_enum(name, value)
+end
+
+function enum_type.new_enum(self, name, value)
+	local instance = enum(name, value)
+
+	rawset(self, name, instance)
+	return instance
+end
+
+-- enum_value class begin
+class('enum')
+
+function enum._init(self, name, value)
+	self.name = name
+	self.value = value
+	self._v = value -- use in c++
+end
+
+function test()
+	local value = Enum.ETriggerEvent.Started
+	if Enum.ETriggerEvent.Started == value then
+
+	end
+end
+
+_set_global('_le', enum)
+_set_global('Enum', enum_mgr())

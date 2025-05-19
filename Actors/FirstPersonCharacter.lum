@@ -18,7 +18,8 @@ end
 local _plugins = {
 	'Plugins.input',
 	'Plugins.test',
-	'Plugins.component'
+	'Plugins.component',
+	'Plugins.first_person'
 }
 
 local overloads = {

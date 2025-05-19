@@ -1,62 +1,22 @@
 
 
 function _init(self)
-	-- self.IntValue = 1234
-	-- print(_text('float value from cpp'), _text(tostring(self.FloatValue)))
-	-- self.StringValue = _text('从脚本来的中文22')
 
-	-- print(_text('string value from cpp'), self.StringValue)
-
-	-- self:say_hi()
-	-- self:say_it()
---	self:SayHello(42, _text('请说句话'))
 end
-
--- function say_it()
--- 	print(_text('say_it'))
--- end
-
--- function say_hi(self)
--- 	print(_text('say_hi'))
--- end
 
 function pass_struct(self, channel)
 	print(_text('struct channel from c++'), _text(tostring(channel)))
-	local t = channel._type
-	local result = channel + channel
-	tablex.print_table(result)
-	print(_text('channel int value'), _text(tostring(channel.X)))
 
-	return result
+	print(_text('name and value'), _text(channel.name), _text(tostring(channel.value)))
+	-- local t = channel._type
+	-- local result = channel + channel
+	-- tablex.print_table(result)
+	-- print(_text('channel int value'), _text(tostring(channel.X)))
+
+	-- return result
+	return channel.value
 end
 
 function pass_component(self)
 	print(_text('component Mesh from c++'), _text(tostring(com)))
-
-	local capsule = self.CapsuleComponent
-	print(_text(tostring(capsule.CapsuleRadius)))
-	capsule:InitCapsuleSize(100, 200)
-
-	print(_text('capsule component'), _text(tostring(capsule)))
-	tablex.print_table(getmetatable(capsule))
-	print(_text(capsule:_get_type_name()))
-
---	local camera = self:creat_camera_component(_text('camera1'))
-
-	-- print(_text(tostring(self)))
-	-- print(_text(tostring(com)))
-
-	-- -- local mesh = com.Mesh1P
-	-- -- -- com.bCastDynamicShadow = true
-	-- -- -- com.CastShadow = true
-	-- -- mesh.bCastDynamicShadow = true
-	-- -- mesh.CastShadow = true
-	-- print(_text('mesh'), _text(tostring(mesh)))
-
-	-- self:SayHi()
-	-- local result = self:SayHello(1234, _text("你好吗?"))
-	-- print(_text('result'), _text(tostring(result)))
-	-- -- result.bCastDynamicShadow = true
-	-- -- result.CastShadow = true
-	-- return com
 end
