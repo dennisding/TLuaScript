@@ -108,6 +108,27 @@ function class(name, parent, ...)
 		return nil
 	end
 
+	function _newindex(self, name, value)
+		if not parent then
+			rawset(self, name, value)
+			return
+		end
+
+		local old_value = rawget(parent, name)
+		if old_value ~= nil then
+			rawset(self, name, value)
+			return
+		end
+
+		local pnewindex = parent.__newindex
+		if pnewindex ~= nil then
+			pnewindex(self, name, value)
+			return
+		end
+
+		rawset(self, name, value)
+	end
+
 	local function _install_plugins(plugins, overloads, reverses)
 		local methods = _gen_plugin_method(_new_class, plugins, overloads, reverses)
 		for name, fun in pairs(methods) do
@@ -120,6 +141,7 @@ function class(name, parent, ...)
 	_new_class._call_init = _call_init
 	_new_class._install_plugins = _install_plugins
 	_new_class.__index = _index
+	_new_class.__newindex = _newindex
 	_new_class._super = parent
 
 	-- metatable setup

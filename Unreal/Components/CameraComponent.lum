@@ -1,0 +1,3 @@
+import('object')
+
+class('CameraComponent', object.object)

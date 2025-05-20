@@ -1,6 +1,7 @@
 
 require('lua')
 require('unreal')
+require('game')
 --require('gameplay')
 
 function init()

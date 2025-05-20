@@ -3,8 +3,8 @@ function _init(self)
 	-- setup the capsure = self.GetCapsuleComponent()->InitCapsuleSize(55.f, 96.f)
 	self.CapsuleComponent:InitCapsuleSize(55, 96)
 
-	self:setup_camera()
-	self:setup_mesh()
+	-- self:setup_camera()
+	-- self:setup_mesh()
 end
 
 function setup_mesh(self)
@@ -15,8 +15,8 @@ function setup_camera(self)
 	local camera = self:create_camera_component(_text('first_person'))
 	self.FirstPersonCameraComponent = camera
 
---	camera:SetupAttachment(self.CapsuleComponent)
---	camera:AttachTo(self.CapsuleComponent)
---	camera:SetRelativeLocation(vector(-10, 0, 60))
+	-- camera:SetupAttachment(self.CapsuleComponent)
+	camera:AttachTo(self.CapsuleComponent)
+	camera:K2_SetRelativeLocation(vector(-10, 0, 60))
 	camera.bUsePawnControlRotation = true
 end

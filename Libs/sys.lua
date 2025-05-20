@@ -30,6 +30,10 @@ function printf(format, ...)
 	print(_text(msg))
 end
 
+function print_table(t)
+	tablex.print_table(t)
+end
+
 -- redefined in Libs/log.lua
 function print(...)
 	_cpp_log(1, _format_args(...))

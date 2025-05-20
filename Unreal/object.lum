@@ -14,6 +14,7 @@ local function _gen_property(property, cpp_getter, cpp_setter)
 	end
 
 	local function _setter(self, value)
+		print(_text('set property'), _text(tostring(value)))
 		return cpp_setter(rawget(self, '_co'), property, value)
 	end
 

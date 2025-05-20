@@ -10,6 +10,8 @@ function _lua_bind_obj(cobject)
 
 	local instance = _lua_get_obj(cobject)
 	_sys.cpp_objects[cobject] = instance
+
+	_world.player = instance
 	return instance
 end
 

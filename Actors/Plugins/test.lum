@@ -4,6 +4,16 @@ function _init(self)
 
 end
 
+function test(self, channel, mesh)
+	tablex.print_table(self)
+--	tablex.print_table(this)
+	self.IntValue =  1314
+	self.StringValue = _text('你好!!!!')
+
+	tablex.print_table(channel)
+	tablex.print_table(mesh)
+end
+
 function pass_struct(self, channel)
 	print(_text('struct channel from c++'), _text(tostring(channel)))
 
