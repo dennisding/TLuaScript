@@ -35,6 +35,10 @@ function _lua_get_enum(ctype, value)
 	return Enum:_get_enum_value(ctype, value)
 end
 
+function _lua_new_struct(ctype)
+
+end
+
 function _lua_unbind_obj(cpp_obj)
 	print(_text('lua_unbind_obj'))
 	assert(_sys.cpp_objects[cpp_obj] ~= nil)

@@ -8,10 +8,13 @@ function test(self, channel, mesh)
 	tablex.print_table(self)
 --	tablex.print_table(this)
 	self.IntValue =  1314
+	self.IntValue = 4567
 	self.StringValue = _text('你好!!!!')
 
 	tablex.print_table(channel)
 	tablex.print_table(mesh)
+
+	self:SayHello(10234, _text('中文信息'))
 end
 
 function pass_struct(self, channel)
