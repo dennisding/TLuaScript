@@ -6,7 +6,9 @@ local actor = silent_import('actor')
 -- 这个对象通过c++调用lua函数的参数
 -- 或是lua调用c++函数的返回值传递给lua
 function _lua_bind_obj(cobject)
-	assert(_sys.cpp_objects[cobject] == nil)
+	if _sys.cpp_objects[cobject] ~= nil then
+		return _sys.cpp_objects[cobject]
+	end
 
 	local instance = _lua_get_obj(cobject)
 	_sys.cpp_objects[cobject] = instance
@@ -26,7 +28,9 @@ function _lua_get_obj(cobject)
 	local ctype = _cpp_object_get_type(cobject)
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)
-	instance._call_init(instance)
+	--instance._call_init(instance)
+	if instance._call_init then-- trigger the reset_metatable
+	end
 
 	return instance
 end
@@ -50,7 +54,7 @@ function _lua_call(cobject, name, ...)
 	local self = _lua_get_obj(cobject)
 	local method = self[name]
 	if method == nil then
-		error(string.format('Invalid call from c++[%s:%s]', tostring(name)))
+		error(string.format('Invalid call from c++[%s]', tostring(name)))
 	end
 	return method(self, ...)
 end

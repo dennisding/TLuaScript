@@ -16,7 +16,8 @@ function enum_mgr.__index(self, name)
 
 	local lua_type = self:_get_enum_type(ctype)
 
-	return lua_type:get_enum_by_name(name)
+	return lua_type
+	-- return lua_type:get_enum_by_name(name)
 end
 
 function enum_mgr._get_enum_type(self, ctype)
@@ -44,6 +45,15 @@ class('enum_type')
 function enum_type._init(self, ctype)
 	self._ct = ctype
 	self._name = _cpp_enum_get_type_name(ctype)
+end
+
+function enum_type.__index(self, name)
+	local attr = rawget(enum_type, name)
+	if attr ~= nil then
+		return attr
+	end
+
+	return self:get_enum_by_name(name)
 end
 
 function enum_type.get_enum_by_name(self, name)

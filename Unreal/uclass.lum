@@ -1,0 +1,20 @@
+
+import('uclass_map')
+
+class('uclass')
+
+function uclass.__index(self, name)
+	local attr = rawget(uclass, name)
+	if attr ~= nil then
+		return attr
+	end
+	attr = _cpp_load_class(name)
+	if attr == nil then
+		error(string.format("invalid class:<%s>", name))
+	end
+	rawset(self, name, attr)
+	return attr
+end
+
+-- set global
+_set_global('Class', uclass())

@@ -5,29 +5,10 @@ function _init(self)
 end
 
 function test(self, channel, mesh)
-	tablex.print_table(self)
---	tablex.print_table(this)
-	self.IntValue =  1314
-	self.IntValue = 4567
-	self.StringValue = _text('你好!!!!')
 
-	tablex.print_table(channel)
-	tablex.print_table(mesh)
-
-	self:SayHello(10234, _text('中文信息'))
 end
 
 function pass_struct(self, channel)
-	print(_text('struct channel from c++'), _text(tostring(channel)))
-
-	print(_text('name and value'), _text(channel.name), _text(tostring(channel.value)))
-	-- local t = channel._type
-	-- local result = channel + channel
-	-- tablex.print_table(result)
-	-- print(_text('channel int value'), _text(tostring(channel.X)))
-
-	-- return result
-	return channel.value
 end
 
 function pass_component(self)

@@ -5,11 +5,6 @@ function create_component(self, name, type)
 	return _cpp_object_create(self, name, type)
 end
 
-function create_camera_component(self, name)
-	local type = _text('/Script/Engine.CameraComponent')
-	return self:create_component(name, type)
-end
-
 function create_mesh_component(self, name)
 
 end

@@ -1,0 +1,6 @@
+
+
+function create_default_subobject(self, name, cclass)
+	local obj = _cpp_create_default_subobject(self, name, cclass)
+	return obj
+end

@@ -1,6 +1,5 @@
 
 import('object')
-
 import('CppLuaCharacter')
 
 class('FirstPersonCharacter', CppLuaCharacter.CppLuaCharacter)
@@ -19,7 +18,11 @@ local _plugins = {
 	'Plugins.input',
 	'Plugins.test',
 	'Plugins.component',
-	'Plugins.first_person'
+	'Plugins.first_person',
+
+	-- unreal
+	'Plugins.object_utils',
+	'Plugins.component_utils'
 }
 
 local overloads = {

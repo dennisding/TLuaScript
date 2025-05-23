@@ -1,13 +1,14 @@
 
 --import('ctype')
 import('object')
+import('component_base')
 import('component_map')
 
-class('component', object.object)
+-- class('component', object.object)
 
-function component.AttachTo(self, parent, socket)
-	self:K2_AttachTo(parent, socket)
-end
+-- function component.AttachTo(self, parent, socket)
+-- 	self:K2_AttachTo(parent, socket)
+-- end
 
 local function _gen_component_lua_type(ctype)
 	local ctype_name = _cpp_object_get_name(ctype)
@@ -15,7 +16,7 @@ local function _gen_component_lua_type(ctype)
 	local module = safe_import(type_name)
 
 	print(_text('gen_component_type'), _text(type_name))
-	return module[ctype_name] or component
+	return module[ctype_name] or component_base.component_base
 end
 
 local context = {}

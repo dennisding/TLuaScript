@@ -7,6 +7,7 @@ import('struct')
 import('enum')
 import('component')
 import('actor')
+import('uclass')
 -- print(_text("unreal module中文说明"))
 
 -- import data type

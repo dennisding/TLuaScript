@@ -1,0 +1,15 @@
+
+import('object')
+
+class('component_base', object.object)
+
+function component_base.AttachToComponent(self, parent, 
+	socket_name, location_rule, rotation_rule, scale_rule, sim_bodies)
+
+	self:K2_AttachToComponent(parent, socket_name, location_rule, 
+			rotation_rule, scale_rule, sim_bodies)
+end
+
+function component_base.SetRelativeLocation(self, location, sweep, hit_result, teleport)
+	self:K2_SetRelativeLocation(location, sweep, hit_result, teleport)
+end

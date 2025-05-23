@@ -14,7 +14,6 @@ local function _gen_property(property, cpp_getter, cpp_setter)
 	end
 
 	local function _setter(self, value)
-		print(_text('set property'), _text(tostring(value)))
 		return cpp_setter(rawget(self, '_co'), property, value)
 	end
 
@@ -38,6 +37,7 @@ function vtable.__index(self, name)
 	local ctype = rawget(self, '_ct')
 	local context = rawget(self, '_context')
 	local property, getter, setter = context.get_info(ctype, name)
+	debugx.print_stack()
 	print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
 	print(_text(tostring(getter)), _text(tostring(setter)))
 	-- update the vtable
