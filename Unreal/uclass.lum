@@ -8,7 +8,9 @@ function uclass.__index(self, name)
 	if attr ~= nil then
 		return attr
 	end
-	attr = _cpp_load_class(name)
+
+	local type_name = uclass_map[name] or name
+	attr = _cpp_load_class(type_name)
 	if attr == nil then
 		error(string.format("invalid class:<%s>", name))
 	end

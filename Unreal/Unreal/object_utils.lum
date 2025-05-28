@@ -1,0 +1,5 @@
+
+
+function create_default_subobject(self, name, cclass)
+	return _cpp_create_default_subobject(self, name, cclass)
+end

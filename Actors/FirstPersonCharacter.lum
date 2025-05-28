@@ -15,14 +15,8 @@ function FirstPersonCharacter:hello(msg)
 end
 
 local _plugins = {
-	'Plugins.input',
-	'Plugins.test',
-	'Plugins.component',
-	'Plugins.first_person',
-
-	-- unreal
-	'Plugins.object_utils',
-	'Plugins.component_utils'
+	-- 'Plugins.input',
+	-- 'Plugins.test',
 }
 
 local overloads = {

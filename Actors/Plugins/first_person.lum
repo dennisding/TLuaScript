@@ -1,25 +1,30 @@
 
 function _init(self)
-	-- setup the capsure = self.GetCapsuleComponent()->InitCapsuleSize(55.f, 96.f)
 	self.CapsuleComponent:InitCapsuleSize(55, 96)
 
 	self:setup_camera()
-	-- self:setup_mesh()
+	self:setup_mesh()
 end
 
 function setup_mesh(self)
-	local mesh = self:create_mesh_component(_text('1111'))
+	local mesh = self:create_default_subobject(_text('CharacterMesh1P'), 
+								Class.SkeletalMeshComponent)
+	
+	self.Mesh1P = mesh
+
+	mesh:SetOnlyOwnerSee(true)
+	mesh:AttachToComponent(self.FirstPersonCameraComponent)
+	mesh.bCastDynamicShadow = true
+	mesh.CastShadow = true
+	mesh:SetRelativeLocation(Vector(-30, 0, -150))
 end
 
 function setup_camera(self)
---	local camera = self:create_camera_component(_text('first_person'))
-	local camera = self:create_default_subobject(_text('FirstPersonCamera'), Class.CameraComponent)
-	self.FirstPersonCameraComponent = camera
---	local camera = self.FirstPersonCameraComponent
-	tablex.print_table(camera)
+ 	local camera = self:create_default_subobject(_text('FirstPersonCamera'), Class.CameraComponent)
 
---	camera:SetupAttachment(self.CapsuleComponent)
-	camera:AttachToComponent(self.CapsuleComponent)
-	camera:K2_SetRelativeLocation(Vector(-10, 0, 60))
-	camera.bUsePawnControlRotation = true
+ 	camera:AttachToComponent(self.CapsuleComponent)
+ 	camera:SetRelativeLocation(Vector(-10, 0, 60))
+ 	camera.bUsePawnControlRotation = true
+
+	self.FirstPersonCameraComponent = camera
 end

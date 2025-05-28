@@ -13,7 +13,14 @@ end
 
 local _plugins = {
 	'Plugins.input',
-	'Plugins.test'
+	'Plugins.test',
+
+	'Plugins.component',
+	'Plugins.first_person',
+
+	-- unreal
+	'Unreal.object_utils',
+	'Unreal.component_utils'
 }
 
 local overloads = {

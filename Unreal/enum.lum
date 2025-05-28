@@ -17,7 +17,6 @@ function enum_mgr.__index(self, name)
 	local lua_type = self:_get_enum_type(ctype)
 
 	return lua_type
-	-- return lua_type:get_enum_by_name(name)
 end
 
 function enum_mgr._get_enum_type(self, ctype)

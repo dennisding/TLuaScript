@@ -1,14 +1,7 @@
 
---import('ctype')
 import('object')
 import('component_base')
 import('component_map')
-
--- class('component', object.object)
-
--- function component.AttachTo(self, parent, socket)
--- 	self:K2_AttachTo(parent, socket)
--- end
 
 local function _gen_component_lua_type(ctype)
 	local ctype_name = _cpp_object_get_name(ctype)
@@ -19,22 +12,28 @@ local function _gen_component_lua_type(ctype)
 	return module[ctype_name] or component_base.component_base
 end
 
-local context = {}
-context.gen_lua_type = _gen_component_lua_type
-context.get_info = _cpp_object_get_info
+local function _get_component_type(ctype)
+	local lua_type = _sys.ctypes[ctype]
+	if lua_type ~= nil then
+		return lua_type
+	end
 
-class('component_proxy')
+	local ctype_name = _cpp_object_get_name(ctype)
+	local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
+	local module = safe_import(type_name)
 
-function component_proxy.__index(self, name)
-	object.reset_metatable(self, context)
-	return self[name]
+	local component_type = module[ctype_name] or component_base.component_base
+	_sys.ctypes[ctype] = component_type
+	return component_type
 end
 
-function component_proxy.__newindex(self, name, value)
-	object.reset_metatable(self, context)
-	self[name] = value
-end
+function new_component(cobject, ctype)
+	local component_type = _get_component_type(ctype)
 
--- set global
--- '_lc' = lua_component
-_set_global('_lc', component_proxy)
+	local instance = component_type._new_instance()
+	rawset(instance, '_co', cobject)
+	rawset(instance, '_ct', ctype)
+	object.set_vtable(instance)
+
+	return instance
+end
