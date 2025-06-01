@@ -1,0 +1,6 @@
+
+
+_data = {
+	[100] = {name = _text('普攻(Attack)'), damge = 3},
+	[200] = {name = _text('火球术(FireBall)'), damge = 10}
+}

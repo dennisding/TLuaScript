@@ -9,9 +9,9 @@ class('actor', object.object)
 
 local function _format_actor_name(name)
 	-- convert BP_FirstPersonCharacter_C to FirstPersonCharacter
-	if stringx.start_with(name, 'BP_') then
+	if stringx.end_with(name, '_C') then
 		local tokens = stringx.split(name, '_')
-		return tokens[2]
+		return tokens[#tokens - 1]
 	end
 
 	return name

@@ -45,17 +45,17 @@ function _update_table(names, old, new)
 	-- 删除新表中不存在的数据, 最顶层的数据不删除(_G 和 module)
 	local key = nil
 	local old_copy = tablex.raw_copy(old)
-	repeat
-		key = next(old_copy, key)
-		if not key then
-			break
-		end
-		-- the del action
-		local new_value = rawget(new, key)
-		if new_value == nil then
-			rawset(old, key, nil)	-- del the old attr
-		end
-	until not key
+	-- repeat
+	-- 	key = next(old_copy, key)
+	-- 	if not key then
+	-- 		break
+	-- 	end
+	-- 	-- the del action
+	-- 	local new_value = rawget(new, key)
+	-- 	if new_value == nil then
+	-- 		rawset(old, key, nil)	-- del the old attr
+	-- 	end
+	-- until not key
 
 	-- 添加旧表中不存在的数据
 	key = nil

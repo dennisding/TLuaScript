@@ -1,0 +1,7 @@
+
+
+class('main', _gui._panel)
+
+function main._init(self)
+	
+end

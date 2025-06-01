@@ -1,11 +1,34 @@
 
+import('fun_utils')
 
 function _init(self)
-
+	pass
 end
 
 function test(self, channel, mesh)
+	local input = self.PlayerInputComponent
+	local callback = fun_utils.fun(self.jump, self)
+	input:BindAction(self.JumpAction, Enum.ETriggerEvent.Started, callback)
+end
 
+function use_skill(self, skill_id)
+	local data = _datas.skill[skill_id]
+
+	printf("use_skill: %d, name=%s", skill_id, data.name)
+end
+
+function test_method(self, value, msg)
+	print(_text('test_method'), towstring(value), msg)
+	local mesh = self:SayHello(1314, _text('中文消息'))
+
+	print(towstring(mesh))
+	-- assert(mesh == self.Mesh1P)
+	-- mesh.bCastDynamicShadow = false
+	-- mesh.CastShadow = false
+end
+
+function jump(self, input_value)
+	print(_text('actor jump!!!!'))
 end
 
 function pass_struct(self, channel)

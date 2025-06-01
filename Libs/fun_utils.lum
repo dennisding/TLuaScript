@@ -1,0 +1,15 @@
+
+
+function fun(f, ...)
+	local args = {...}
+
+	local function _fun(...)
+		return f(table.unpack(args), ...)
+	end
+
+	return _fun
+end
+
+function nil_fun(...)
+	return nil_fun
+end

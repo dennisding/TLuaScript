@@ -1,6 +1,7 @@
 
 local actor = silent_import('actor')
 local component = silent_import('component')
+local object = silent_import('object')
 
 -- 在bind_object之前, 只能单向操作, 
 -- 即只能通过lua操作c++对象.
@@ -62,5 +63,36 @@ end
 function _lua_tcall(cobject, name, ...)
 	local self = _lua_get_obj(cobject)
 	local method = self[name]
-	method and method(self, ...)
+	if method then
+		method(self, ...)
+	end
+end
+
+local function _get_class(module_name, class_name)
+	local module = silent_import(module_name)
+	return module[class_name]
+end
+
+local function _get_method(callback, context)
+	local function _fun(self, ...)
+		return callback(rawget(self, '_co'), context, ...)
+	end
+
+	return _fun
+end
+
+local function _set_method(lua_class, name, method)
+--	assert(rawget(lua_class, name) == nil, string.format('method<%s> already exist.', name))
+
+	rawset(lua_class, name, method)
+end
+
+function _lua_actor_method(class_name, method_name, callback, context)
+	local lua_class = _get_class(class_name, class_name)
+	_set_method(lua_class, method_name, _get_method(callback, context))
+end
+
+function _lua_component_method(class_name, method_name, callback, context)
+	local lua_class = _get_class('Components.' .. class_name, class_name)
+	_set_method(lua_class, method_name, _get_method(callback, context))
 end

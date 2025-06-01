@@ -1,0 +1,54 @@
+
+
+-- data_mgr begin
+class('data_mgr')
+
+function data_mgr._init(self)
+
+end
+
+function data_mgr.__index(self, name)
+	local data = data_set(name)
+
+	rawset(self, name, data)
+
+	return data
+end
+
+-- data_mgr end
+
+-- data_set begin
+class('data_set')
+
+function data_set._init(self, name)
+	self._name = name
+	self._data = self:_load_data()
+end
+
+function data_set._load_data(self)
+	local module_name = 'Datas.' .. self._name
+	local module = clean_import(module_name)
+
+	-- to do: split the data set into small file by key
+	-- to do: cache the data
+	self._data = module._data
+end
+
+function data_set.__index(self, key)
+	if type(key) ~= 'table' then
+		local data = self._data[key]
+		rawset(self, key, data)
+		return data
+	else
+		local data = self._data
+		for _, table_key in iparis(key) do
+			data = data[table_key]
+		end
+		return data
+	end
+end
+
+-- data_set end
+
+-- set global
+_set_global('_datas', data_mgr())

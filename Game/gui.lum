@@ -1,0 +1,41 @@
+
+
+-- gui_mgr begin
+
+class('gui_mgr')
+
+function gui_mgr._init(self)
+	-- basic class type
+	self._panel = panel
+end
+
+function gui_mgr.__index(self, name)
+	local module_name = 'Guis.' .. name
+	local module = clean_import(module_name)
+
+	local gui_type = module[name]
+	local gui = gui_type()
+
+	rawset(self, name, gui)
+end
+
+-- gui_mgr end
+
+-- class panel begin
+class('panel')
+
+function panel._init(self, res)
+	self._visible = false
+end
+
+function panel.set_visible(self, visible)
+	self._visible = visible
+end
+
+function panel.is_visible(self)
+	return self._visible
+end
+-- class panel end
+
+-- set global
+_set_global('_gui', gui_mgr())
