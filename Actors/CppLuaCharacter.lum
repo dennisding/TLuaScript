@@ -11,12 +11,26 @@ function CppLuaCharacter:hello(msg)
 	print(_text("CppLuaCharacter:hello"), msg)
 end
 
+-- function CppLuaCharacter.__index(self, name)
+-- 	print(_text('CppLuaCharacter!!!!!!!!!!!!!'))
+-- 	local attr = CppLuaCharacter[name]
+-- 	if attr ~= nil then
+-- 		return attr
+-- 	end
+-- 	return rawget(self, '_vtable')[name][1](self)
+-- end
+
+-- function CppLuaCharacter.__newindex(self, name, value)
+-- 	rawget(self, '_vtable')[name][2](self, value)
+-- end
+
 local _plugins = {
 	'Plugins.input',
 	'Plugins.test',
 
 	'Plugins.component',
 	'Plugins.first_person',
+	'Plugins.user_data',
 
 	-- unreal
 	'Unreal.object_utils',

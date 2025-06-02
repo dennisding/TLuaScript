@@ -2,13 +2,14 @@
 import('fun_utils')
 
 function _init(self)
-	pass
 end
 
 function test(self, channel, mesh)
 	local input = self.PlayerInputComponent
 	local callback = fun_utils.fun(self.jump, self)
 	input:BindAction(self.JumpAction, Enum.ETriggerEvent.Started, callback)
+
+	self.some_value = 1234
 end
 
 function use_skill(self, skill_id)
@@ -21,6 +22,7 @@ function test_method(self, value, msg)
 	print(_text('test_method'), towstring(value), msg)
 	local mesh = self:SayHello(1314, _text('中文消息'))
 
+	self.Mesh1P = mesh
 	print(towstring(mesh))
 	-- assert(mesh == self.Mesh1P)
 	-- mesh.bCastDynamicShadow = false

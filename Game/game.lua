@@ -1,4 +1,5 @@
 
 
-clean_import('data')
+clean_import('data_mgr')
+clean_import('data_types_imp')
 import('world')

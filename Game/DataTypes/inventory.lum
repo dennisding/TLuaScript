@@ -1,0 +1,38 @@
+
+import('Datas.item')
+import('data_desc')
+
+class('inventory', data_desc.data_desc)
+
+inventory.max_size = data_types.i32(100, 'client')
+inventory.size = data_types.i32(10, 'client')
+inventory.items = data_type.array(data_types.item, 'client')
+
+function inventory._init(self)
+
+end
+
+function inventory.add_item(self, item_id)
+	local slot = self:get_empty_slot()
+	if slot == nil then
+		return false
+	end
+
+	local item = data_types.item(item_id)
+	self:add_item_to_slot(item, slot)
+	return true
+end
+
+function inventory.get_empty_slot(self)
+	for index = 0..self.max_size do
+		if self.items[index] == nil then
+			return index
+		end
+	end
+
+	return nil
+end
+
+function invenotry.add_item_to_slot(self, item, slot)
+	self.items[slot] = item
+end

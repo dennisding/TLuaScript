@@ -1,5 +1,6 @@
 
-local function _gather_method(result, t)
+-- local function _gather_method(result, t)
+local function _gather_infos(methods, attrs, t)
 	local key = nil
 	repeat
 		key = next(t, key)
@@ -8,9 +9,13 @@ local function _gather_method(result, t)
 		end
 		local value = rawget(t, key)
 		if type(value) == 'function' then
-			container = result[key] or {}
+			container = methods[key] or {}
 			table.insert(container, value)
-			result[key] = container
+			methods[key] = container
+		elseif type(value) == 'table' then
+			if value._get ~= nil or value._set ~= nil then
+				attrs[key] = value
+			end
 		end
 	until not key
 end
@@ -47,28 +52,58 @@ local function _build_plugin_method(method_map, overloads, reverses)
 	return result
 end
 
-local function _gen_plugin_method(type, plugins, overloads, reverses)
+-- local function _gen_plugin_method(type, plugins, overloads, reverses)
+-- 	local methods = {} -- {name:{method1, method2, method3}}
+-- 	_gather_method(methods, type)
+-- 	local loaded = {}
+-- 	for _, plugin_name in ipairs(plugins) do
+-- 		if loaded[plugin_name] == nil then
+-- 			local plugin = safe_import(plugin_name)
+-- 			_gather_method(methods, plugin)
+-- 			loaded[plugin_name] = plugin
+-- 		end
+-- 	end
+
+-- 	return _build_plugin_method(methods, overloads, reverses)
+-- end
+
+local function _gen_plugin_info(type, plugins, overloads, reverses)
 	local methods = {} -- {name:{method1, method2, method3}}
-	_gather_method(methods, type)
+	local attrs = {} -- {name: attrs}
+	
+	-- _gather_method(methods, type)
+	_gather_infos(methods, attrs, type)
 	local loaded = {}
 	for _, plugin_name in ipairs(plugins) do
 		if loaded[plugin_name] == nil then
 			local plugin = safe_import(plugin_name)
-			_gather_method(methods, plugin)
+			-- _gather_method(methods, plugin)
+			_gather_infos(methods, attrs, plugin)
 			loaded[plugin_name] = plugin
 		end
 	end
 
-	return _build_plugin_method(methods, overloads, reverses)
+	local method_infos = _build_plugin_method(methods, overloads, reverses)
+	return method_infos, attrs
+	-- return _build_plugin_method(methods, overloads, reverses)
 end
 
 function class(name, parent, ...)
-	local _new_class = {_type = name}
+	-- local _new_class = {_type = name}
+	local _new_class = {}
+	if parent ~= nil then
+		_new_class = tablex.copy(parent)
+	end
+	_new_class._name = name
+
 	_set_upvalue_by_name(name, _new_class)
 
 	local function _new_instance()
 		local instance = {}
 		setmetatable(instance, _new_class)
+		if _new_class._has_attr then
+			rawset(instance, '_attrs', {})
+		end
 		return instance
 	end
 
@@ -86,69 +121,90 @@ function class(name, parent, ...)
 		return instance
 	end
 
-	local function _index(self, name)
-		local value = rawget(_new_class, name)
-		if value ~= nil then
-			return value
+	local function _install_plugins(plugins, overloads, reverses)
+		local methods, attrs = _gen_plugin_info(_new_class, plugins, overloads, reverses)
+		-- set the method
+		for name, fun in pairs(methods) do
+			_new_class[name] = fun
 		end
-		if parent == nil then
-			return nil
+		-- set the attribute
+		for name, attr in pairs(attrs) do
+			attr:_set_name(name)
+			
+			_new_class[name] = attr
+			_new_class._has_attr = true
 		end
-
-		local method = rawget(parent, name)
-		if method then
-			return method
-		end
-
-		method = parent.__index
-		if method then
-			return method(self, name)
-		end
-
-		return nil
 	end
 
-	function _newindex(self, name, value)
-		if not parent then
+	local function _raw_set(self, name, value)
+		if not _new_class._has_attr then
 			rawset(self, name, value)
 			return
 		end
-
-		local old_value = rawget(parent, name)
-		if old_value ~= nil then
-			rawset(self, name, value)
-			return
-		end
-
-		local pnewindex = parent.__newindex
-		if pnewindex ~= nil then
-			pnewindex(self, name, value)
-			return
+		local attr = _new_class[name]
+		if attr ~= nil then
+			if attr._set ~= nil or attr._get ~= nil then
+				self._attrs[name] = value
+			end
 		end
 
 		rawset(self, name, value)
 	end
 
-	local function _install_plugins(plugins, overloads, reverses)
-		local methods = _gen_plugin_method(_new_class, plugins, overloads, reverses)
-		for name, fun in pairs(methods) do
-			_new_class[name] = fun
-		end
+	function _index(self, name)
+		local attr = getmetatable(self)[name]
 	end
 
 	-- class setup
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._install_plugins = _install_plugins
-	_new_class.__index = _index
-	_new_class.__newindex = _newindex
+
+	-- 调用链上只有一个__index函数起效果
+	if parent and type(parent.__index) == 'function' then
+		_new_class.__index = parent.__index
+	else
+		_new_class.__index = _new_class
+	end
+
+	_new_class._raw_set = _raw_set
+
+	-- class attrs
 	_new_class._super = parent
+	_new_class._has_attr = false
 
 	-- metatable setup
 	local metatable = {}
 	metatable.__call = _new
+	metatable.__index = parent
 	setmetatable(_new_class, metatable)
 	return _new_class
 end
 
+local function is_child_of(_class, base)
+	local parent = rawget(_class, '_parent')
+	repeat
+		if parent == base then
+			return true
+		end
+		parent = rawget(_class, '_parent')
+	until not parent
+
+	return false
+end
+
+local function is_same_type(object_1, object_2)
+	return getmetable(object_1) == getmetable(object_2)
+end
+
+local function setup_plugins(_class, plugins, overloads, reverses)
+	overloads = overloads or {}
+	table.insert(overloads, '_init')
+	reverses = reverses or {}
+	_class._insall_plugins(plugins, overloads, reverses)
+end
+
+-- set global
 _set_global('class', class)
+_set_global('is_child_of', is_child_of)
+_set_global('is_same_type', is_same_type)

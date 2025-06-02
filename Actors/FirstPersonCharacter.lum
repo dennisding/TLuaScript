@@ -14,6 +14,19 @@ function FirstPersonCharacter:hello(msg)
 	print(_text("FirstPersonCharacter:hello"), msg)
 end
 
+-- function FirstPersonCharacter.__index(self, name)
+-- 	print(_text('FirstPersonCharacter!!!!!!!!!!!!!'))
+-- 	local attr = FirstPersonCharacter[name]
+-- 	if attr ~= nil then
+-- 		return attr
+-- 	end
+-- 	return rawget(self, '_vtable')[name][1](self)
+-- end
+
+-- function FirstPersonCharacter.__newindex(self, name, value)
+-- 	rawget(self, '_vtable')[name][2](self, value)
+-- end
+
 local _plugins = {
 	-- 'Plugins.input',
 	-- 'Plugins.test',

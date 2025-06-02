@@ -1,0 +1,31 @@
+
+import('data_desc')
+
+-- class data_types begin
+class('data_types')
+
+function data_types._init()
+
+end
+
+function data_types.__index(self, name)
+	local data_type = rawget(data_types, name)
+	if data_type ~= nil then
+		return data_type
+	end
+
+	data_type = data_desc[name]
+	if data_type == nil then
+		local module = safe_import('DataTypes.' .. name)
+		data_type = module[name]
+	end
+
+	rawset(self, name, data_type)
+	
+	return data_type
+end
+
+-- class data_types end
+
+-- set global
+_set_global('data_types', data_types())

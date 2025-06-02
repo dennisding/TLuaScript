@@ -5,5 +5,10 @@ function print_stack(msg, level)
 	print(_text(trace))
 end
 
+function default_watch(old, new)
+
+end
+
 function watch(object, name, ...)
+	
 end

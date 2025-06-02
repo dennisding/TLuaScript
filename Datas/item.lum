@@ -1,0 +1,6 @@
+
+
+_data = {
+	[100] = {name = _text('hp回复'), recover_hp = 10},
+	[101] = {name = _text('毒药'), recover_hp = -30}
+}

@@ -1,0 +1,20 @@
+
+
+class('item')
+
+item.item_id = data_types.i32(0, 'client')
+item.price = data_types.i8(0, 'client')
+item.star = data_types.i8(1, 'client')
+item.hidden_property = data_types.i8(1, 'server_only')
+
+function item._init(self, item_id)
+	self.item_id = item_id
+end
+
+function item.get_data(self)
+	return _data.item[self.item_id]
+end
+
+function item.use_on_entity(self, entity)
+
+end

@@ -26,6 +26,7 @@ class('panel')
 
 function panel._init(self, res)
 	self._visible = false
+	self._res = res
 end
 
 function panel.set_visible(self, visible)

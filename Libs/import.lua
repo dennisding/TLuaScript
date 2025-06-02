@@ -37,6 +37,9 @@ local function _load_chunk(name, env, hints)
 	local chunk, msg = nil, nil
 	if hints.silent and content == nil then -- 什么都不用做
 	else
+		if content == nil then
+			error(string.format('invalid module: %s', name))
+		end
 		chunk, msg = load(content, utf16_to_utf8(file_name), 'bt', env)
 		if chunk then
 			chunk()
