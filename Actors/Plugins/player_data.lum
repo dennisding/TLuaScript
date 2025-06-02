@@ -15,11 +15,7 @@ function setup_user_data(self)
 
 end
 
-function on_set_name(self, old, name)
-	print(_text('on_set_name'), towstring(old), towstring(name))
-	_gui.main:set_name(old, name)
-end
-
-function on_set_inventory(self, old, new)
-
+function on_set_name(self, name)
+	print(_text('on_set_name'), towstring(name))
+	_gui.main:set_name(name)
 end

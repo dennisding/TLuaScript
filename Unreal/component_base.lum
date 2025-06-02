@@ -4,7 +4,6 @@ import('object')
 class('component_base', object.object)
 
 function component_base.AttachToComponent(self, parent, socket_name, ...)
-
 	self:K2_AttachToComponent(parent, socket_name, ...)
 end
 

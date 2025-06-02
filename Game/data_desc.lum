@@ -14,27 +14,28 @@ function data_desc._get(self, owner)
 		owner._attrs[self._name] = self._default
 		return self._default
 	end
+	return value
 end
 
 -- see class.lum _newindex
 function data_desc._set(self, owner, new_value)
 	print(_text('data_desc._set'), _text(self._name))
-	local notify = self[self._notify_name]
+	local notify = owner[self._notify_name]
 	if notify then
 		local old_value = owner._attrs[self._name]
 		owner._attrs[self._name] = new_value
-		notify(self, old_value, new_value)
+		notify(self, new_value)
 		return
 	end
 
-	local global_notify = self['on_set_attr']
+	local global_notify = owner['on_set_attr']
 	if not global_notify then
 		owner._attrs[self._name] = new_value
 		return
 	end
 	local old_value = owner._attrs[self._name]
 	owner._attrs[self._name] = new_value
-	global_notify(self, data_desc, old_value, new_value)
+	global_notify(owner, self, new_value)
 end
 -- class data_desc end
 

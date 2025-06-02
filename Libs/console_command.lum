@@ -1,7 +1,7 @@
 
 -- console commands
 -- _console_commands = _ENV._console_command or {}			-- {name:command}
-_console_commands = _console_commands or {}
+_console_commands = {}
 setmetatable(_console_commands, {__index = _ENV})
 
 function add_console_command(cmds)
@@ -55,5 +55,6 @@ commands.p = '_world.player'
 
 add_console_command(commands)
 
+-- set global
 _set_global('add_console_command', add_console_command)
 _set_global('_lua_process_console_command', _lua_process_console_command)

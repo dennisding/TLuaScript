@@ -72,7 +72,10 @@ class('object')
 
 function object.__index(self, name)
 	local attr = getmetatable(self)[name]
-	if attr ~= nil then
+	if attr then
+		if type(attr) == 'table' and attr._get ~= nil then
+			return attr._get(attr, self)
+		end
 		return attr
 	end
 
@@ -80,6 +83,12 @@ function object.__index(self, name)
 end
 
 function object.__newindex(self, name, value)
+	local attr = getmetatable(self)[name]
+	if attr and attr._set ~= nil then
+		attr._set(attr, self, value)
+		return
+	end
+
 	rawget(self, '_vtable')[name][2](self, value)
 end
 --- class object end

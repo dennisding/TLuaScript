@@ -17,6 +17,8 @@ function gui_mgr.__index(self, name)
 	local gui = gui_type()
 
 	rawset(self, name, gui)
+
+	return gui
 end
 
 -- gui_mgr end

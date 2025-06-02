@@ -32,7 +32,7 @@ end
 -- 危险函数, 会污染调用环境, 请小心使用
 function _set_global(name, value)
 	if _sys.reloading then
-		_G[name] = value
+--		_G[name] = value
 		return
 	end
 

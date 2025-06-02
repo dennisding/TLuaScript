@@ -1,5 +1,4 @@
 
--- local function _gather_method(result, t)
 local function _gather_infos(methods, attrs, t)
 	local key = nil
 	repeat
@@ -52,32 +51,15 @@ local function _build_plugin_method(method_map, overloads, reverses)
 	return result
 end
 
--- local function _gen_plugin_method(type, plugins, overloads, reverses)
--- 	local methods = {} -- {name:{method1, method2, method3}}
--- 	_gather_method(methods, type)
--- 	local loaded = {}
--- 	for _, plugin_name in ipairs(plugins) do
--- 		if loaded[plugin_name] == nil then
--- 			local plugin = safe_import(plugin_name)
--- 			_gather_method(methods, plugin)
--- 			loaded[plugin_name] = plugin
--- 		end
--- 	end
-
--- 	return _build_plugin_method(methods, overloads, reverses)
--- end
-
 local function _gen_plugin_info(type, plugins, overloads, reverses)
 	local methods = {} -- {name:{method1, method2, method3}}
 	local attrs = {} -- {name: attrs}
 	
-	-- _gather_method(methods, type)
 	_gather_infos(methods, attrs, type)
 	local loaded = {}
 	for _, plugin_name in ipairs(plugins) do
 		if loaded[plugin_name] == nil then
 			local plugin = safe_import(plugin_name)
-			-- _gather_method(methods, plugin)
 			_gather_infos(methods, attrs, plugin)
 			loaded[plugin_name] = plugin
 		end
@@ -85,11 +67,9 @@ local function _gen_plugin_info(type, plugins, overloads, reverses)
 
 	local method_infos = _build_plugin_method(methods, overloads, reverses)
 	return method_infos, attrs
-	-- return _build_plugin_method(methods, overloads, reverses)
 end
 
 function class(name, parent, ...)
-	-- local _new_class = {_type = name}
 	local _new_class = {}
 	if parent ~= nil then
 		_new_class = tablex.copy(parent)
@@ -159,14 +139,12 @@ function class(name, parent, ...)
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._install_plugins = _install_plugins
-
 	-- 调用链上只有一个__index函数起效果
 	if parent and type(parent.__index) == 'function' then
 		_new_class.__index = parent.__index
 	else
 		_new_class.__index = _new_class
 	end
-
 	_new_class._raw_set = _raw_set
 
 	-- class attrs

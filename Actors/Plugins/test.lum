@@ -23,7 +23,7 @@ function test_method(self, value, msg)
 	local mesh = self:SayHello(1314, _text('中文消息'))
 
 	self.Mesh1P = mesh
-	print(towstring(mesh))
+--	print(towstring(mesh))
 	-- assert(mesh == self.Mesh1P)
 	-- mesh.bCastDynamicShadow = false
 	-- mesh.CastShadow = false
