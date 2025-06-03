@@ -1,0 +1,10 @@
+
+class('map', data_types.data_type)
+
+function map._init()
+
+end
+
+function map.insert(self, key, value)
+
+end

@@ -1,0 +1,70 @@
+
+class('array', data_types.data_type)
+
+function array._init(self, item_desc)
+	self._item_desc = item_desc
+	self._items = {}
+	self._owner = nil
+	self._notifiers = {}  -- {name: notifier_name}
+end
+
+function array.set_owner(self, owner)
+	self._owner = owner
+end
+
+function array.set_name(self, name)
+	self._name = name
+end
+
+function array.size(self)
+	return #self._items
+end
+
+function array.iter(self)
+	local items = self._items
+	local index = 0
+	function _iter()
+		index = index + 1
+		return items[index]
+	end
+
+	return _iter
+end
+
+function array.insert(self, item, pos)
+	local items = self._items
+	pos = pos or (#items + 1)
+
+	assert(pos > 0 and pos <= #items + 1)
+	-- move the item
+	table.insert(items, pos, item)
+
+	--	item:set_owner(self)
+	self._item_desc:set_owner(item, self)
+	self:notify_owner('insert', item, pos)
+end
+
+function array.remove(self, pos)
+	local items = self._items
+	
+	assert(pos > 0 and pos <= #items)
+
+	table.remove(items, pos)
+	self:notify_owner('remove', pos)
+end
+
+function array.notify_owner(self, name, ...)
+	local notifier = self._notifiers[name]
+	if notifier == nil then
+		-- on_name_remove(pos)
+		-- no_name_insert(item, pos)
+		notifier = 'on_' .. self._name .. '_' .. name
+		self._notifiers[name] = notifier
+	end
+
+	local owner = self._owner
+	if owner and owner[notifier] then
+		owner[notifier](owner, ...)
+	end
+end
+

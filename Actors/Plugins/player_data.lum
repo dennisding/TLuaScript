@@ -1,21 +1,49 @@
 
-name = data_types.str(_text(''), 'save')
-max_hp = data_types.i32(100, 'save')
-max_mp = data_types.i32(1000, 'save')
-hp = data_types.i32(100, 'save')
-mp = data_types.i32(1000, 'save')
+name = data_desc.str(_text(''), 'save')
+max_hp = data_desc.i32(100, 'save')
+max_mp = data_desc.i32(1000, 'save')
+hp = data_desc.i32(100, 'save')
+mp = data_desc.i32(1000, 'save')
+glod = data_desc.i16(0, 'own_client')
 
--- inventory = data_types.inventory()
+-- inventory = data_types.inventory('save')
+
+quests = data_desc.array(data_desc.i16(1), 'save')
 
 function _init(self)
 	self.name = _text('勇者(hero)')
+
+	self.quests:insert(100)
+	self.quests:insert(101)
+	self.quests:insert(102)
+	self.quests:insert(103)
+	self.quests:remove(3)
+
+	for quest_id in self.quests:iter() do
+		print(_text('has_quest'), towstring(quest_id))
+	end
 end
 
 function setup_user_data(self)
-
 end
 
-function on_set_name(self, name)
-	print(_text('on_set_name'), towstring(name))
+function gain_quest(self, quest_id)
+	self.quests:insert(quest_id)
+end
+
+function on_name_set(self, name)
+	print(_text('on_name_set'), towstring(name))
 	_gui.main:set_name(name)
+end
+
+function on_quests_set(self, quests)
+	print(_text('on_quests_set'))
+end
+
+function on_quests_insert(self, item, slot)
+	print(_text('on_quests_insert'), towstring(item), towstring(slot))
+end
+
+function on_quests_remove(self, slot)
+	print(_text('on_quests_remove'), towstring(slot))
 end

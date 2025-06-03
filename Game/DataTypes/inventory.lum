@@ -1,12 +1,14 @@
 
 import('Datas.item')
 import('data_desc')
+import('data_types')
 
-class('inventory', data_desc.data_desc)
+-- class inventory begin
+class('inventory', data_types.data_type)
 
 inventory.max_size = data_types.i32(100, 'client')
 inventory.size = data_types.i32(10, 'client')
-inventory.items = data_type.array(data_types.item, 'client')
+inventory.items = data_types.array(data_types.item, 'client')
 
 function inventory._init(self)
 
@@ -36,3 +38,4 @@ end
 function invenotry.add_item_to_slot(self, item, slot)
 	self.items[slot] = item
 end
+-- class inventory end

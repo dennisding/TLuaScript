@@ -3,7 +3,6 @@
 class('main', _gui._panel)
 
 function main._init(self)
-	
 end
 
 function main.set_name(self, name)

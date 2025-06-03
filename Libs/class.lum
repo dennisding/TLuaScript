@@ -74,7 +74,7 @@ function class(name, parent, ...)
 	if parent ~= nil then
 		_new_class = tablex.copy(parent)
 	end
-	_new_class._name = name
+	_new_class._type = name
 
 	_set_upvalue_by_name(name, _new_class)
 
@@ -109,7 +109,7 @@ function class(name, parent, ...)
 		end
 		-- set the attribute
 		for name, attr in pairs(attrs) do
-			attr:_set_name(name)
+			attr:set_name(name)
 			
 			_new_class[name] = attr
 			_new_class._has_attr = true

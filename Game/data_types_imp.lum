@@ -1,11 +1,9 @@
 
-import('data_desc')
-
 -- class data_types begin
 class('data_types')
 
-function data_types._init()
-
+function data_types._init(self)
+	self.data_type = data_type
 end
 
 function data_types.__index(self, name)
@@ -14,18 +12,30 @@ function data_types.__index(self, name)
 		return data_type
 	end
 
-	data_type = data_desc[name]
-	if data_type == nil then
-		local module = safe_import('DataTypes.' .. name)
-		data_type = module[name]
-	end
-
+	local module = clean_import('DataTypes.' .. name)
+	data_type = module[name]
 	rawset(self, name, data_type)
-	
 	return data_type
+
+	-- data_type = data_desc[name]
+	-- if data_type == nil then
+	-- 	local module = safe_import('DataTypes.' .. name)
+	-- 	data_type = module[name]
+	-- end
+
+	-- rawset(self, name, data_type)
+	
+	-- return data_type
+end
+-- class data_types end
+-- class data_type begin
+class('data_type')
+
+function data_type.set_owner(self, owner)
+	self._owner = owner
 end
 
--- class data_types end
+-- class data_type end
 
 -- set global
 _set_global('data_types', data_types())
