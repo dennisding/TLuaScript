@@ -69,19 +69,39 @@ local function _gen_plugin_info(type, plugins, overloads, reverses)
 	return method_infos, attrs
 end
 
+local function _setup_data_desc(_new_class)
+	for key, value in pairs(_new_class) do
+		-- data_descriptor
+		if type(value) == 'table' and (value._get ~= nil or value._set ~= nil ) then
+			value:set_name(key)
+			_new_class._has_data_desc = true
+		end
+	end
+end
+
 function class(name, parent, ...)
 	local _new_class = {}
 	if parent ~= nil then
 		_new_class = tablex.copy(parent)
 	end
 	_new_class._type = name
-
 	_set_upvalue_by_name(name, _new_class)
 
+	local _ready = false
+
+	local function _make_class_ready()
+		_setup_data_desc(_new_class)
+		_ready = true
+	end
+
 	local function _new_instance()
+		if not _ready then
+			_make_class_ready()
+		end
+
 		local instance = {}
 		setmetatable(instance, _new_class)
-		if _new_class._has_attr then
+		if _new_class._has_data_desc then
 			rawset(instance, '_attrs', {})
 		end
 		return instance
@@ -109,15 +129,16 @@ function class(name, parent, ...)
 		end
 		-- set the attribute
 		for name, attr in pairs(attrs) do
-			attr:set_name(name)
-			
 			_new_class[name] = attr
-			_new_class._has_attr = true
+			-- attr:set_name(name)
+			
+			-- _new_class[name] = attr
+			-- _new_class._has_attr = true
 		end
 	end
 
 	local function _raw_set(self, name, value)
-		if not _new_class._has_attr then
+		if not _new_class._has_data_desc then
 			rawset(self, name, value)
 			return
 		end
@@ -149,7 +170,7 @@ function class(name, parent, ...)
 
 	-- class attrs
 	_new_class._super = parent
-	_new_class._has_attr = false
+	-- _new_class._has_attr = false
 
 	-- metatable setup
 	local metatable = {}

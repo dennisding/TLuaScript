@@ -55,6 +55,22 @@ function data_desc._set(self, owner, new_value)
 	global_notify(owner, self, new_value)
 end
 -- class data_desc end
+-- class data_proxy begin
+class('data_proxy', data_desc)
+
+function data_proxy._init(self, key)
+	self.key = key
+end
+
+function data_proxy._get(self, owner)
+	return owner._data[self.key]
+end
+
+function data_proxy._set(self, owner)
+	error(string.format("can not set the data : %s", self.key))
+end
+
+-- class data_proxy end
 -- class number begin
 class('number', data_desc)
 
@@ -102,7 +118,6 @@ end
 
 function array.new_value(self, owner)
 	local new_array = data_types.array(self.item_desc)
-	tablex.print_table(new_array)
 	new_array:set_name(self.name or '')
 	new_array:set_owner(owner)
 	return new_array
@@ -162,7 +177,7 @@ function data_desc_mgr.__index(self, name)
 	end
 
 	local data_type = data_types[name]
-	assert(date_type ~= nil)
+	assert(data_type ~= nil, name)
 
 	local function _desc(...)
 		return class_desc(data_type, ...)

@@ -1,10 +1,21 @@
 
 class('map', data_types.data_type)
 
-function map._init()
-
+function map._init(self, key_desc, value_desc)
+	self._key_desc = key_desc
+	self._value_desc = value_desc
+	self._items = {}  -- {key:value}
 end
 
-function map.insert(self, key, value)
+function map.add(self, key, value)
+	self._items[key] = value
 
+	self:notify_owner('add', key, value)
+end
+
+function map.remove(self, key)
+	assert(self._items[key] ~= nil)
+	self._items[key] = nil
+
+	self:notify_owner('remove', key)
 end
