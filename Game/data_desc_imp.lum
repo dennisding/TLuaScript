@@ -61,12 +61,14 @@ end
 -- class data_proxy begin
 class('data_proxy', data_desc)
 
-function data_proxy._init(self, key)
+function data_proxy._init(self, key, data)
 	self.key = key
+	self.data = data or '_data'
 end
 
 function data_proxy._get(self, owner)
-	return owner._data[self.key]
+	return owner[self.data][self.key]
+--	return owner._data[self.key]
 end
 
 function data_proxy._set(self, owner)
