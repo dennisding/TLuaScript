@@ -172,6 +172,7 @@ function class(name, parent, ...)
 		_new_class.__index = _new_class
 	end
 	_new_class._raw_set = _raw_set
+	_new_class.__name = string.format('object<%s>', name)
 
 	-- class attrs
 	_new_class._super = parent
@@ -180,6 +181,7 @@ function class(name, parent, ...)
 	local metatable = {}
 	metatable.__call = _new
 	metatable.__index = parent
+	metatable.__name = string.format('class<%s>', name)
 	setmetatable(_new_class, metatable)
 	return _new_class
 end
