@@ -23,6 +23,14 @@ function data_desc.new_value(self, owner)
 	return nil
 end
 
+function data_desc.from_value(self, owner, value)
+	if value ~= nil then
+		return value
+	end
+
+	return self:new_value(owner)
+end
+
 -- call by class, see class.lum _index
 function data_desc._get(self, owner)
 	local value = owner._attrs[self.name]
@@ -36,23 +44,18 @@ end
 
 -- see class.lum _newindex
 function data_desc._set(self, owner, new_value)
+	owner._attrs[self.name] = new_value
+
 	local notify = owner[self.notify_name]
 	if notify then
-		local old_value = owner._attrs[self.name]
-		owner._attrs[self.name] = new_value
 		notify(self, new_value)
 		return
 	end
 
 	local global_notify = owner['on_set_attr']
-	if not global_notify then
-		owner._attrs[self.name] = new_value
-		return
+	if global_notify then
+		global_notify(owner, self, new_value)
 	end
-
-	local old_value = owner._attrs[self.name]
-	owner._attrs[self.name] = new_value
-	global_notify(owner, self, new_value)
 end
 -- class data_desc end
 -- class data_proxy begin
@@ -113,15 +116,26 @@ function array._init(self, item_desc, ...)
 end
 
 function array.set_owner(self, value, owner)
-	value:set_owner(owner)
+	value:_set_owner(owner)
 end
 
 function array.new_value(self, owner)
 	local new_array = data_types.array(self.item_desc)
-	new_array:set_name(self.name or '')
-	new_array:set_owner(owner)
+	new_array:_set_name(self.name or '')
+	new_array:_set_owner(owner)
 	return new_array
 end
+
+function array.from_value(self, owner, value)
+	if value == nil then
+		return nil
+	end
+
+	local new_array = self:new_value(owner)
+	new_array:_from_value(value)
+	return new_array
+end
+
 -- class array end
 
 -- class fixed_array begin
@@ -161,9 +175,25 @@ end
 
 function class_desc.new_value(self, owner)
 	local value = self.data_type()
-	value:set_name(self.name or '')
+--	value:set_name(self.name or '')
+	value:_set_name(self.name or '')
 	value:set_owner(owner)
 	return value
+end
+
+function class_desc.from_value(self, owner, value)
+	if value == nil then
+		return nil
+	end
+
+	local instance = self.data_type._new_instance(value)
+	instance:_call_init()
+	return instance
+
+-- 	local instance = self.data_type._init_new(value)
+-- --	instance:set_name(self.name or '')
+-- 	instance:set_owner(owner)
+-- 	return instance
 end
 
 -- class class_desc end

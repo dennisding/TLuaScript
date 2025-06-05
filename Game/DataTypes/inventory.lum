@@ -1,17 +1,16 @@
 
-import('Datas.item')
-import('data_desc')
-import('data_types')
+-- import('Datas.item')
+-- import('data_desc')
+-- import('data_types')
 
 -- class inventory begin
 class('inventory', data_types.data_type)
 
-inventory.max_size = data_types.i32(100, 'client')
-inventory.size = data_types.i32(10, 'client')
-inventory.items = data_types.array(data_types.item, 'client')
+inventory.max_size = data_types.i32(100, 'save', 'client')
+inventory.size = data_types.i32(10, 'save', 'client')
+inventory.items = data_types.array(data_types.item('save'), 'client')
 
 function inventory._init(self)
-
 end
 
 function inventory.add_item(self, item_id)

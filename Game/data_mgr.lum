@@ -35,6 +35,11 @@ function data_set._load_data(self)
 end
 
 function data_set.__index(self, key)
+	local value = rawget(data_set, key)
+	if value ~= nil then
+		return value
+	end
+
 	if type(key) ~= 'table' then
 		local data = self._data[key]
 		rawset(self, key, data)

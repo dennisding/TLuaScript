@@ -4,16 +4,23 @@ class('array', data_types.data_type)
 function array._init(self, item_desc)
 	self._item_desc = item_desc
 	self._items = {}
+	self._name = ''
 	self._owner = nil
 	self._notifiers = {}  -- {name: notifier_name}
 end
 
-function array.set_owner(self, owner)
+function array._set_owner(self, owner)
 	self._owner = owner
 end
 
-function array.set_name(self, name)
+function array._set_name(self, name)
 	self._name = name
+end
+
+function array._from_value(self, value)
+	for index, item in ipairs(value) do
+		self._items[index] = self._item_desc:from_value(self, item)
+	end
 end
 
 function array.size(self)

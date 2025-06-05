@@ -1,15 +1,23 @@
 
 
+-- class item begin
 class('item', data_types.data_type)
 
 item.id = data_desc.i8(0, 'save')
 item.name = data_desc.data_proxy('name') -- 查表获得 self._data[name]
 
-function item._init(self, id)
-	self.id = id
-	self._data = _data.item[id]
+function item._init(self)
+	self._data = _data.item[self.id]
 end
 
-function item.use_on_entity(self, entity)
-
+function item.new(id)
+	local value = {}
+	value.id = id
+	return item.from_value(value)
 end
+
+function item.use(self, use)
+	print(_text('use item'), towstring(self.id))
+end
+
+-- class item end

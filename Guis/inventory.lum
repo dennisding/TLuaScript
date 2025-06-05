@@ -1,0 +1,16 @@
+
+-- class inventory begin
+class('inventory', _gui.panel)
+
+function inventory._init()
+
+end
+
+function inventory.add_item(self, item)
+
+end
+
+function inventory.add_item_at(self, item, pos)
+
+end
+-- class inventory end
