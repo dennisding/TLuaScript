@@ -1,5 +1,5 @@
 
-local function _buid_hints(...)
+local function _build_hints(...)
 	return tablex.to_set({...})
 end
 
@@ -7,7 +7,7 @@ end
 class('data_desc')
 
 function data_desc._init(self, ...)
-	self.hints = tablex.to_set({...})
+	self.hints = _build_hints(...)
 end
 
 function data_desc.set_name(self, name)
@@ -15,7 +15,8 @@ function data_desc.set_name(self, name)
 	self.notify_name = 'on_' .. name .. '_set'
 end
 
-function data_desc.set_owner(self, owner)
+function data_desc.set_value_owner(self, value, owner)
+
 end
 
 function data_desc.new_value(self, owner)
@@ -33,11 +34,12 @@ end
 -- call by class, see class.lum _index
 function data_desc._get(self, owner)
 	local value = owner._attrs[self.name]
-	if value == nil then
-		value = self:new_value(owner)
-		owner._attrs[self.name] = value
+	if value ~= nil then
 		return value
 	end
+
+	value = self:new_value(owner)
+	owner._attrs[self.name] = value
 	return value
 end
 
@@ -45,15 +47,14 @@ end
 function data_desc._set(self, owner, new_value)
 	owner._attrs[self.name] = new_value
 
-	local notify = owner[self.notify_name]
-	if notify then
-		notify(self, new_value)
-		return
+	local notifier = owner['on_attr_changed']
+	if notifier then
+		notifier(owner, self)
 	end
 
-	local global_notify = owner['on_set_attr']
-	if global_notify then
-		global_notify(owner, self, new_value)
+	notifier = owner[self.notify_name]
+	if notifier then
+		notifier(owner, new_value)
 	end
 end
 -- class data_desc end
@@ -75,6 +76,11 @@ end
 -- class data_proxy end
 -- class number begin
 class('number', data_desc)
+
+function number._init(self, default, ...)
+	self.default = default
+	self.hints = _build_hints(...)
+end
 
 function number.new_value(self, owner)
 	return self.default
@@ -99,7 +105,7 @@ class('str', data_desc)
 
 function str._init(self, default, ...)
 	self.default = default
-	self.hints = tablex.to_set({...})
+	self.hints = _build_hints(...)
 end
 
 function str.new_value(self, owner)
@@ -112,16 +118,17 @@ class('array', data_desc)
 
 function array._init(self, item_desc, ...)
 	self.item_desc = item_desc
+	self.hints = _build_hints(...)
 end
 
-function array.set_owner(self, value, owner)
-	value:_set_owner(owner)
+function array.set_value_owner(self, value, owner)
+	value:_set_owner(owner, self)
 end
 
 function array.new_value(self, owner)
 	local new_array = data_types.array(self.item_desc)
-	new_array:_set_name(self.name or '')
-	new_array:_set_owner(owner)
+--	new_array:_set_name(self.name or '')
+	new_array:_set_owner(owner, self)
 	return new_array
 end
 
@@ -142,8 +149,8 @@ class('fixed_array', array)
 
 function fixed_array.new_value(self, owner)
 	local new_array = data_types.fixed_array(self.item_desc)
-	new_array:set_name(self.name or '')
-	new_array:set_owner(owner)
+--	new_array:_set_name(self.name or '')
+	new_array:_set_owner(owner)
 	return new_array
 end
 -- class fixed_array end
@@ -159,24 +166,22 @@ end
 
 function map.new_value(self, owner)
 	local new_map = data_types.map(self.key_desc, self.value_desc)
-	new_map:set_name(self.name or '')
-	new_map:set_owner(owner)
+	new_map:_set_owner(owner, self)
 	return new_map
 end
 -- class map end
+
 -- calss class_desc begin
 class('class_desc', data_desc)
 
 function class_desc._init(self, data_type, ...)
 	self.data_type = data_type
-	self.hints = tablex.to_set({...})
+	self.hints = _build_hints(...)
 end
 
 function class_desc.new_value(self, owner)
 	local value = self.data_type()
---	value:set_name(self.name or '')
-	value:_set_name(self.name or '')
-	value:set_owner(owner)
+	value:_set_owner(owner, self)
 	return value
 end
 
@@ -185,8 +190,8 @@ function class_desc.from_value(self, owner, value)
 		return nil
 	end
 
-	local instance = self.data_type._new_instance(value)
-	instance:_call_init()
+	local instance = self.data_type._init_new(value)
+	instance:_set_owner(owner, self)
 	return instance
 end
 

@@ -21,8 +21,31 @@ end
 -- class data_type begin
 class('data_type')
 
-function data_type.set_owner(self, owner)
+function data_type._set_owner(self, owner, desc)
 	self._owner = owner
+	self._desc = desc
+	self._name = desc._name or ''
+	self._notifiers = {}  -- {name notifier}
+end
+
+function data_type.notify_owner(self, event, ...)
+	local owner = self._owner
+	if not owner then -- standalone value
+		return
+	end
+	
+	local notifier = self._notifiers[event]
+	if notifier == nil then
+		notifier = 'on_' .. self._name .. '_' .. event
+		self._notifiers[event] = notifier
+	end
+
+	if owner[notifier] then
+		owner[notifier](owner, self._desc, ...)
+	end
+	if owner['on_attr_changed'] then
+		owner.on_attr_changed(owner, self._desc, ...)
+	end
 end
 
 function data_type.__index(self, key)
@@ -43,7 +66,10 @@ function data_type.__newindex(self, key, value)
 	end
 	rawset(self, key, value)
 end
--- class data_type end
+
+function data_type.on_attr_changed(self, owner, desc)
+	self:notify_owner('')
+end
 
 -- set global
 _set_global('data_types', data_types())

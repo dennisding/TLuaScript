@@ -4,9 +4,7 @@ max_hp = data_desc.i32(100, 'save')
 max_mp = data_desc.i32(1000, 'save')
 hp = data_desc.i32(100, 'save')
 mp = data_desc.i32(1000, 'save')
-gold = data_desc.i16(0, 'own_client')
-
--- inventory = data_types.inventory('save')
+gold = data_desc.i16(0, 'save')
 
 quests = data_desc.array(data_desc.i16(0), 'save')
 item = data_desc.item('save')
@@ -21,11 +19,31 @@ function _init(self)
 	-- self.quests:insert(101)
 	-- self.quests:insert(102)
 	-- self.quests:insert(103)
-	self.quests:remove(1)
+	self.quests:remove_at(1)
 
-	for quest_id in self.quests:iter() do
+	for index, quest_id in self.quests:iter() do
 		print(_text('has_quest'), towstring(quest_id))
 	end
+end
+
+function test_items(self)
+	local new_item = data_types.item.new(100)
+	for index, item in self.items:iter() do
+		print(_text("item"), towstring(item.id), item.name)
+	end
+
+--	self.items:remove(new_item)
+
+	local item = self.items:get(1)
+	item.price = 30
+
+	for index, item in self.items:iter() do
+		print(_text("item"), towstring(item.id), item.name)
+	end
+end
+
+function on_attr_changed(self, desc)
+	print(_text('on_attr_changed'), _text(desc.name))
 end
 
 function on_hp_set(self, hp)

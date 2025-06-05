@@ -4,6 +4,7 @@
 class('item', data_types.data_type)
 
 item.id = data_desc.i8(0, 'save')
+item.price = data_desc.i32(1000, 'save')
 item.name = data_desc.data_proxy('name') -- 查表获得 self._data[name]
 
 function item._init(self)
@@ -13,7 +14,7 @@ end
 function item.new(id)
 	local value = {}
 	value.id = id
-	return item.from_value(value)
+	return item._init_new(value)
 end
 
 function item.use(self, use)
