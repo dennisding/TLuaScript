@@ -18,13 +18,21 @@ function array._set_name(self, name)
 end
 
 function array._from_value(self, value)
+	print(_text('array from value'), towstring(value))
+	tablex.print_table(value)
 	for index, item in ipairs(value) do
+		print(_text('array set'), towstring(index), towstring(item))
+		print(towstring(self._item_desc:from_value(self, item)))
 		self._items[index] = self._item_desc:from_value(self, item)
 	end
 end
 
 function array.size(self)
 	return #self._items
+end
+
+function array.get2(self, index)
+	return self._items[index]
 end
 
 function array.iter(self)

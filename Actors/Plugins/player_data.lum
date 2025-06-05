@@ -11,7 +11,7 @@ gold = data_desc.i16(0, 'own_client')
 quests = data_desc.array(data_desc.i16(0), 'save')
 item = data_desc.item('save')
 
--- items = data_desc.array(data_desc.item('save'), 'save')
+items = data_desc.array(data_desc.item('save'), 'save')
 
 function _init(self)
 	self.name = _text('勇者(hero)')

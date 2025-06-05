@@ -14,6 +14,11 @@ end
 local _update_table = nil
 
 local function _update_attr(names, old, new)
+	-- new value is nil, don't delete the attribute
+	if new == nil then
+		return old
+	end
+
 	if old == new then
 		return new
 	end

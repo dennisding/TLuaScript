@@ -12,7 +12,6 @@ end
 
 function data_desc.set_name(self, name)
 	self.name = name
-	--self.notify_name = 'on_set_' .. name
 	self.notify_name = 'on_' .. name .. '_set'
 end
 
@@ -189,11 +188,6 @@ function class_desc.from_value(self, owner, value)
 	local instance = self.data_type._new_instance(value)
 	instance:_call_init()
 	return instance
-
--- 	local instance = self.data_type._init_new(value)
--- --	instance:set_name(self.name or '')
--- 	instance:set_owner(owner)
--- 	return instance
 end
 
 -- class class_desc end

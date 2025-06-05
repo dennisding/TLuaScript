@@ -71,7 +71,4 @@ function print_table(t, msg)
 	for k, v in pairs(t) do
 		print(_text('    '), _text(tostring(k)), _text(tostring(v)))
 	end
-	for k, v in ipairs(t) do
-		print(_text('    '), _text(tostring(k)), _text(tostring(v)))
-	end
 end

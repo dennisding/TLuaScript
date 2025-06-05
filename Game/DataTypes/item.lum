@@ -17,7 +17,7 @@ function item.new(id)
 end
 
 function item.use(self, use)
-	print(_text('use item'), towstring(self.id))
+	print(_text('use item222'), towstring(self.id))
 end
 
 -- class item end

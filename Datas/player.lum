@@ -20,11 +20,11 @@ _data = {
 
 	[2] = {
 		name = _text('玩家2'),
-		hp = 100,
-		mp = 1000,
-		max_hp = 100,
-		max_mp = 1000,
-		gold = 10004,
+		hp = 200,
+		mp = 2000,
+		max_hp = 200,
+		max_mp = 2000,
+		gold = 20004,
 		quests = {101, 102},
 		item = {
 			id = 101,
