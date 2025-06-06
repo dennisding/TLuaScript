@@ -91,6 +91,24 @@ function object.__newindex(self, name, value)
 
 	rawget(self, '_vtable')[name][2](self, value)
 end
+
+function object._get_attrs(self)
+	local ctype = rawget(self, '_ct')
+	local attrs = _cpp_object_get_attrs(ctype)
+	local result = {}
+	for index, value in pairs(attrs) do
+		result[index] = _cpp_utf16_to_utf8(value)
+	end
+	return result
+end
+
+function object._dump_attrs(self)
+	print(towstring(self))
+	for index, value in ipairs(self:_get_attrs()) do
+		print(_text('    '), _text(value), towstring(self[value]))
+	end
+end
+
 --- class object end
 
 local function _gen_vtable(ctype, context)

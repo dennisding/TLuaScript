@@ -33,8 +33,6 @@ function _lua_get_actor(cobject, ctype)
 end
 
 function _lua_get_obj(cobject, ctype)
-	print(_text('_lua_get_obj'), towstring(cobject), towstring(ctype))
-
 	return object.new_object(cobject, ctype)
 end
 
