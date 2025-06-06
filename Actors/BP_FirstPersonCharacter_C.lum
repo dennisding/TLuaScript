@@ -1,0 +1,27 @@
+
+import('object')
+import('CppLuaCharacter')
+
+class('BP_FirstPersonCharacter_C', CppLuaCharacter.CppLuaCharacter)
+
+function BP_FirstPersonCharacter_C:_init()
+	self._super._init(self)
+	print(_text('BP_FirstPersonCharacter_C:_init'))
+end
+
+function BP_FirstPersonCharacter_C:hello(msg)
+	self._super._hello(self, msg)
+	print(_text("BP_FirstPersonCharacter_C:hello"), msg)
+end
+
+local _plugins = {
+}
+
+local overloads = {
+	'_init',
+}
+
+local reverses = {}
+
+-- finish setup
+BP_FirstPersonCharacter_C._install_plugins(_plugins, overloads, reverses)

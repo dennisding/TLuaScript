@@ -20,7 +20,7 @@ function _lua_bind_obj(cobject, ctype)
 	return instance
 end
 
-function _lua_get_obj(cobject, ctype)
+function _lua_get_actor(cobject, ctype)
 	local object = _sys.cpp_objects[cobject]
 	if object ~= nil then
 		return object
@@ -30,6 +30,12 @@ function _lua_get_obj(cobject, ctype)
 	end
 
 	return actor.new_proxy(cobject, ctype)
+end
+
+function _lua_get_obj(cobject, ctype)
+	print(_text('_lua_get_obj'), towstring(cobject), towstring(ctype))
+
+	return object.new_object(cobject, ctype)
 end
 
 function _lua_get_com(cobject, ctype)
@@ -52,7 +58,7 @@ function _lua_unbind_obj(cpp_obj)
 end
 
 function _lua_call(cobject, name, ...)
-	local self = _lua_get_obj(cobject)
+	local self = _lua_get_actor(cobject)
 	local method = self[name]
 	if method == nil then
 		error(string.format('Invalid call from c++[%s]', tostring(name)))
@@ -61,7 +67,7 @@ function _lua_call(cobject, name, ...)
 end
 
 function _lua_tcall(cobject, name, ...)
-	local self = _lua_get_obj(cobject)
+	local self = _lua_get_actor(cobject)
 	local method = self[name]
 	if method then
 		method(self, ...)

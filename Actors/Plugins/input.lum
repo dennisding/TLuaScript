@@ -4,3 +4,8 @@ depends = {}  -- depends
 function _init(self)
 
 end
+
+function setup_player_input(self, input)
+	print(_text('setup_player_input'), towstring(input))
+	self.input = input
+end

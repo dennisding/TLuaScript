@@ -81,13 +81,21 @@ local function _setup_data_desc(_new_class)
 	_new_class._data_desc = data_desc
 end
 
+local function _build_hints(...)
+	-- clean
+	return tablex.to_set({...})
+end
+
 function class(name, parent, ...)
 	local _new_class = {}
 	if parent ~= nil then
 		_new_class = tablex.copy(parent)
 	end
 	_new_class._type = name
-	_set_upvalue_by_name(name, _new_class)
+	_hints = _build_hints(...)
+	if not _hints.clean then
+		_set_upvalue_by_name(name, _new_class)
+	end
 
 	local _ready = false
 	local function _make_class_ready()

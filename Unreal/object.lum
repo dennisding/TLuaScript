@@ -30,12 +30,12 @@ local function _gen_function(fun_context)
 	return {_index, _index}
 end
 
-local function _gen_nil_function()
+local function _gen_nil_function(key)
 	local function _nil_fun(self, ...)
 		return nil
 	end
 
-	local function _raw_set(self, key, value)
+	local function _raw_set(self, value)
 		rawset(self, key, value)
 	end
 
@@ -55,7 +55,7 @@ function vtable.__index(self, name)
 	elseif getter ~= nil then
 		attr = _gen_function(getter)
 	else
-		attr = _gen_nil_function()
+		attr = _gen_nil_function(name)
 	end
 
 	rawset(self, name, attr)
@@ -99,21 +99,21 @@ local function _gen_vtable(ctype, context)
 	return result
 end
 
-function reset_metatable(self, context)
-	local ctype = rawget(self, '_ct')
+-- function reset_metatable(self, context)
+-- 	local ctype = rawget(self, '_ct')
 
-	local lua_type = _sys.ctypes[ctype]
-	local vtable = _sys.vtables[ctype] or _gen_vtable(ctype, context)
+-- 	local lua_type = _sys.ctypes[ctype]
+-- 	local vtable = _sys.vtables[ctype] or _gen_vtable(ctype, context)
 
-	if lua_type == nil then
-		lua_type = context.gen_lua_type(ctype) or object
-		_sys.ctypes[ctype] = lua_type
-	end
+-- 	if lua_type == nil then
+-- 		lua_type = context.gen_lua_type(ctype) or object
+-- 		_sys.ctypes[ctype] = lua_type
+-- 	end
 
-	assert(vtable ~= nil, "invalid vtable")
-	rawset(self, '_vtable', vtable)
-	setmetatable(self, lua_type)
-end
+-- 	assert(vtable ~= nil, "invalid vtable")
+-- 	rawset(self, '_vtable', vtable)
+-- 	setmetatable(self, lua_type)
+-- end
 
 local function _get_vtable(ctype)
 	local result = _sys.vtables[ctype]
@@ -132,4 +132,22 @@ function set_vtable(self)
 
 	assert(vtable ~= nil, "invalid vtable")
 	rawset(self, '_vtable', vtable)
+end
+
+local function _get_lua_type(ctype)
+	local name = _cpp_object_get_name(ctype)
+	local new_type = class(name, object, 'clean')
+	return new_type
+end
+
+function new_object(cobject, ctype)
+	local lua_type = _get_lua_type(ctype)
+	local instance = lua_type._new_instance()
+	rawset(instance, '_co', cobject)
+	rawset(instance, '_ct', ctype)
+
+	set_vtable(instance)
+	instance:_call_init()
+
+	return instance
 end
