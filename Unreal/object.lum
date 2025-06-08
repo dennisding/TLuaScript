@@ -127,7 +127,7 @@ end
 
 --- class object end
 -- class dummy begin
-class('dummy')
+class('dummy', nil, 'singleton')
 
 function dummy.__index(self, name)
 	return self

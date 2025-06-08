@@ -181,9 +181,22 @@ function class(name, parent, ...)
 	-- class attrs
 	_new_class._super = parent
 
+	-- signleton 
+	local _singleton = nil
+	local function _singleton_new(...)
+		if _singleton == nil then
+			_singleton = _new(...)
+		end
+		return _singleton
+	end
+
 	-- metatable setup
 	local metatable = {}
-	metatable.__call = _new
+	if _hints.singleton then
+		metatable.__call = _singleton_new
+	else 
+		metatable.__call = _new
+	end
 	metatable.__index = parent
 	metatable.__name = string.format('class<%s>', name)
 	setmetatable(_new_class, metatable)
