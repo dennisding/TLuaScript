@@ -46,8 +46,8 @@ function vtable.__index(self, name)
 	-- get the attribute from c++
 	local ctype = rawget(self, '_ct')
 	local property, getter, setter = _cpp_object_get_info(ctype, name)
-	-- print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
-	-- print(_text(tostring(getter)), _text(tostring(setter)))
+	print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
+	print(_text(tostring(getter)), _text(tostring(setter)))
 	-- update the vtable
 	local attr = nil
 	if property ~= nil then
@@ -92,6 +92,18 @@ function object.__newindex(self, name, value)
 	rawget(self, '_vtable')[name][2](self, value)
 end
 
+-- 危险行为, 注意释放问题
+function object.add_to_root(self)
+	local cobject = rawget(self, '_co')
+	_cpp_object_add_to_root(cobject)
+end
+
+function object.remove_from_root(self)
+	local cobject = rawget(self, '_co')
+	_cpp_object_remove_from_root(cobject)
+end
+
+-- for debug use
 function object._get_attrs(self)
 	local ctype = rawget(self, '_ct')
 	local attrs = _cpp_object_get_attrs(ctype)
@@ -102,36 +114,39 @@ function object._get_attrs(self)
 	return result
 end
 
+-- for debug use
 function object._dump_attrs(self)
 	print(towstring(self))
 	for index, value in ipairs(self:_get_attrs()) do
 		print(_text('    '), _text(value), towstring(self[value]))
+		if type(self[value]) == 'table' then
+			tablex.print_table(self[value])
+		end
 	end
 end
 
 --- class object end
+-- class dummy begin
+class('dummy')
+
+function dummy.__index(self, name)
+	return self
+end
+
+function dummy.__newindex(self, name, value)
+end
+
+function dummy.__call(self, ...)
+	return self
+end
+
+-- class dummy end
 
 local function _gen_vtable(ctype, context)
 	local result = vtable(ctype, context)
 	_sys.vtables[ctype] = result
 	return result
 end
-
--- function reset_metatable(self, context)
--- 	local ctype = rawget(self, '_ct')
-
--- 	local lua_type = _sys.ctypes[ctype]
--- 	local vtable = _sys.vtables[ctype] or _gen_vtable(ctype, context)
-
--- 	if lua_type == nil then
--- 		lua_type = context.gen_lua_type(ctype) or object
--- 		_sys.ctypes[ctype] = lua_type
--- 	end
-
--- 	assert(vtable ~= nil, "invalid vtable")
--- 	rawset(self, '_vtable', vtable)
--- 	setmetatable(self, lua_type)
--- end
 
 local function _get_vtable(ctype)
 	local result = _sys.vtables[ctype]
@@ -153,6 +168,7 @@ function set_vtable(self)
 end
 
 local function _get_lua_type(ctype)
+	assert(ctype ~= nil)
 	local name = _cpp_object_get_name(ctype)
 	local new_type = class(name, object, 'clean')
 	return new_type
@@ -168,4 +184,13 @@ function new_object(cobject, ctype)
 	instance:_call_init()
 
 	return instance
+end
+
+function create_object(class_name)
+	local ctype = _cpp_load_class(class_name)
+	assert(ctype ~= nil)
+	local cobject = _cpp_new_object(ctype)
+	assert(cobject ~= nil)
+
+	return new_object(cobject, ctype)
 end

@@ -6,19 +6,33 @@ class('gui_mgr')
 
 function gui_mgr._init(self)
 	-- basic class type
-	self._panel = panel
+	self.panel = panel
+	self._guis = {}  -- {name:gui}
 end
 
 function gui_mgr.__index(self, name)
+	local attr = getmetatable(self)[name]
+	if attr ~= nil then
+		return attr
+	end
+
+	assert(self._guis[name] == nil)
+
 	local module_name = 'Guis.' .. name
 	local module = clean_import(module_name)
 
 	local gui_type = module[name]
 	local gui = gui_type()
 
+	self._guis[name] = gui
 	rawset(self, name, gui)
-
 	return gui
+end
+
+function gui_mgr.game_exist(self)
+	for name, gui in pairs(self._guis) do
+		gui:release()
+	end
 end
 
 -- gui_mgr end
@@ -27,16 +41,33 @@ end
 class('panel')
 
 function panel._init(self, res)
-	self._visible = false
-	self._res = res
+	self._visible = true
+
+	self:_load_res(res)
 end
 
-function panel.set_visible(self, visible)
-	self._visible = visible
+function panel._load_res(self, res)
+	if res == nil then
+		self._obj = object.dummy()
+		return
+	end
+	local object = object.create_object(res)
+	object:add_to_root()
+	object:AddToViewport(999)
+	self._obj = object
 end
 
-function panel.is_visible(self)
-	return self._visible
+function panel.release(self)
+	self._obj:remove_from_root()
+end
+
+function panel.__index(self, name)
+	local attr = getmetatable(self)[name]
+	if attr ~= nil then
+		return attr
+	end
+
+	return self._obj[name]
 end
 -- class panel end
 

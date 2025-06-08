@@ -1,0 +1,12 @@
+
+
+class('armor', _gui.panel)
+
+function armor._init(self)
+	local res = '/Game/Guis/PlayerArmor.PlayerArmor_C'
+	self._super._init(self, res)
+end
+
+function armor.say_hello(self)
+	print(_text('hello armor!!!!'))
+end

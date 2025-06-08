@@ -163,10 +163,6 @@ function class(name, parent, ...)
 		end
 	end
 
-	function _index(self, name)
-		local attr = getmetatable(self)[name]
-	end
-
 	-- class setup
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init

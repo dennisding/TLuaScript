@@ -4,12 +4,8 @@ import('fun_utils')
 function _init(self)
 end
 
-function test(self, channel, mesh)
-	local input = self.PlayerInputComponent
-	local callback = fun_utils.fun(self.jump, self)
-	input:BindAction(self.JumpAction, Enum.ETriggerEvent.Started, callback)
-
-	self.some_value = 1234
+function test(self)
+	_gui.armor:say_hello()
 end
 
 function use_skill(self, skill_id)

@@ -1,6 +1,6 @@
 
 
-class('main', _gui._panel)
+class('main', _gui.panel)
 
 function main._init(self)
 end

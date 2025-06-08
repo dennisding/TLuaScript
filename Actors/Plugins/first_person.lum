@@ -1,5 +1,6 @@
 
 function _init(self)
+	print(_text('capsuleComponent'), self.CapsuleComponent)
 	self.CapsuleComponent:InitCapsuleSize(55, 96)
 
 	self:setup_camera()
