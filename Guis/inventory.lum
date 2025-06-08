@@ -2,8 +2,8 @@
 -- class inventory begin
 class('inventory', _gui.panel)
 
-function inventory._init()
-
+function inventory._init(self)
+	self._super._init(self)
 end
 
 function inventory.add_item(self, item)

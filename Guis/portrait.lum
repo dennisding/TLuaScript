@@ -3,6 +3,9 @@
 class('portrait', _gui.panel)
 
 function portrait._init(self)
-	local res = '/Game/Guis/PlayerPortrait.PlayerPortrait_C'
+	local res = _text('/Game/Guis/PlayerPortrait.PlayerPortrait_C')
 	self._super._init(self, res)
+end
+
+function portrait.update_hp(self)
 end

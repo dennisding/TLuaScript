@@ -1,0 +1,10 @@
+
+
+class('world')
+
+function world._init(self)
+
+end
+
+-- set global
+_set_global('_world', world())

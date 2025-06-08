@@ -3,7 +3,7 @@
 class('armor', _gui.panel)
 
 function armor._init(self)
-	local res = '/Game/Guis/PlayerArmor.PlayerArmor_C'
+	local res = _text('/Game/Guis/PlayerArmor.PlayerArmor_C')
 	self._super._init(self, res)
 end
 

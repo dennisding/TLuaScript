@@ -7,7 +7,11 @@ function init()
 	print(_text("hello unreal!!!"))
 end
 
-function exit()
-	_gui:game_exist()
-	print(_text('goodbye unreal'))
+function game_start()
+	print(_text('game start'))
+end
+
+function game_exit()
+	_gui:on_game_exit()
+	print(_text('game exist'))
 end

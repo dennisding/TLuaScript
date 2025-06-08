@@ -29,7 +29,7 @@ function gui_mgr.__index(self, name)
 	return gui
 end
 
-function gui_mgr.game_exist(self)
+function gui_mgr.on_game_exit(self)
 	for name, gui in pairs(self._guis) do
 		gui:release()
 	end
@@ -40,6 +40,8 @@ end
 -- class panel begin
 class('panel')
 
+panel._obj = object.dummy()
+
 function panel._init(self, res)
 	self._visible = true
 
@@ -48,7 +50,6 @@ end
 
 function panel._load_res(self, res)
 	if res == nil then
-		self._obj = object.dummy()
 		return
 	end
 	local object = object.create_object(res)
@@ -58,6 +59,7 @@ function panel._load_res(self, res)
 end
 
 function panel.release(self)
+	print(_text('panel release'), rawget(self, '_obj'))
 	self._obj:remove_from_root()
 end
 
@@ -67,6 +69,8 @@ function panel.__index(self, name)
 		return attr
 	end
 
+	local object = rawget(self, '_obj')
+	
 	return self._obj[name]
 end
 -- class panel end

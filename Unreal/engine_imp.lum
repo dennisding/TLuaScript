@@ -1,0 +1,10 @@
+
+
+class('engine')
+
+function engine._init(self)
+
+end
+
+-- set global
+_set_global('_engine', engine())

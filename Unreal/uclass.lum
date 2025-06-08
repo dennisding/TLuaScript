@@ -10,9 +10,10 @@ function uclass.__index(self, name)
 	end
 
 	local type_name = uclass_map[name] or name
+	local type_name = _cpp_utf8_to_utf16(type_name)
 	attr = _cpp_load_class(type_name)
 	if attr == nil then
-		type_name = '/Script/Engine.' .. name
+		type_name = _text('/Script/Engine.') .. _cpp_utf8_to_utf16(name)
 		attr = _cpp_load_class(type_name)
 	end
 	
