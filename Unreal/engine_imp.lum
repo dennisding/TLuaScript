@@ -5,7 +5,13 @@ import('object')
 -- class engine begin
 class('engine')
 
-function engine._init(self, game_instance)
+function engine._init(self)
+	-- local instance = _cpp_get_engine()
+	-- self._engine = object.new_object(instance)
+	-- self._game_instance = game_instance
+end
+
+function engine.set_instance(self, game_instance)
 	local instance = _cpp_get_engine()
 	self._engine = object.new_object(instance)
 	self._game_instance = game_instance
@@ -22,4 +28,4 @@ end
 
 -- class engine end
 -- set global
---_set_global('_engine', engine())
+_set_global('_engine', engine())

@@ -6,4 +6,3 @@ clean_import('data_types_imp')
 clean_import('data_mgr')
 clean_import('gui_mgr')
 
-import('world')

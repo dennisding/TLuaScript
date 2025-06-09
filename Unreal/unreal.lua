@@ -7,8 +7,8 @@ import('enum')
 import('component')
 import('actor')
 import('uclass')
-import('engine')
-import('world')
+clean_import('engine_imp')
+clean_import('world_imp')
 -- import('engine_imp')
 
 -- import data type

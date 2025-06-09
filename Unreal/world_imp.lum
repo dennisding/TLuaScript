@@ -2,7 +2,10 @@
 
 class('world')
 
-function world._init(self, instance)
+function world._init(self)
+end
+
+function world.set_instance(self, instance)
 	self._world = instance
 end
 
@@ -15,3 +18,5 @@ function world.__index(self, name)
 	return rawget(self, '_world')[name]
 end
 
+-- set global
+_set_global('_world', world())

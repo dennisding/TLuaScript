@@ -38,6 +38,8 @@ function gui_mgr.on_game_exit(self)
 end
 
 function gui_mgr.on_change_world(self)
+	-- 这里需要对长期存在的ui重新绑定viewport.
+	-- 需要进一步梳理流程
 	self.portrait:add_to_viewport()
 	self.armor:add_to_viewport()
 	-- self.portrait:AddToViewport()
