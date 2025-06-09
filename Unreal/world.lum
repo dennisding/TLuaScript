@@ -1,0 +1,17 @@
+
+
+class('world')
+
+function world._init(self, instance)
+	self._world = instance
+end
+
+function world.__index(self, name)
+	local attr = getmetatable(self)[name]
+	if attr ~= nil then
+		return attr
+	end
+
+	return rawget(self, '_world')[name]
+end
+

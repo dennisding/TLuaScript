@@ -8,6 +8,7 @@ import('component')
 import('actor')
 import('uclass')
 import('engine')
+import('world')
 -- import('engine_imp')
 
 -- import data type

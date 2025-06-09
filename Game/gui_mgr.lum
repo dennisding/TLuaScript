@@ -37,6 +37,13 @@ function gui_mgr.on_game_exit(self)
 	self._guis = {}
 end
 
+function gui_mgr.on_change_world(self)
+	self.portrait:add_to_viewport()
+	self.armor:add_to_viewport()
+	-- self.portrait:AddToViewport()
+	-- self.armor:AddToViewport()
+end
+
 -- gui_mgr end
 
 -- class panel begin
@@ -50,19 +57,39 @@ function panel._init(self, res)
 	self:_load_res(res)
 end
 
+function panel.show(self)
+	if self._visible then
+		return
+	end
+	self._visible = true
+end
+
+function panel.hide(self)
+	if not self._visible then
+		return
+	end
+
+	self._visible = false
+end
+
 function panel._load_res(self, res)
 	if res == nil then
 		return
 	end
-	local object = object.create_object(res)
-	object:add_to_root()
-	object:AddToViewport(999)
+	-- unsafe code, 小心内存泄漏
+	local parent = _engine._game_instance
+	local object = object.create_object(parent, res)
+--	object:add_to_root()
+--	object:AddToViewport()
 	self._obj = object
 end
 
 function panel.release(self)
-	print(_text('panel release'), rawget(self, '_obj'))
-	self._obj:remove_from_root()
+	self._obj:remove_from_parent()
+end
+
+function panel.add_to_viewport(self)
+	return self._obj:AddToViewport()
 end
 
 function panel.__index(self, name)
@@ -71,8 +98,6 @@ function panel.__index(self, name)
 		return attr
 	end
 
-	local object = rawget(self, '_obj')
-	
 	return self._obj[name]
 end
 -- class panel end

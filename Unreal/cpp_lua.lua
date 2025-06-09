@@ -16,7 +16,7 @@ function _lua_bind_obj(cobject, ctype)
 	_sys.cpp_objects[cobject] = instance
 	instance:_call_init()
 
-	_world.player = instance
+--	_world.player = instance
 	return instance
 end
 

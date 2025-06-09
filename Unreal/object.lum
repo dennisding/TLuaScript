@@ -93,14 +93,14 @@ function object.__newindex(self, name, value)
 end
 
 -- 危险行为, 注意释放问题
-function object.add_to_root(self)
-	local cobject = rawget(self, '_co')
-	_cpp_object_add_to_root(cobject)
-end
+-- function object.add_to_root(self)
+-- 	local cobject = rawget(self, '_co')
+-- 	_cpp_object_add_to_root(cobject)
+-- end
 
-function object.remove_from_root(self)
+function object.remove_from_parent(self)
 	local cobject = rawget(self, '_co')
-	_cpp_object_remove_from_root(cobject)
+	_cpp_object_remove_from_parent(cobject)
 end
 
 -- for debug use
@@ -191,10 +191,14 @@ function new_object(cobject, ctype)
 	return instance
 end
 
-function create_object(class_name)
+function create_object(parent, class_name)
 	local ctype = _cpp_load_class(class_name)
 	assert(ctype ~= nil)
-	local cobject = _cpp_new_object(ctype)
+	local cparent = parent
+	if type(parent) == 'table' then
+		cparent = rawget(parent, '_co')
+	end
+	local cobject = _cpp_new_object(cparent, ctype)
 	assert(cobject ~= nil)
 
 	return new_object(cobject, ctype)
