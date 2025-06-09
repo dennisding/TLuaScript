@@ -9,3 +9,8 @@ end
 
 function portrait.update_hp(self)
 end
+
+function portrait.update(self)
+	self.HealthBar:SetPercent(0.3)
+	self.EnergyBar:SetPercent(0.5)
+end

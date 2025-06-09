@@ -51,7 +51,7 @@ function new_proxy(cobject, ctype)
 	local pid = 1 -- 1号玩家
 	local data = _data.player[1]
 
-	local instance = lua_type._new_instance(data)
+	local instance = lua_type:_new_instance(data)
 
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)

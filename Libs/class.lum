@@ -132,12 +132,12 @@ function class(name, parent, ...)
 		_ready = true
 	end
 
-	local function _new_instance(value)
+	local function _new_instance(type, value)
 		_make_class_ready()
 
 		local instance = {}
-		setmetatable(instance, _new_class)
-		if _new_class._data_desc ~= nil then
+		setmetatable(instance, type)
+		if type._data_desc ~= nil then
 			rawset(instance, '_attrs', {})
 		end
 		if value ~= nil then
@@ -155,13 +155,13 @@ function class(name, parent, ...)
 	end
 
 	local function _new(type, ...)
-		local instance = _new_instance()
+		local instance = _new_instance(type)
 		_call_init(instance, ...)
 		return instance
 	end
 
-	local function _init_new(value, ...)
-		local instance = _new_instance(value)
+	local function _init_new(type, value, ...)
+		local instance = _new_instance(type, value)
 		_call_init(instance, ...)
 		return instance
 	end
@@ -189,19 +189,23 @@ function class(name, parent, ...)
 	else
 		_new_class.__index = _new_class
 	end
+	-- 要使class的reload plugin起效果,需要在定义改class的模块调用
+	-- _make_class_ready
+	_new_class._make_class_ready = _make_class_ready
 	_new_class._raw_set = _raw_set
 	_new_class.__name = string.format('object<%s>', name)
 
 	-- class attrs
 	_new_class._super = parent
 
-	-- signleton 
-	local _singleton = nil
-	local function _singleton_new(...)
-		if _singleton == nil then
-			_singleton = _new(...)
+--	local _singleton = nil
+	local function _singleton_new(type, ...)
+		local singleton = rawget(type, '_singleton')
+		if singleton == nil then
+			singleton = _new(type, ...)
+			rawset(type, '_singleton', singleton)
 		end
-		return _singleton
+		return singleton
 	end
 
 	-- metatable setup

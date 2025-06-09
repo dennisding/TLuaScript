@@ -42,6 +42,8 @@ function gui_mgr.on_change_world(self)
 	-- 需要进一步梳理流程
 	self.portrait:add_to_viewport()
 	self.armor:add_to_viewport()
+
+	self.portrait:update()
 	-- self.portrait:AddToViewport()
 	-- self.armor:AddToViewport()
 end

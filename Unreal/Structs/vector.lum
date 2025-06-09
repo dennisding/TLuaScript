@@ -8,7 +8,7 @@ function vector._init(self, X, Y, Z)
 end
 
 function vector.__add(a, b)
-	local tmp = vector._new_instance()
+	local tmp = vector:_new_instance()
 	tmp.X = a.X + b.X
 	tmp.Y = a.Y + b.Y
 	tmp.Z = a.Z + b.Z

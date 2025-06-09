@@ -30,7 +30,7 @@ end
 function new_component(cobject, ctype)
 	local component_type = _get_component_type(ctype)
 
-	local instance = component_type._new_instance()
+	local instance = component_type:_new_instance()
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)
 	object.set_vtable(instance)

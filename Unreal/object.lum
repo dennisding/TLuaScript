@@ -181,7 +181,7 @@ function new_object(cobject, ctype)
 	end
 
 	local lua_type = _get_lua_type(cobject, ctype)
-	local instance = lua_type._new_instance()
+	local instance = lua_type:_new_instance()
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)
 

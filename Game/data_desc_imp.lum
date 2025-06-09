@@ -192,7 +192,7 @@ function class_desc.from_value(self, owner, value)
 		return nil
 	end
 
-	local instance = self.data_type._init_new(value)
+	local instance = self.data_type:_init_new(value)
 	instance:_set_owner(owner, self)
 	return instance
 end

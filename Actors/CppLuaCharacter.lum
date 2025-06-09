@@ -25,6 +25,8 @@ CppLuaCharacter._plugins = {
 	'Unreal.component_utils'
 }
 
+CppLuaCharacter._make_class_ready()
+
 -- local overloads = {
 -- 	'_init',
 -- }

@@ -14,7 +14,7 @@ end
 function item.new(id)
 	local value = {}
 	value.id = id
-	return item._init_new(value)
+	return item:_init_new(value)
 end
 
 function item.use(self, use)

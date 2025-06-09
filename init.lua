@@ -23,10 +23,11 @@ function game_exit()
 	print(_text('game exist'))
 end
 
-function change_world(world_instance)
+-- call by engine
+function change_world(world)
 	-- _world = world.world(world_instance)
 	print(_text('change world'), towstring(world))
-	_world:set_instance(world_instance)
+	_world:set_instance(world)
 
 	-- test code
 	_gui:on_change_world()

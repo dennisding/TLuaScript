@@ -1,6 +1,6 @@
 
 
-class('world')
+class('world', nil, 'singleton')
 
 function world._init(self)
 end
