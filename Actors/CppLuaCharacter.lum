@@ -3,15 +3,16 @@ import('actor')
 
 class('CppLuaCharacter', actor.actor)
 
-function CppLuaCharacter:_init()
+function CppLuaCharacter._init(self)
 	print(_text('CppLuaCharacter:_init'))
 end
 
-function CppLuaCharacter:hello(msg)
+function CppLuaCharacter.hello(self, msg)
 	print(_text("CppLuaCharacter:hello"), msg)
 end
 
-local _plugins = {
+--local _plugins = {
+CppLuaCharacter._plugins = {
 	'Plugins.input',
 	'Plugins.test',
 
@@ -24,11 +25,11 @@ local _plugins = {
 	'Unreal.component_utils'
 }
 
-local overloads = {
-	'_init',
-}
+-- local overloads = {
+-- 	'_init',
+-- }
 
-local reverses = {}
+-- local reverses = {}
 
--- finish setup
-CppLuaCharacter._install_plugins(_plugins, overloads, reverses)
+-- -- finish setup
+-- CppLuaCharacter._install_plugins(_plugins, overloads, reverses)

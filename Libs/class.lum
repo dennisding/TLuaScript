@@ -51,9 +51,17 @@ local function _build_plugin_method(method_map, overloads, reverses)
 	return result
 end
 
-local function _gen_plugin_info(type, plugins, overloads, reverses)
+--local function _gen_plugin_info(type, plugins, overloads, reverses)
+local function _gen_plugin_info(type)
 	local methods = {} -- {name:{method1, method2, method3}}
 	local attrs = {} -- {name: attrs}
+
+	local plugins = rawget(type, '_plugins')
+	local overloads = rawget(type, '_plugin_overloads') or {'_init'}
+	local reverses = rawget(type, '_plugin_reverses') or {}
+	if plugins == nil then
+		return methods, attrs
+	end
 	
 	_gather_infos(methods, attrs, type)
 	local loaded = {}
@@ -90,6 +98,9 @@ function class(name, parent, ...)
 	local _new_class = {}
 	if parent ~= nil then
 		_new_class = tablex.copy(parent)
+		_new_class._plugins = nil
+		_new_class._plugin_overloads = nil
+		_new_class._plugin_reverses = nil
 	end
 	_new_class._type = name
 	_hints = _build_hints(...)
@@ -97,11 +108,26 @@ function class(name, parent, ...)
 		_set_upvalue_by_name(name, _new_class)
 	end
 
+--	local function _install_plugins(plugins, overloads, reverses)
+	local function _install_plugins()
+--		local methods, attrs = _gen_plugin_info(_new_class, plugins, overloads, reverses)
+		local methods, attrs = _gen_plugin_info(_new_class)
+		-- set the method
+		for name, fun in pairs(methods) do
+			_new_class[name] = fun
+		end
+		-- set the attribute
+		for name, attr in pairs(attrs) do
+			_new_class[name] = attr
+		end
+	end
+
 	local _ready = false
 	local function _make_class_ready()
 		if _ready then
 			return
 		end
+		_install_plugins()
 		_setup_data_desc(_new_class)
 		_ready = true
 	end
@@ -140,18 +166,6 @@ function class(name, parent, ...)
 		return instance
 	end
 
-	local function _install_plugins(plugins, overloads, reverses)
-		local methods, attrs = _gen_plugin_info(_new_class, plugins, overloads, reverses)
-		-- set the method
-		for name, fun in pairs(methods) do
-			_new_class[name] = fun
-		end
-		-- set the attribute
-		for name, attr in pairs(attrs) do
-			_new_class[name] = attr
-		end
-	end
-
 	local function _from_value(self, value)
 
 		-- 暂时只处理 data_desc
@@ -167,7 +181,7 @@ function class(name, parent, ...)
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._init_new = _init_new
-	_new_class._install_plugins = _install_plugins
+--	_new_class._install_plugins = _install_plugins
 	_new_class._from_value = _from_value
 	-- 调用链上只有一个__index函数起效果
 	if parent and type(parent.__index) == 'function' then

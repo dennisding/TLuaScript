@@ -32,7 +32,9 @@ end
 function gui_mgr.on_game_exit(self)
 	for name, gui in pairs(self._guis) do
 		gui:release()
+		rawset(self, name, nil)
 	end
+	self._guis = {}
 end
 
 -- gui_mgr end

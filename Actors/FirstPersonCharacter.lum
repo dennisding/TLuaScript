@@ -4,24 +4,24 @@ import('CppLuaCharacter')
 
 class('FirstPersonCharacter', CppLuaCharacter.CppLuaCharacter)
 
-function FirstPersonCharacter:_init()
+function FirstPersonCharacter._init(self)
 	self._super._init(self)
 	print(_text('FirstPersonCharacter:_init'))
 end
 
-function FirstPersonCharacter:hello(msg)
+function FirstPersonCharacter.hello(self, msg)
 	self._super._hello(self, msg)
 	print(_text("FirstPersonCharacter:hello"), msg)
 end
 
-local _plugins = {
-}
+-- local _plugins = {
+-- }
 
-local overloads = {
-	'_init',
-}
+-- local overloads = {
+-- 	'_init',
+-- }
 
-local reverses = {}
+-- local reverses = {}
 
--- finish setup
-FirstPersonCharacter._install_plugins(_plugins, overloads, reverses)
+-- -- finish setup
+-- FirstPersonCharacter._install_plugins(_plugins, overloads, reverses)
