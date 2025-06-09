@@ -7,6 +7,10 @@ function armor._init(self)
 	self._super._init(self, res)
 end
 
+function armor.update(self)
+	self.ArmorText:SetText(_text('11/25'))
+end
+
 function armor.say_hello(self)
 	print(_text('hello armor!!!!'))
 end

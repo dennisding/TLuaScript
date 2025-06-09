@@ -44,6 +44,7 @@ function gui_mgr.on_change_world(self)
 	self.armor:add_to_viewport()
 
 	self.portrait:update()
+	self.armor:update()
 	-- self.portrait:AddToViewport()
 	-- self.armor:AddToViewport()
 end

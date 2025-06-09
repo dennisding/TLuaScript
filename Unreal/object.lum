@@ -46,8 +46,8 @@ function vtable.__index(self, name)
 	-- get the attribute from c++
 	local ctype = rawget(self, '_ct')
 	local property, getter, setter = _cpp_object_get_info(ctype, name)
-	print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
-	print(_text(tostring(getter)), _text(tostring(setter)))
+	-- print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
+	-- print(_text(tostring(getter)), _text(tostring(setter)))
 	-- update the vtable
 	local attr = nil
 	if property ~= nil then
