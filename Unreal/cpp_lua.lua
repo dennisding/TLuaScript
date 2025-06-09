@@ -25,9 +25,9 @@ function _lua_get_actor(cobject, ctype)
 	if object ~= nil then
 		return object
 	end
-	if ctype == nil then
-		ctype = _cpp_object_get_type(cobject)
-	end
+	-- if ctype == nil then
+	-- 	ctype = _cpp_object_get_type(cobject)
+	-- end
 
 	return actor.new_proxy(cobject, ctype)
 end

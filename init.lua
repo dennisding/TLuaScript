@@ -11,6 +11,9 @@ end
 -- call by engine
 function game_start()
 	print(_text('game start'))
+
+	-- set global object
+	_engine = engine.engine()
 end
 
 -- call by engine

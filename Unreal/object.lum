@@ -167,15 +167,20 @@ function set_vtable(self)
 	rawset(self, '_vtable', vtable)
 end
 
-local function _get_lua_type(ctype)
-	assert(ctype ~= nil)
+local function _get_lua_type(cobject, ctype)
 	local name = _cpp_object_get_name(ctype)
 	local new_type = class(name, object, 'clean')
 	return new_type
 end
 
 function new_object(cobject, ctype)
-	local lua_type = _get_lua_type(ctype)
+	assert(cobject ~= nil)
+
+	if ctype == nil then
+		ctype = _cpp_object_get_type(cobject)
+	end
+
+	local lua_type = _get_lua_type(cobject, ctype)
 	local instance = lua_type._new_instance()
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)

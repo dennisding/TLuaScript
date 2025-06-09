@@ -1,0 +1,24 @@
+
+
+import('object')
+
+-- class engine begin
+class('engine')
+
+function engine._init(self)
+	local instance = _cpp_get_engine()
+	self._engine = object.new_object(instance)
+end
+
+function engine.__index(self, name)
+	local attr = rawget(engine, name)
+	if attr ~= nil then
+		return attr
+	end
+
+	return rawget(self, '_engine')[name]
+end
+
+-- class engine end
+-- set global
+--_set_global('_engine', engine())
