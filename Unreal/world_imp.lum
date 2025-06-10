@@ -1,12 +1,20 @@
 
+-- 暂时分配一个整数id
+local _last_id = 0
+local function _alloc_id()
+	_last_id = _last_id + 1
+	return _last_id
+end
 
+-- class world begin
 class('world', nil, 'singleton')
 
 function world._init(self)
+	self.actors = {}
 end
 
-function world.set_instance(self, instance)
-	self._world = instance
+function world.set_world(self, world)
+	self.world = world
 end
 
 function world.__index(self, name)
@@ -17,6 +25,28 @@ function world.__index(self, name)
 
 	return rawget(self, '_world')[name]
 end
+
+-- actor manager
+function world.add_actor(self, actor)
+	local id = _alloc_id()
+	self.actors[id] = actor
+end
+
+function world.remove_actor(self, aid)
+	assert(self.actors[aid] ~= nil)
+
+	self.actors[aid] = nil
+end
+
+function world.get_actor(self, aid)
+	return self.actors[aid]
+end
+
+function world.get_player()
+	local player_id = 1
+	return self.actors[player_id]
+end
+-- class world end
 
 -- set global
 _set_global('_world', world())

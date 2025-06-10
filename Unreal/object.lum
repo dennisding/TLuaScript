@@ -191,7 +191,8 @@ function new_object(cobject, ctype)
 	return instance
 end
 
-function create_object(parent, class_name)
+function create_object(class_name, parent)
+	parent = parent or _engine.root
 	local ctype = _cpp_load_class(class_name)
 	assert(ctype ~= nil)
 	local cparent = parent

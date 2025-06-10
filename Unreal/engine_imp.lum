@@ -9,12 +9,17 @@ function engine._init(self)
 	-- local instance = _cpp_get_engine()
 	-- self._engine = object.new_object(instance)
 	-- self._game_instance = game_instance
+	local engine = _cpp_get_engine()
+	self.engine = engine
 end
 
-function engine.set_instance(self, game_instance)
-	local instance = _cpp_get_engine()
-	self._engine = object.new_object(instance)
-	self._game_instance = game_instance
+-- function engine.set_instance(self, game_instance)
+-- 	local instance = _cpp_get_engine()
+-- 	self._engine = object.new_object(instance)
+-- 	self._game_instance = game_instance
+-- end
+function engine.set_root(self, root)
+	self.root = root
 end
 
 function engine.__index(self, name)

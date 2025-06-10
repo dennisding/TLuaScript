@@ -223,11 +223,15 @@ end
 
 local function is_child_of(_class, base)
 	local parent = rawget(_class, '_parent')
+	if parent == nil then
+		return false
+	end
+	
 	repeat
 		if parent == base then
 			return true
 		end
-		parent = rawget(_class, '_parent')
+		parent = rawget(parent, '_parent')
 	until not parent
 
 	return false
@@ -237,12 +241,12 @@ local function is_same_type(object_1, object_2)
 	return getmetable(object_1) == getmetable(object_2)
 end
 
-local function setup_plugins(_class, plugins, overloads, reverses)
-	overloads = overloads or {}
-	table.insert(overloads, '_init')
-	reverses = reverses or {}
-	_class._insall_plugins(plugins, overloads, reverses)
-end
+-- local function setup_plugins(_class, plugins, overloads, reverses)
+-- 	overloads = overloads or {}
+-- 	table.insert(overloads, '_init')
+-- 	reverses = reverses or {}
+-- 	_class._insall_plugins(plugins, overloads, reverses)
+-- end
 
 -- set global
 _set_global('class', class)

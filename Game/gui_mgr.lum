@@ -82,8 +82,9 @@ function panel._load_res(self, res)
 		return
 	end
 	-- unsafe code, 小心内存泄漏
-	local parent = _engine._game_instance
-	local object = object.create_object(parent, res)
+--	local parent = _engine._game_instance
+--	local parent = _engine.root
+	local object = object.create_object(res)
 --	object:add_to_root()
 --	object:AddToViewport()
 	self._obj = object

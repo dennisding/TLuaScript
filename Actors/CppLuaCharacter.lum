@@ -25,13 +25,6 @@ CppLuaCharacter._plugins = {
 	'Unreal.component_utils'
 }
 
+-- 如果没有_make_class_ready, 则无法对plugins进行reload
+-- 可以在reload的时候再加上这个函数.
 CppLuaCharacter._make_class_ready()
-
--- local overloads = {
--- 	'_init',
--- }
-
--- local reverses = {}
-
--- -- finish setup
--- CppLuaCharacter._install_plugins(_plugins, overloads, reverses)

@@ -14,6 +14,12 @@ function use_skill(self, skill_id)
 	printf("use_skill: %d, name=%s", skill_id, data.name)
 end
 
+function use_item(self, item_id)
+	local item = data_types.item.new(item_id)
+	
+	item:use_on(self)
+end
+
 function test_method(self, value, msg)
 	print(_text('test_method'), towstring(value), msg)
 	local mesh = self:SayHello(1314, _text('中文消息'))

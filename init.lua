@@ -9,26 +9,23 @@ function init()
 end
 
 -- call by engine
-function game_start(game_instance)
-	print(_text('game start'), towstring(game_instance))
+function game_start(root)
+	print(_text('game start'), towstring(root))
 
-	-- set global object
---	_engine = engine.engine(game_instance)
-	_engine:set_instance(game_instance)
+	_engine:set_root(root)
 end
 
 -- call by engine
 function game_exit()
-	_gui:on_game_exit()
 	print(_text('game exist'))
+
+	_gui:on_game_exit()
 end
 
 -- call by engine
 function change_world(world)
-	-- _world = world.world(world_instance)
 	print(_text('change world'), towstring(world))
-	_world:set_instance(world)
 
-	-- test code
+	_world:set_world(world)
 	_gui:on_change_world()
 end

@@ -13,15 +13,3 @@ function SKEL_BP_FirstPersonCharacter_C.hello(self, msg)
 	self._super._hello(self, msg)
 	print(_text("SKEL_BP_FirstPersonCharacter_C:hello"), msg)
 end
-
--- local _plugins = {
--- }
-
--- local overloads = {
--- 	'_init',
--- }
-
--- local reverses = {}
-
--- -- finish setup
--- SKEL_BP_FirstPersonCharacter_C._install_plugins(_plugins, overloads, reverses)
