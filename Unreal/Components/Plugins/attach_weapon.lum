@@ -1,0 +1,9 @@
+
+__includes = {
+	'Components.Plugins.attachment',
+}
+
+function attach_weapon(self, character)
+	print(_text('component attach weapon'), character)
+	self:attach_to()
+end

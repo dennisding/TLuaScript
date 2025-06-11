@@ -1,11 +1,12 @@
 
 local function _gather_infos(methods, attrs, t)
 	local key = nil
-	repeat
-		key = next(t, key)
-		if not key then
-			break
+
+	local function _gather(key)
+		if stringx.start_with(key, '__') then
+			return
 		end
+
 		local value = rawget(t, key)
 		if type(value) == 'function' then
 			container = methods[key] or {}
@@ -16,7 +17,27 @@ local function _gather_infos(methods, attrs, t)
 				attrs[key] = value
 			end
 		end
+	end
+
+	repeat
+		key = next(t, key)
+		if not key then
+			break
+		end
+
+		_gather(key)
 	until not key
+end
+
+local function _gather_module_info(methods, attrs, name, plugins)
+	local plugin = safe_import(name)
+	-- add the include
+	local include = plugin.__includes
+	if type(include) == 'table' then
+		table.move(include, 1, #include, #plugins + 1, plugins)
+	end
+
+	_gather_infos(methods, attrs, plugin)
 end
 
 local function _build_plugin_method(method_map, overloads, reverses)
@@ -51,7 +72,6 @@ local function _build_plugin_method(method_map, overloads, reverses)
 	return result
 end
 
---local function _gen_plugin_info(type, plugins, overloads, reverses)
 local function _gen_plugin_info(type)
 	local methods = {} -- {name:{method1, method2, method3}}
 	local attrs = {} -- {name: attrs}
@@ -62,14 +82,17 @@ local function _gen_plugin_info(type)
 	if plugins == nil then
 		return methods, attrs
 	end
-	
+
+	-- _gather the class itself
 	_gather_infos(methods, attrs, type)
+
 	local loaded = {}
-	for _, plugin_name in ipairs(plugins) do
-		if loaded[plugin_name] == nil then
-			local plugin = safe_import(plugin_name)
-			_gather_infos(methods, attrs, plugin)
-			loaded[plugin_name] = plugin
+	plugins = tablex.copy(plugins) -- we will modify the plugins
+	while #plugins > 0 do
+		local name = table.remove(plugins)
+		if loaded[name] == nil then
+			loaded[name] = true
+			_gather_module_info(methods, attrs, name, plugins)
 		end
 	end
 
@@ -109,9 +132,7 @@ function class(name, parent, ...)
 		_set_upvalue_by_name(name, _new_class)
 	end
 
---	local function _install_plugins(plugins, overloads, reverses)
 	local function _install_plugins()
---		local methods, attrs = _gen_plugin_info(_new_class, plugins, overloads, reverses)
 		local methods, attrs = _gen_plugin_info(_new_class)
 		-- set the method
 		for name, fun in pairs(methods) do
@@ -168,7 +189,6 @@ function class(name, parent, ...)
 	end
 
 	local function _from_value(self, value)
-
 		-- 暂时只处理 data_desc
 		if not _new_class._data_desc then
 			return
@@ -182,7 +202,6 @@ function class(name, parent, ...)
 	_new_class._new_instance = _new_instance
 	_new_class._call_init = _call_init
 	_new_class._init_new = _init_new
---	_new_class._install_plugins = _install_plugins
 	_new_class._from_value = _from_value
 	-- 调用链上只有一个__index函数起效果
 	if parent and type(parent.__index) == 'function' then
@@ -190,8 +209,7 @@ function class(name, parent, ...)
 	else
 		_new_class.__index = _new_class
 	end
-	-- 要使class的reload plugin起效果,需要在定义改class的模块调用
-	-- _make_class_ready
+
 	_new_class._make_class_ready = _make_class_ready
 	_new_class._raw_set = _raw_set
 	_new_class.__name = string.format('object<%s>', name)
@@ -199,7 +217,6 @@ function class(name, parent, ...)
 	-- class attrs
 	_new_class._super = parent
 
---	local _singleton = nil
 	local function _singleton_new(type, ...)
 		local singleton = rawget(type, '_singleton')
 		if singleton == nil then
@@ -209,7 +226,7 @@ function class(name, parent, ...)
 		return singleton
 	end
 
-	-- metatable setup
+	-- class metatable setup
 	local metatable = {}
 	if _hints.singleton then
 		metatable.__call = _singleton_new
@@ -241,13 +258,6 @@ end
 local function is_same_type(object_1, object_2)
 	return getmetable(object_1) == getmetable(object_2)
 end
-
--- local function setup_plugins(_class, plugins, overloads, reverses)
--- 	overloads = overloads or {}
--- 	table.insert(overloads, '_init')
--- 	reverses = reverses or {}
--- 	_class._insall_plugins(plugins, overloads, reverses)
--- end
 
 -- set global
 _set_global('class', class)

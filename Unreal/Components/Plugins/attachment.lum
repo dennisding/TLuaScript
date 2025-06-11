@@ -1,0 +1,5 @@
+
+
+function attach_to(self)
+	print(_text('component plugin attachment.attach_to'))
+end

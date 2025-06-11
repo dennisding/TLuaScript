@@ -7,12 +7,17 @@ local object = silent_import('object')
 -- 即只能通过lua操作c++对象.
 -- 这个对象通过c++调用lua函数的参数
 -- 或是lua调用c++函数的返回值传递给lua
-function _lua_bind_obj(cobject, ctype)
+function _lua_bind_obj(cobject, ctype, is_component)
 	if _sys.cpp_objects[cobject] ~= nil then
 		return _sys.cpp_objects[cobject]
 	end
 
-	local instance = actor.new_proxy(cobject, ctype)
+	local instance = nil
+	if is_component then
+		instance = component.new_component(cobject, ctype)
+	else
+		instance = actor.new_proxy(cobject, ctype)
+	end
 	_sys.cpp_objects[cobject] = instance
 	instance:_call_init()
 
