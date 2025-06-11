@@ -97,6 +97,7 @@ end
 function class(name, parent, ...)
 	local _new_class = {}
 	if parent ~= nil then
+		parent._make_class_ready()
 		_new_class = tablex.copy(parent)
 		_new_class._plugins = nil
 		_new_class._plugin_overloads = nil
