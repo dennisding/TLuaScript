@@ -10,7 +10,9 @@ local function _gather_infos(methods, attrs, t)
 		local value = rawget(t, key)
 		if type(value) == 'function' then
 			container = methods[key] or {}
-			table.insert(container, value)
+			if tablex.find(container, value) == nil then
+				table.insert(container, value)
+			end
 			methods[key] = container
 		elseif type(value) == 'table' then
 			if value._get ~= nil or value._set ~= nil then
