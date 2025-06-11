@@ -1,9 +1,9 @@
 
 
-import('component_base')
+import('component')
 
 -- class CppLuaWeaponComponent begin
-class('CppLuaWeaponComponent', component_base.component_base)
+class('CppLuaWeaponComponent', component.component)
 
 function CppLuaWeaponComponent._init(self)
 	print(_text('CppLuaWeaponComponent._init'))
@@ -14,6 +14,7 @@ function CppLuaWeaponComponent.fire(self)
 end
 
 CppLuaWeaponComponent._plugins = {
+--	'Components.Plugins.basic',
 	'Components.Weapons.attach_weapon',
 }
 

@@ -1,3 +1,3 @@
-import('component_base')
+import('component')
 
-class('CameraComponent', component_base.component_base)
+class('CameraComponent', component.component)

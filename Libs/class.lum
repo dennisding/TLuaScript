@@ -30,9 +30,9 @@ local function _gather_infos(methods, attrs, t)
 end
 
 local function _gather_module_info(methods, attrs, name, plugins)
-	local plugin = safe_import(name)
+	local plugin = clean_import(name)
 	-- add the include
-	local include = plugin.__includes
+	local include = plugin._includes
 	if type(include) == 'table' then
 		table.move(include, 1, #include, #plugins + 1, plugins)
 	end

@@ -1,4 +1,5 @@
 
+import('component')
 
-class('EnhancedInputComponent')
+class('EnhancedInputComponent', component.component)
 

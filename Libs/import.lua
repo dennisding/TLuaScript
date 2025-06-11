@@ -66,6 +66,7 @@ function import(name, shortcut, ...)
 			if not hints.clean then
 				_set_upvalue_by_name(shortcut or module._shortcut, module)
 			end
+
 			return module
 		end
 	end

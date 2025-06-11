@@ -1,12 +1,12 @@
 
-import('object')
+-- import('object')
 
-class('component_base', object.object)
+-- class('component_base', object.object)
 
-function component_base.AttachToComponent(self, parent, socket_name, ...)
-	self:K2_AttachToComponent(parent, socket_name, ...)
-end
+-- function component_base.AttachToComponent(self, parent, socket_name, ...)
+-- 	self:K2_AttachToComponent(parent, socket_name, ...)
+-- end
 
-function component_base.SetRelativeLocation(self, location, ...)
-	self:K2_SetRelativeLocation(location, ...)
-end
+-- function component_base.SetRelativeLocation(self, location, ...)
+-- 	self:K2_SetRelativeLocation(location, ...)
+-- end

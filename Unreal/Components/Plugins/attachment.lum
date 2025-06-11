@@ -1,4 +1,11 @@
 
+-- class attach_rules begin
+class('attach_rules')
+
+function attach_rules._init(self)
+
+end
+-- class attch_rules end
 
 function attach_to(self)
 	print(_text('component plugin attachment.attach_to'))

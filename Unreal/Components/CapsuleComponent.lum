@@ -1,7 +1,7 @@
 
-import('component_base')
+import('component')
 
-class('CapsuleComponent', component_base.component_base)
+class('CapsuleComponent', component.component)
 
 function CapsuleComponent:InitCapsuleSize(radius, half_height)
 	self.CapsuleRadius = radius

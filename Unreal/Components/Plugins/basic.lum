@@ -1,0 +1,14 @@
+
+_includes = {
+	'Components.Plugins.attachment',
+}
+
+--function component_base.AttachToComponent(self, parent, socket_name, ...)
+function AttachToComponent(self, parent, socket_name, ...)
+	self:K2_AttachToComponent(parent, socket_name, ...)
+end
+
+-- function component_base.SetRelativeLocation(self, location, ...)
+function SetRelativeLocation(self, location, ...)
+	self:K2_SetRelativeLocation(location, ...)
+end
