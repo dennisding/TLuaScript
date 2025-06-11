@@ -14,7 +14,7 @@ function CppLuaWeaponComponent.fire(self)
 end
 
 CppLuaWeaponComponent._plugins = {
-	'Components.Plugins.attach_weapon',
+	'Components.Weapons.attach_weapon',
 }
 
 -- class CppLuaWeaponComponent end
