@@ -2,6 +2,7 @@
 local actor = silent_import('actor')
 local component = silent_import('component')
 local object = silent_import('object')
+local delegate = silent_import('delegate')
 
 -- 在bind_object之前, 只能单向操作, 
 -- 即只能通过lua操作c++对象.
@@ -21,7 +22,6 @@ function _lua_bind_obj(cobject, ctype, is_component)
 	_sys.cpp_objects[cobject] = instance
 	instance:_call_init()
 
---	_world.player = instance
 	return instance
 end
 
@@ -30,9 +30,6 @@ function _lua_get_actor(cobject, ctype)
 	if object ~= nil then
 		return object
 	end
-	-- if ctype == nil then
-	-- 	ctype = _cpp_object_get_type(cobject)
-	-- end
 
 	return actor.new_proxy(cobject, ctype)
 end
@@ -49,8 +46,8 @@ function _lua_get_enum(ctype, value)
 	return Enum:_get_enum_value(ctype, value)
 end
 
-function _lua_new_struct(ctype)
-
+function _lua_get_delegate(cobject)
+	return delegate.new_delegate(cobject)
 end
 
 function _lua_unbind_obj(cpp_obj)
@@ -73,7 +70,7 @@ function _lua_tcall(cobject, name, ...)
 	local self = _lua_get_actor(cobject)
 	local method = self[name]
 	if method then
-		method(self, ...)
+		return method(self, ...)
 	end
 end
 
@@ -91,8 +88,6 @@ local function _get_method(callback, context)
 end
 
 local function _set_method(lua_class, name, method)
---	assert(rawget(lua_class, name) == nil, string.format('method<%s> already exist.', name))
-
 	rawset(lua_class, name, method)
 end
 

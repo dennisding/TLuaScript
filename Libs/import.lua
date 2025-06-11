@@ -80,12 +80,12 @@ function import(name, shortcut, ...)
 	local old_module = nil
 	if _sys.reloading then
 		-- reloading 逻辑
-		if _sys.reloading[module] ~= nil then
+		if _sys.reloading[name] ~= nil then
 			-- 正在import, 有可能出现循环import的情况
 			return module
 		end
 		-- 设置reloading
-		_sys.reloading[module] = true
+		_sys.reloading[name] = true
 		old_module = tablex.raw_copy(module)
 	end
 
@@ -100,7 +100,7 @@ function import(name, shortcut, ...)
 
 	if _sys.reloading then
 		_sys.update_module({'import', name}, old_module, module)
-		_sys.reloading[module] = nil
+--		_sys.reloading[name] = nil
 	end
 	return module
 end

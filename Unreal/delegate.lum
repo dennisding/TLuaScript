@@ -1,0 +1,17 @@
+
+
+class('delegate')
+
+function delegate.execute(self)
+	local cobject = rawget(self,'_co')
+	assert(cobject ~= nil)
+	_cpp_delegate_execute(cobject)
+end
+
+
+function new_delegate(cobject)
+	print(_text('new_delegate'), towstring(cobject))
+	local instance = delegate:_new_instance()
+	rawset(instance, '_co', cobject)
+	return instance
+end

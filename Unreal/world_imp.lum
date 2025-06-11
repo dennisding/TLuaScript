@@ -23,7 +23,7 @@ function world.__index(self, name)
 		return attr
 	end
 
-	return rawget(self, '_world')[name]
+	return rawget(self, 'world')[name]
 end
 
 -- actor manager

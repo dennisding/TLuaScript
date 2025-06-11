@@ -1,5 +1,4 @@
 
--- import('ctype')
 import('struct_map')
 
 class('struct')

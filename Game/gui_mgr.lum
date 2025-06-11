@@ -1,5 +1,4 @@
 
-
 -- gui_mgr begin
 
 class('gui_mgr')

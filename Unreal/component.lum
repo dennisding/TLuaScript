@@ -1,23 +1,14 @@
 
 import('object')
--- import('component_base')
 import('component_map')
 
 -- class component begin
 class('component', object.object)
+
 component._plugins = {
 	'Components.Plugins.basic'
 }
 -- class component end
-
--- local function _gen_component_lua_type(ctype)
--- 	local ctype_name = _cpp_object_get_name(ctype)
--- 	local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
--- 	local module = safe_import(type_name)
-
--- 	print(_text('gen_component_type'), _text(type_name))
--- 	return module[ctype_name] or component_base.component_base
--- end
 
 local function _get_component_type(ctype)
 	local lua_type = _sys.ctypes[ctype]
@@ -29,12 +20,8 @@ local function _get_component_type(ctype)
 	local type_name = component_map[ctype_name] or ('Components.' .. ctype_name)
 	local module = safe_import(type_name)
 
---	local component_type = module[ctype_name] or component_base.component_base
 	local component_type = module[ctype_name]
 	if component_type == nil then
-		-- create new component type
---		print(_text('create new component type'), _text(ctype_name))
---		component_type = class(ctype_name, component_base.component_base, 'clean')
 		component_type = class(ctype_name, component, 'clean')
 	end
 	_sys.ctypes[ctype] = component_type

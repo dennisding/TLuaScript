@@ -6,6 +6,13 @@ end
 
 function test(self)
 	_gui.armor:say_hello()
+
+	self.bind_delegate(self.Delegate, self.delegate_callback)
+	self.Delegate.Bind(self.delegate_callback)
+end
+
+function delegate_callback(self)
+	print(_text('delegate_callback'))
 end
 
 function use_skill(self, skill_id)

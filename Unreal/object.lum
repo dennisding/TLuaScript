@@ -92,12 +92,6 @@ function object.__newindex(self, name, value)
 	rawget(self, '_vtable')[name][2](self, value)
 end
 
--- 危险行为, 注意释放问题
--- function object.add_to_root(self)
--- 	local cobject = rawget(self, '_co')
--- 	_cpp_object_add_to_root(cobject)
--- end
-
 function object.remove_from_parent(self)
 	local cobject = rawget(self, '_co')
 	_cpp_object_remove_from_parent(cobject)
