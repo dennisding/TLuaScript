@@ -46,8 +46,8 @@ function _lua_get_enum(ctype, value)
 	return Enum:_get_enum_value(ctype, value)
 end
 
-function _lua_get_delegate(cobject)
-	return delegate.new_delegate(cobject)
+function _lua_get_delegate(cobject, ctype)
+	return delegate.new_delegate(cobject, ctype)
 end
 
 function _lua_unbind_obj(cpp_obj)

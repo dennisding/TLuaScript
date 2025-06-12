@@ -2,16 +2,26 @@
 
 class('delegate')
 
-function delegate.execute(self)
-	local cobject = rawget(self,'_co')
+function delegate.execute(self, ...)
+	print(_text('delegate.execute'))
+	local cobject = rawget(self, '_co')
+	local ctype = rawget(self, '_ct')
 	assert(cobject ~= nil)
-	_cpp_delegate_execute(cobject)
+	_cpp_delegate_execute(cobject, ctype, ...)
 end
 
+function delegate.broadcast(self, ...)
+	print(_text('delegate.broadcast'))
+	local cobject = rawget(self, '_co')
+	local ctype = rawget(self, '_ct')
+	
+	_cpp_delegate_execute(cobject, ctype, ...)
+end
 
-function new_delegate(cobject)
+function new_delegate(cobject, ctype)
 	print(_text('new_delegate'), towstring(cobject))
 	local instance = delegate:_new_instance()
 	rawset(instance, '_co', cobject)
+	rawset(instance, '_ct', ctype)
 	return instance
 end
