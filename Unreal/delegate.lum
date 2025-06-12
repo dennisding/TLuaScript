@@ -14,8 +14,15 @@ function delegate.broadcast(self, ...)
 	self:execute(...)
 end
 
+function delegate.bind(self, fun)
+	local cobject = rawget(self, '_co')
+	local ctype = rawget(self, '_ct')
+	
+	print(_text('bind'), towstring(cobject), towstring(ctype), towstring(fun))
+	_cpp_delegate_bind(cobject, ctype, fun)
+end
+
 function new_delegate(cobject, ctype)
-	print(_text('new_delegate'), towstring(cobject))
 	local instance = delegate:_new_instance()
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)

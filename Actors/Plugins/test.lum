@@ -2,11 +2,39 @@
 import('fun_utils')
 
 function _init(self)
+	_world.p = self
 end
 
 function test(self)
 	print(towstring(_engine.root.OneMultiDelegate:execute(1234)))
+
+	local function _fun()
+		print(_text('on_callback'))
+	end
+
+	function _fire()
+		print(_text('bind function In lua _fire'))
+	end
+
+	local delegate = _engine.root.Delegate
+	-- delegate:bind(self, 'fire')
+	-- delegate:execute()
+
+	delegate:bind(_fire)
+	delegate:execute()
+
+	-- delegate = _engine.root.OneDelegate
+	-- delegate:bind(self, 'fire_one')
+
 --	_gui.armor:say_hello()
+end
+
+function fire(self)
+	print(towstring(self), _text('on fire'))
+end
+
+function fire_one(self, value)
+	print(towstring(self), _text('on fire'), towstring(value))
 end
 
 function delegate_callback(self)
