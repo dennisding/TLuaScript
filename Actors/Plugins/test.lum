@@ -5,7 +5,8 @@ function _init(self)
 end
 
 function test(self)
-	_gui.armor:say_hello()
+	print(towstring(_engine.root.OneMultiDelegate:execute(1234)))
+--	_gui.armor:say_hello()
 end
 
 function delegate_callback(self)

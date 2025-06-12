@@ -11,11 +11,7 @@ function delegate.execute(self, ...)
 end
 
 function delegate.broadcast(self, ...)
-	print(_text('delegate.broadcast'))
-	local cobject = rawget(self, '_co')
-	local ctype = rawget(self, '_ct')
-	
-	_cpp_delegate_execute(cobject, ctype, ...)
+	self:execute(...)
 end
 
 function new_delegate(cobject, ctype)
