@@ -1,4 +1,6 @@
 
+import('fun_utils')
+
 -- class delegate begin
 class('delegate')
 
@@ -14,11 +16,11 @@ function delegate.broadcast(self, ...)
 	self:execute(...)
 end
 
-function delegate.bind(self, fun)
+function delegate.bind(self, fun, ...)
 	local cobject = rawget(self, '_co')
 	local ctype = rawget(self, '_ct')
 	
-	_cpp_delegate_bind(cobject, ctype, fun)
+	_cpp_delegate_bind(cobject, ctype, fun_utils.wrape_fun(fun, ...))
 end
 -- class delegate end
 
