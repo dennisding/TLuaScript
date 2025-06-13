@@ -1,15 +1,15 @@
 
-import('object')
+import('actor')
 import('CppLuaCharacter')
 
-class('FirstPersonCharacter', CppLuaCharacter.CppLuaCharacter)
+class('FirstPersonCharacter', actor.actor)
 
 function FirstPersonCharacter._init(self)
-	self._super._init(self)
+--	self._super._init(self)
 	print(_text('FirstPersonCharacter:_init'))
 end
 
 function FirstPersonCharacter.hello(self, msg)
-	self._super._hello(self, msg)
+--	self._super._hello(self, msg)
 	print(_text("FirstPersonCharacter:hello"), msg)
 end

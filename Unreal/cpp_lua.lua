@@ -10,6 +10,7 @@ local delegate = silent_import('delegate')
 -- 或是lua调用c++函数的返回值传递给lua
 function _lua_bind_obj(cobject, ctype, is_component)
 	if _sys.cpp_objects[cobject] ~= nil then
+		print(_text('_lua_bind_obj0'), towstring(_sys.cpp_objects[cobject]))
 		return _sys.cpp_objects[cobject]
 	end
 
@@ -19,6 +20,7 @@ function _lua_bind_obj(cobject, ctype, is_component)
 	else
 		instance = actor.new_proxy(cobject, ctype)
 	end
+	print(_text('_lua_bind_obj'), towstring(instance))
 	_sys.cpp_objects[cobject] = instance
 	instance:_call_init()
 
@@ -51,8 +53,8 @@ function _lua_get_delegate(cobject, ctype)
 end
 
 function _lua_unbind_obj(cpp_obj)
-	print(_text('lua_unbind_obj'))
-	assert(_sys.cpp_objects[cpp_obj] ~= nil)
+	print(_text('_lua_unbind_obj'), towstring(cpp_obj))
+--	assert(_sys.cpp_objects[cpp_obj] ~= nil)
 
 	_sys.cpp_objects[cpp_obj] = nil
 end

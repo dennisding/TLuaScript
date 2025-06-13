@@ -31,7 +31,8 @@ local function _get_lua_type(ctype)
 
 	lua_type = module[type_name]
 	if lua_type == nil then
-		lua_type = actor
+--		lua_type = actor
+		lua_type = class(type_name, actor, 'clean')
 	end
 	_sys.ctypes[ctype] = lua_type
 	return lua_type

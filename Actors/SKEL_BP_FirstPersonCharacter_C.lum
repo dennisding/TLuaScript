@@ -1,15 +1,15 @@
 
-import('object')
+import('actor')
 import('CppLuaCharacter')
 
-class('SKEL_BP_FirstPersonCharacter_C', CppLuaCharacter.CppLuaCharacter)
+class('SKEL_BP_FirstPersonCharacter_C', actor.actor)
 
 function SKEL_BP_FirstPersonCharacter_C._init(self)
-	self._super._init(self)
+--	self._super._init(self)
 	print(_text('SKEL_BP_FirstPersonCharacter_C:_init'))
 end
 
 function SKEL_BP_FirstPersonCharacter_C.hello(self, msg)
-	self._super._hello(self, msg)
+--	self._super._hello(self, msg)
 	print(_text("SKEL_BP_FirstPersonCharacter_C:hello"), msg)
 end

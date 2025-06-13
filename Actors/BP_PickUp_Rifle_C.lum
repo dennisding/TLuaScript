@@ -1,0 +1,16 @@
+
+
+import('actor')
+import('CppLuaCharacter')
+
+class('BP_PickUp_Rifle_C', actor.actor)
+
+function BP_PickUp_Rifle_C._init(self)
+--	self._super._init(self)
+	print(_text('BP_PickUp_Rifle_C:_init'))
+end
+
+function BP_PickUp_Rifle_C.hello(self, msg)
+--	self._super._hello(self, msg)
+	print(_text("BP_PickUp_Rifle_C:hello"), msg)
+end
