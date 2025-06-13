@@ -33,6 +33,13 @@ function portrait.setup_button(self)
 	button.OnReleased:bind(_on_released)
 	button.OnHovered:bind(_on_hovered)
 	button.OnUnhovered:bind(_on_unhovered)
+
+	local function _callback()
+		print(_text('callback!!!!!!!!!!!!'))
+	end
+
+	local handle = _engine:callback(3, _callback)
+	_engine:cancel_callback(handle)
 end
 
 function portrait.update_hp(self)

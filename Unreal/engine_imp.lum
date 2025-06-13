@@ -18,7 +18,12 @@ end
 function engine.callback(self, delta, fun, ...)
 --	self.root:AddCallbck(delta, fun_utils.wrape_fun(fun, ...))
 	local root = rawget(self.root, '_co')
-	_cpp_engine_callback(root, delta, fun_utils.wrape_fun(fun, ...))
+	return _cpp_engine_callback(root, delta, fun_utils.wrape_fun(fun, ...))
+end
+
+function engine.cancel_callback(self, handle)
+	local root = rawget(self.root, '_co')
+	return _cpp_engine_cancel_callback(root, handle)
 end
 
 function engine.test(self)
