@@ -1,11 +1,12 @@
 
+import('ui_panel')
 -- gui_mgr begin
 
 class('gui_mgr')
 
 function gui_mgr._init(self)
 	-- basic class type
-	self.panel = panel
+	self.panel = ui_panel.panel
 	self._guis = {}  -- {name:gui}
 end
 
@@ -49,63 +50,6 @@ function gui_mgr.on_change_world(self)
 end
 
 -- gui_mgr end
-
--- class panel begin
-class('panel')
-
-panel._obj = object.dummy()
-
-function panel._init(self, res)
-	self._visible = true
-
-	self:_load_res(res)
-end
-
-function panel.show(self)
-	if self._visible then
-		return
-	end
-	self._visible = true
-end
-
-function panel.hide(self)
-	if not self._visible then
-		return
-	end
-
-	self._visible = false
-end
-
-function panel._load_res(self, res)
-	if res == nil then
-		return
-	end
-	-- unsafe code, 小心内存泄漏
---	local parent = _engine._game_instance
---	local parent = _engine.root
-	local object = object.create_object(res)
---	object:add_to_root()
---	object:AddToViewport()
-	self._obj = object
-end
-
-function panel.release(self)
-	self._obj:remove_from_parent()
-end
-
-function panel.add_to_viewport(self)
-	return self._obj:AddToViewport()
-end
-
-function panel.__index(self, name)
-	local attr = getmetatable(self)[name]
-	if attr ~= nil then
-		return attr
-	end
-
-	return self._obj[name]
-end
--- class panel end
 
 -- set global
 _set_global('_gui', gui_mgr())

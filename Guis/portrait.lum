@@ -5,6 +5,34 @@ class('portrait', _gui.panel)
 function portrait._init(self)
 	local res = _text('/Game/Guis/PlayerPortrait.PlayerPortrait_C')
 	self._super._init(self, res)
+
+	self:ensure('Button', self.setup_button, self)
+--	self:setup_button()
+end
+
+function portrait.setup_button(self)
+	local function _on_clicked()
+		print(_text('_on_clicked'))
+	end
+	local function _on_pressed()
+		print(_text('_on_pressed'))
+	end
+	local function _on_released()
+		print(_text('_on_released'))
+	end
+	local function _on_hovered()
+		print(_text('_on_hovered'))
+	end
+	local function _on_unhovered()
+		print(_text('_on_unhovered'))
+	end
+
+	local button = self.Button
+	button.OnClicked:bind(_on_clicked)
+	button.OnPressed:bind(_on_pressed)
+	button.OnReleased:bind(_on_released)
+	button.OnHovered:bind(_on_hovered)
+	button.OnUnhovered:bind(_on_unhovered)
 end
 
 function portrait.update_hp(self)

@@ -1,4 +1,6 @@
 
+import('fun_utils')
+
 -- 暂时分配一个整数id
 local _last_id = 0
 local function _alloc_id()
@@ -24,6 +26,11 @@ function world.__index(self, name)
 	end
 
 	return rawget(self, 'world')[name]
+end
+
+function world.callback(self, delta, fun, ...)
+	_engine:callback(delta, fun, ...)
+	-- _engine.root:AddWorldCallback(delta, fun_utils.wrape_fun(fun, ...))
 end
 
 -- actor manager

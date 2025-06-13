@@ -1,5 +1,5 @@
 
-
+-- class delegate begin
 class('delegate')
 
 function delegate.execute(self, ...)
@@ -18,9 +18,9 @@ function delegate.bind(self, fun)
 	local cobject = rawget(self, '_co')
 	local ctype = rawget(self, '_ct')
 	
-	print(_text('bind'), towstring(cobject), towstring(ctype), towstring(fun))
 	_cpp_delegate_bind(cobject, ctype, fun)
 end
+-- class delegate end
 
 function new_delegate(cobject, ctype)
 	local instance = delegate:_new_instance()

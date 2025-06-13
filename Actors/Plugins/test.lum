@@ -6,27 +6,19 @@ function _init(self)
 end
 
 function test(self)
-	print(towstring(_engine.root.OneMultiDelegate:execute(1234)))
-
-	local function _fun()
-		print(_text('on_callback'))
+	local function _callback(value)
+		print(_text('callback'), towstring(value))
 	end
 
-	function _fire()
-		print(_text('bind function In lua _fire'))
+	local function _normal_callback()
+		print(_text('normal callback'))
 	end
 
-	local delegate = _engine.root.Delegate
-	-- delegate:bind(self, 'fire')
-	-- delegate:execute()
-
-	delegate:bind(_fire)
-	delegate:execute()
-
-	-- delegate = _engine.root.OneDelegate
-	-- delegate:bind(self, 'fire_one')
-
---	_gui.armor:say_hello()
+	-- add callback
+	_engine:callback(2, _callback, 1024)
+	_engine:callback(4, _normal_callback)
+	_world:callback(5, _callback, 2048)
+	_world:callback(6, _normal_callback)
 end
 
 function fire(self)
