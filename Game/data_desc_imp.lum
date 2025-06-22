@@ -152,7 +152,7 @@ class('fixed_array', array)
 function fixed_array.new_value(self, owner)
 	local new_array = data_types.fixed_array(self.item_desc)
 --	new_array:_set_name(self.name or '')
-	new_array:_set_owner(owner)
+	new_array:_set_owner(owner, self)
 	return new_array
 end
 -- class fixed_array end
@@ -169,6 +169,12 @@ end
 function map.new_value(self, owner)
 	local new_map = data_types.map(self.key_desc, self.value_desc)
 	new_map:_set_owner(owner, self)
+	return new_map
+end
+
+function map.from_value(self, owner, values)
+	local new_map = self:new_value(owner)
+	new_map:_from_value(value)
 	return new_map
 end
 -- class map end

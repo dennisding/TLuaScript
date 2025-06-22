@@ -48,7 +48,7 @@ function _update_table(names, old, new)
 	_sys.reloading[old] = true
 
 	-- make class ready
-	if type(new) == 'table' and type(new._make_class_ready) == 'function' then
+	if type(new) == 'table' and type(rawget(new, '_make_class_ready')) == 'function' then
 		new._make_class_ready()
 	end
 

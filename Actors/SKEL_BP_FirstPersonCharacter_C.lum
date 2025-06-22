@@ -1,6 +1,5 @@
 
 import('actor')
-import('CppLuaCharacter')
 
 class('SKEL_BP_FirstPersonCharacter_C', actor.actor)
 

@@ -1,6 +1,5 @@
 
 import('actor')
-import('CppLuaCharacter')
 
 class('FirstPersonCharacter', actor.actor)
 

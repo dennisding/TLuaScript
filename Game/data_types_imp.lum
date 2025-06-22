@@ -24,7 +24,7 @@ class('data_type')
 function data_type._set_owner(self, owner, desc)
 	self._owner = owner
 	self._desc = desc
-	self._name = desc._name or ''
+	self._name = desc.name or ''
 	self._notifiers = {}  -- {name notifier}
 end
 

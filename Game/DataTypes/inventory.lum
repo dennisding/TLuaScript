@@ -1,8 +1,4 @@
 
--- import('Datas.item')
--- import('data_desc')
--- import('data_types')
-
 -- class inventory begin
 class('inventory', data_types.data_type)
 

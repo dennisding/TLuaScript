@@ -5,17 +5,71 @@ function map._init(self, key_desc, value_desc)
 	self._key_desc = key_desc
 	self._value_desc = value_desc
 	self._items = {}  -- {key:value}
+	self._size = 0
+end
+
+function map._from_value(self, in_values)
+	if in_values == nil then
+		return
+	end
+
+	for key, value in pairs(in_values) do
+		local key_item = self._key_desc.from_value(key)
+		local value_item = self._value_desc.from_value(value)
+
+		if self._items[key_item] == nil then
+			self._size = self._size + 1
+		end
+
+		self._items[key_item] = value_item
+	end
+end
+
+function map.size(self)
+	return self._size
+end
+
+function map.iter(self)
+	local key = nil
+	local value = nil
+	local items = self._items
+	local function _iter()
+		key, value = next(items, key)
+		if key == nil then
+			return nil
+		end
+		return key, value
+	end
+	return _iter
 end
 
 function map.add(self, key, value)
+	assert(value)
+	assert(self._items[key] == nil)
 	self._items[key] = value
+	self._size = self._size + 1
 
 	self:notify_owner('add', key, value)
 end
 
+function map.update(self, key, value)
+	assert(self._items[key] ~= nil)
+
+	self._items[key] = value
+
+	self:notify_owner('update', key, value)
+end
+
 function map.remove(self, key)
 	assert(self._items[key] ~= nil)
+	assert(self._size >= 0)
+
 	self._items[key] = nil
+	self._size = self._size - 1
 
 	self:notify_owner('remove', key)
+end
+
+function map.find(self, key)
+	return self._items[key]
 end

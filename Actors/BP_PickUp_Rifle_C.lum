@@ -1,7 +1,6 @@
 
 
 import('actor')
-import('CppLuaCharacter')
 
 class('BP_PickUp_Rifle_C', actor.actor)
 

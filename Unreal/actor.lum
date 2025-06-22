@@ -8,12 +8,6 @@ class('actor', object.object)
 -- class actor end
 
 local function _format_actor_name(name)
-	-- convert BP_FirstPersonCharacter_C to FirstPersonCharacter
-	-- if stringx.end_with(name, '_C') then
-	-- 	local tokens = stringx.split(name, '_')
-	-- 	return tokens[#tokens - 1]
-	-- end
-
 	return name
 end
 

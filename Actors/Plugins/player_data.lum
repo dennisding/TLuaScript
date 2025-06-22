@@ -10,6 +10,7 @@ quests = data_desc.array(data_desc.i16(0), 'save')
 item = data_desc.item('save')
 
 items = data_desc.array(data_desc.item('save'), 'save')
+kill_counts = data_desc.map(data_desc.i32(0, 'save'), data_desc.i32(0, 'save'), 'save')
 
 function _init(self)
 	self.name = _text('勇者(hero)')
@@ -24,6 +25,25 @@ function _init(self)
 	for index, quest_id in self.quests:iter() do
 		print(_text('has_quest'), towstring(quest_id))
 	end
+end
+
+function on_kill_counts_add(self, key, value)
+	print(_text('on_kill_counts_add'), towstring(key), towstring(value))
+end
+
+function on_kill_counts_update(self, key, value)
+	print(_text('on_kill_counts_add'), towstring(key), towstring(value))
+end
+
+function on_kill_counts_remove(self, key)
+	print(_text('on_kill_counts_add'), towstring(key), towstring(value))
+end
+
+function test_kill_counts(self)
+	self.kill_counts:add(100, 1)
+	self.kill_counts:add(101, 2)
+	self.kill_counts:update(100, 3)
+	self.kill_counts:remove(101)
 end
 
 function test_items(self)
