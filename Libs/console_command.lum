@@ -51,7 +51,7 @@ function commands.reload()
 end
 
 commands.r = 'reload()'
-commands.p = '_world.player'
+commands.p = '_world.p'
 
 add_console_command(commands)
 

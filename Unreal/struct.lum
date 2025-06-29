@@ -4,83 +4,8 @@ import('struct_map')
 
 -- class struct begin
 class('struct', object.object)
-
 -- class struct end
 
--- local function _reset_metatable(self)
--- 	local ctype = rawget(self, '_ct')
-
--- 	local lua_type = _sys.ctypes[ctype]
--- 	if lua_type == nil then
--- 		local ctype_name = _cpp_struct_get_name(ctype)
-
--- 		local module_name = struct_map[ctype_name] or ('Structs.' .. ctype_name)
--- 		local names = stringx.split(module_name, '.')
--- 		local type_name = names[#names]
--- 		local module = safe_import(module_name)
-
--- 		lua_type = module[type_name] or struct
--- 		_sys.ctypes[ctype] = lua_type
--- 	end
-
--- 	setmetatable(self, lua_type)
--- 	if self._init then
--- 		self:_init()
--- 	end
--- end
-
--- class('cstruct_proxy')
-
--- function cstruct_proxy.__index(self, name)
--- 	_reset_metatable(self, type_prefix)
--- 	return self[name]
--- end
-
--- function cstruct_proxy.__newindex(self, name, value)
--- 	_reset_metatable(self, type_prefix)
--- 	self[name] = value
--- end
-
--- -- class vtable begin
--- class('vtable')
-
--- function vtable._init(self, ct)
--- 	self._ct = ct -- ct means type in c or c++.
--- end
-
--- -- class vtable end
-
--- -- class ref begin
--- class('ref')
-
--- ref.__name = 'ref<struct>'
-
--- function ref._init(self)
--- 	self._co = nil
--- 	self._ct = nil
--- end
-
--- function ref.__index(self, name)
--- 	local attr = rawget(getmetatable(self), name)
--- 	if attr then
--- 		return attr
--- 	end
--- 	-- get the attributes
--- 	local info = _cpp_struct_get_attr(self._ct, name)
--- end
-
--- -- class ref end
--- -- class cstruct begin
--- class('cstruct')
-
--- function cstruct._init(self, ...)
--- end
-
--- function cstruct.__gc(self)
--- 	_cpp_struct_free(self._co, self._ct)
--- end
-
--- class cstruct end
 -- class struct_mgr begin
 class('struct_mgr')
 
@@ -115,7 +40,6 @@ function struct_mgr._get_lua_type(self, ctype)
 
 	local module = safe_import(module_name)
 
-	-- lua_type = module[type_name] or struct
 	lua_type = module[type_name] or class(type_name, struct, 'clean')
 	self.ctypes[ctype] = lua_type
 
@@ -131,33 +55,15 @@ function struct_mgr._wrape_struct(self, cobject, ctype)
 	rawset(instance, '_ct', ctype)
 	object.set_vtable(instance, true)
 
---	instance:_call_init()
 	return instance
 end
 
+function struct_mgr.vector(x, y, z)
+	local cobject, ctype = _cpp_make_vector(x, y, z)
+	return Struct:_wrape_struct(cobject, ctype)
+end
+
 -- class struct_mgr end
-
--- local function _get_lua_type(ctype)
-
--- end
-
--- function new_struct(cobject, ctype)
--- 	assert(cobject ~= nil)
-
--- 	-- if ctype == nil then
--- 	-- 	ctype = _cpp_object_get_type(cobject)
--- 	-- end
-
--- 	local lua_type = _get_lua_type(ctype)
--- 	local instance = lua_type:_new_instance()
--- 	rawset(instance, '_co', cobject)
--- 	rawset(instance, '_ct', ctype)
-
--- 	object.set_vtable(instance, true)
--- 	instance:_call_init()
-
--- 	return instance
--- end
 
 -- _ls means lua struct for c++
 _set_global('_ls', cstruct_proxy)

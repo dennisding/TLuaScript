@@ -9,11 +9,25 @@ function test_channel(self, channel, vec)
 	print(_text('test channel'), towstring(channel), towstring(channel.IntValue))
 	
 	channel.StringValue = _text("脚本中文信息")
-	print(_text("vec"), vec.X)
-	tablex.print_table(vec)
+	channel.IntValue = 11111
+	-- print(_text("vec"), vec.X)
+	-- tablex.print_table(vec)
+	return channel
 end
 
 function test(self)
+	-- local v = Struct.vector(3.14, 6.28, 9.99)
+	-- print(_text('make_vector'), towstring(v.X), towstring(v.Y), towstring(v.Z))
+	local channel = self.Channel
+	print(_text('channel'), towstring(channel.IntValue), channel.StringValue)
+
+	channel.IntValue = 3344
+	self.Channel2 = channel
+
+	return channel
+end
+
+function test_callback(self)
 	local function _callback(value)
 		print(_text('callback'), towstring(value))
 	end
