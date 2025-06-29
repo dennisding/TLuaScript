@@ -44,6 +44,10 @@ function _lua_get_com(cobject, ctype)
 	return component.new_component(cobject, ctype)
 end
 
+function _lua_get_struct(cobject, ctype)
+	return Struct:_wrape_struct(cobject, ctype)
+end
+
 function _lua_get_enum(ctype, value)
 	return Enum:_get_enum_value(ctype, value)
 end
@@ -101,4 +105,9 @@ end
 function _lua_component_method(class_name, method_name, callback, context)
 	local lua_class = _get_class('Components.' .. class_name, class_name)
 	_set_method(lua_class, method_name, _get_method(callback, context))
+end
+
+function _lua_add_function_lib(name, lib)
+	local lib_obj = object.new_object(lib, lib)
+	Function:add_lib(name, lib_obj)
 end

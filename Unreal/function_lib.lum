@@ -1,0 +1,50 @@
+
+
+local _prepared = false
+local function make_libs_ready()
+	if _prepared then
+		return
+	end
+	_prepare = true
+	_cpp_prepare_function_libs()
+end
+-- class functions begin
+class('functions')
+
+function functions._init(self)
+	self.functions = {} -- {name:function_lib}
+	self.shortcuts = {} -- {shortcut:name}
+
+	self:setup_shortcuts()
+end
+
+function functions.setup_shortcuts(self)
+	-- add new libs here
+	self.shortcuts['Math'] = "KismetMathLibrary"
+end
+
+function functions.add_lib(self, name, lib)
+	self.functions[name] = lib
+end
+
+function functions.__index(self, shortcut)
+	local attr = rawget(getmetatable(self), shortcut)
+	if attr ~= nil then
+		return attr
+	end
+
+	make_libs_ready()
+
+	local name = self.shortcuts[shortcut]
+	assert(shortcut ~= nil, 'you need a shortcut to access function libs')
+
+	local libs = self.functions[name]
+	assert(libs ~= nil)
+
+	rawset(self, shortcut, libs)
+	return libs
+end
+-- class function end
+
+-- set global
+_set_global('Function', functions())
