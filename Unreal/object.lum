@@ -2,8 +2,9 @@
 -- class vtable
 class('vtable')
 
-function vtable._init(self, _ct)
+function vtable._init(self, _ct, is_struct)
 	rawset(self, '_ct', _ct)
+	rawset(self, '_is_struct', is_struct)
 end
 
 local function _gen_property(property, cpp_getter, cpp_setter)
@@ -45,9 +46,14 @@ end
 function vtable.__index(self, name)
 	-- get the attribute from c++
 	local ctype = rawget(self, '_ct')
-	local property, getter, setter = _cpp_object_get_info(ctype, name)
-	-- print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
-	-- print(_text(tostring(getter)), _text(tostring(setter)))
+	local property, getter, setter = nil, nil, nil
+	if rawget(self, '_is_struct') then
+		property, getter, setter = _cpp_struct_get_info(ctype, name)
+	else
+		property, getter, setter = _cpp_object_get_info(ctype, name)
+	end
+--	print(_text('cpp_object_get_info'), _text(name), _text(tostring(property)))
+--	print(_text(tostring(getter)), _text(tostring(setter)))
 	-- update the vtable
 	local attr = nil
 	if property ~= nil then
@@ -136,26 +142,26 @@ end
 
 -- class dummy end
 
-local function _gen_vtable(ctype, context)
-	local result = vtable(ctype, context)
-	_sys.vtables[ctype] = result
-	return result
-end
+-- local function _gen_vtable(ctype, context)
+-- 	local result = vtable(ctype, context)
+-- 	_sys.vtables[ctype] = result
+-- 	return result
+-- end
 
-local function _get_vtable(ctype)
+local function _get_vtable(ctype, is_struct)
 	local result = _sys.vtables[ctype]
 	if result ~= nil  then
 		return result
 	end
 
-	result = vtable(ctype)
+	result = vtable(ctype, is_struct)
 	_sys.vtables[ctype] = result
 	return result
 end
 
-function set_vtable(self)
+function set_vtable(self, is_struct)
 	local ctype = rawget(self, '_ct')
-	local vtable = _get_vtable(ctype)
+	local vtable = _get_vtable(ctype, is_struct)
 
 	assert(vtable ~= nil, "invalid vtable")
 	rawset(self, '_vtable', vtable)
@@ -168,7 +174,8 @@ local function _get_lua_type(cobject, ctype)
 end
 
 function new_object(cobject, ctype)
-	assert(cobject ~= nil)
+--	assert(cobject ~= nil)
+	assert((cobject ~= nil) or (ctype ~= nil))
 
 	if ctype == nil then
 		ctype = _cpp_object_get_type(cobject)

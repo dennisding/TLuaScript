@@ -1,5 +1,5 @@
 
-local function _gather_infos(methods, attrs, t)
+local function _gather_infos(methods, attrs, module)
 	local key = nil
 
 	local function _gather(key)
@@ -7,7 +7,7 @@ local function _gather_infos(methods, attrs, t)
 			return
 		end
 
-		local value = rawget(t, key)
+		local value = rawget(module, key)
 		if type(value) == 'function' then
 			container = methods[key] or {}
 			if tablex.find(container, value) == nil then
@@ -22,7 +22,7 @@ local function _gather_infos(methods, attrs, t)
 	end
 
 	repeat
-		key = next(t, key)
+		key = next(module, key)
 		if not key then
 			break
 		end

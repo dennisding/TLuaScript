@@ -5,6 +5,14 @@ function _init(self)
 	_world.p = self
 end
 
+function test_channel(self, channel, vec)
+	print(_text('test channel'), towstring(channel), towstring(channel.IntValue))
+	
+	channel.StringValue = _text("脚本中文信息")
+	print(_text("vec"), vec.X)
+	tablex.print_table(vec)
+end
+
 function test(self)
 	local function _callback(value)
 		print(_text('callback'), towstring(value))
@@ -23,6 +31,8 @@ end
 
 function fire(self)
 	print(towstring(self), _text('on fire'))
+	local v = Struct.vector(0, 0, 0)
+	v.Add(v2)
 end
 
 function fire_one(self, value)

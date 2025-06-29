@@ -17,14 +17,14 @@ function setup_mesh(self)
 	mesh:AttachToComponent(self.FirstPersonCameraComponent)
 	mesh.bCastDynamicShadow = true
 	mesh.CastShadow = true
-	mesh:SetRelativeLocation(Vector(-30, 0, -150))
+--	mesh:SetRelativeLocation(Vector(-30, 0, -150))
 end
 
 function setup_camera(self)
  	local camera = self:create_default_subobject(_text('FirstPersonCamera'), Class.CameraComponent)
 
  	camera:AttachToComponent(self.CapsuleComponent)
- 	camera:SetRelativeLocation(Vector(-10, 0, 60))
+ --	camera:SetRelativeLocation(Vector(-10, 0, 60))
  	camera.bUsePawnControlRotation = true
 
 	self.FirstPersonCameraComponent = camera

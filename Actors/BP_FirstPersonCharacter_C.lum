@@ -1,5 +1,4 @@
 
-import('object')
 import('CppLuaCharacter')
 
 class('BP_FirstPersonCharacter_C', CppLuaCharacter.CppLuaCharacter)

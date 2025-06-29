@@ -1,11 +1,11 @@
 
 import('struct')
 
-class('CppLuaChannel', struct.cstruct)
+class('CppLuaChannel', struct.struct)
 
-function CppLuaChannel._init(self)
-    print(_text('CppLuaChannel._init'))
-end
+-- function CppLuaChannel._init(self)
+--     print(_text('CppLuaChannel._init'))
+-- end
 
 function CppLuaChannel.say_hello(self, msg)
     print(_text('CppLuaChannel.say_hello'), msg)

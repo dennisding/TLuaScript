@@ -1,0 +1,6 @@
+
+
+function test_ui(self)
+	_gui.portrait:update()
+	_gui.armor:update()
+end

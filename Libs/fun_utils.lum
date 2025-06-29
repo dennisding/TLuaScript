@@ -22,8 +22,8 @@ function wrape_fun(f, ...)
 	if #args == 0 then
 		return f
 	end
-	local function _fun()
-		return f(table.unpack(args))
+	local function _fun(...)
+		return f(table.unpack(args), ...)
 	end
 	return _fun
 end

@@ -1,5 +1,7 @@
 
-class('vector')
+import('struct')
+
+class('vector', struct.struct)
 
 function vector._init(self, X, Y, Z)
 	self.X = X or 0
@@ -15,5 +17,21 @@ function vector.__add(a, b)
 	return tmp
 end
 
+function vector.dot(self, other)
+	return self.X*other.X + self.Y*other.Y + self.Z*other.Z
+end
+
+function vector.cross(self, other)
+	return vector(0, 0, 0)
+end
+
+function vector.normal(self)
+	return vector(self.X/length, self.Y/length, self.Z/length)
+end
+
+function vector.length(self)
+	return math.sqrt(self.X*self.X + self.Y*self.Y + self.Z*self.Z)
+end
+
 -- set global
-_set_global('Vector', vector)
+--_set_global('Vector', vector)
