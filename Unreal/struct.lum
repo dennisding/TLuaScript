@@ -4,6 +4,14 @@ import('struct_map')
 
 -- class struct begin
 class('struct', object.object)
+
+function struct.__gc(self)
+	local deleter = rawget(self, '_del')
+	if deleter then
+		local cobject = rawget(self, '_co')
+		_cpp_struct_destroy(cobject, deleter)
+	end
+end
 -- class struct end
 
 -- class struct_mgr begin
@@ -46,13 +54,14 @@ function struct_mgr._get_lua_type(self, ctype)
 	return lua_type
 end
 
-function struct_mgr._wrape_struct(self, cobject, ctype)
+function struct_mgr._wrape_struct(self, cobject, ctype, deleter)
 	assert(cobject ~= nil)
 
 	local lua_type = self:_get_lua_type(ctype)
 	local instance = lua_type:_new_instance()
 	rawset(instance, '_co', cobject)
 	rawset(instance, '_ct', ctype)
+	rawset(instance, '_del', deleter)
 	object.set_vtable(instance, true)
 
 	return instance
@@ -60,6 +69,11 @@ end
 
 function struct_mgr.vector(x, y, z)
 	local cobject, ctype = _cpp_make_vector(x, y, z)
+	return Struct:_wrape_struct(cobject, ctype)
+end
+
+function struct_mgr.vector4(x, y, z, w)
+	local cobject, ctype = _cpp_make_vector(x, y, z, w)
 	return Struct:_wrape_struct(cobject, ctype)
 end
 

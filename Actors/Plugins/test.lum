@@ -16,15 +16,16 @@ function test_channel(self, channel, vec)
 end
 
 function test(self)
-	-- local v = Struct.vector(3.14, 6.28, 9.99)
-	-- print(_text('make_vector'), towstring(v.X), towstring(v.Y), towstring(v.Z))
-	local channel = self.Channel
-	print(_text('channel'), towstring(channel.IntValue), channel.StringValue)
+	local v = Struct.vector(3.14, 6.28, 9.99)
+	v = Function.Math:Normal(v)
+	print(_text('make_vector'), towstring(v.X), towstring(v.Y), towstring(v.Z))
+	-- local channel = self.Channel
+	-- print(_text('channel'), towstring(channel.IntValue), channel.StringValue)
 
-	channel.IntValue = 3344
-	self.Channel2 = channel
+	-- channel.IntValue = 3344
+	-- self.Channel2 = channel
 
-	return channel
+	-- return channel
 end
 
 function test_callback(self)

@@ -44,8 +44,8 @@ function _lua_get_com(cobject, ctype)
 	return component.new_component(cobject, ctype)
 end
 
-function _lua_get_struct(cobject, ctype)
-	return Struct:_wrape_struct(cobject, ctype)
+function _lua_get_struct(cobject, ctype, deleter)
+	return Struct:_wrape_struct(cobject, ctype, deleter)
 end
 
 function _lua_get_enum(ctype, value)
