@@ -35,10 +35,35 @@ end
 function controller_changed(self)
 	print(_text('first_player controller_changed'))
 	local controller = self.Controller
+	if not controller then
+		return
+	end
+
 	local is_local_player = controller.bIsLocalPlayerController
 	local player = controller.Player
 	local subsystem_type = Subsystem.EnhancedInputLocalPlayerSubsystem
 
 	local subsystem = Function.Subsystem:GetLocalPlayerSubSystem(player, subsystem_type)
 	subsystem:AddMappingContext(self.DefaultMappingContext, 0)
+end
+
+function move(self, movement)
+	if self.Controller == nil then
+		return
+	end
+
+	local forward = self:GetActorForwardVector()
+	local right = self:GetActorRightVector()
+	self:AddMovementInput(forward, movement.Y)
+	self:AddMovementInput(right, movement.X)
+end
+
+function look(self, axis)
+	if self.Controller == nil then
+		return
+	end
+	print(_text('look'))
+
+	self:AddControllerYawInput(axis.X)
+	self:AddControllerPitchInput(axis.Y)
 end
