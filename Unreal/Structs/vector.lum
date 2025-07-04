@@ -1,15 +1,15 @@
 
 import('struct')
 
-class('vector', struct.struct)
+class('Vector', struct.struct)
 
-function vector._init(self, X, Y, Z)
+function Vector._init(self, X, Y, Z)
 	self.X = X or 0
 	self.Y = Y or 0
 	self.Z = Z or 0
 end
 
-function vector.__add(a, b)
+function Vector.__add(a, b)
 	local tmp = vector:_new_instance()
 	tmp.X = a.X + b.X
 	tmp.Y = a.Y + b.Y
@@ -17,19 +17,16 @@ function vector.__add(a, b)
 	return tmp
 end
 
-function vector.dot(self, other)
+function Vector.dot(self, other)
 	return self.X*other.X + self.Y*other.Y + self.Z*other.Z
 end
 
-function vector.cross(self, other)
-	return vector(0, 0, 0)
-end
-
-function vector.normal(self)
+function Vector.normal(self)
+	local length = self:length()
 	return vector(self.X/length, self.Y/length, self.Z/length)
 end
 
-function vector.length(self)
+function Vector.length(self)
 	return math.sqrt(self.X*self.X + self.Y*self.Y + self.Z*self.Z)
 end
 
