@@ -31,3 +31,14 @@ function setup_camera(self)
 
 	self.FirstPersonCameraComponent = camera
 end
+
+function controller_changed(self)
+	print(_text('first_player controller_changed'))
+	local controller = self.Controller
+	local is_local_player = controller.bIsLocalPlayerController
+	local player = controller.Player
+	local subsystem_type = Subsystem.EnhancedInputLocalPlayerSubsystem
+
+	local subsystem = Function.Subsystem:GetLocalPlayerSubSystem(player, subsystem_type)
+	subsystem:AddMappingContext(self.DefaultMappingContext, 0)
+end

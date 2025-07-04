@@ -1,0 +1,39 @@
+
+class('subsystem')
+
+function subsystem._init(self)
+	self.subsystems = {} -- {name: subsystem}
+	self.is_ready = false
+end
+
+function subsystem.make_subsystem_ready(self)
+	if self.is_ready then
+		return
+	end
+	print(_text('prepare_subsystem'))
+	self.is_ready = true
+	_cpp_prepare_subsystem()
+end
+
+function subsystem.__index(self, name)
+	local attr = rawget(getmetatable(self), name)
+	if attr then
+		return attr
+	end
+	self:make_subsystem_ready()
+
+	local subsystem = self.subsystems[name]
+	assert(subsystem)
+	rawset(self, name, subsystem)
+
+	return subsystem
+end
+
+function subsystem.add_subsystem(self, name, subsystem)
+--	print(_text('add_subsystem'), _text(name), towstring(subsystem))
+	self.subsystems[name] = subsystem
+end
+
+
+-- set_global
+_set_global('Subsystem', subsystem())

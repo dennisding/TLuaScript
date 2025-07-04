@@ -17,7 +17,9 @@ end
 
 function test(self)
 	local v = Struct.vector(3.14, 6.28, 9.99)
-	v = Function.Math:Normal(v)
+--	v = Function.Math:Normal(v)
+--	self:SayHi(v)
+	Function.Math:Vector_Normalize(v)
 	print(_text('make_vector'), towstring(v.X), towstring(v.Y), towstring(v.Z))
 	-- local channel = self.Channel
 	-- print(_text('channel'), towstring(channel.IntValue), channel.StringValue)

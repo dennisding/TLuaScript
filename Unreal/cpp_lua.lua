@@ -111,3 +111,8 @@ function _lua_add_function_lib(name, lib)
 	local lib_obj = object.new_object(lib, lib)
 	Function:add_lib(name, lib_obj)
 end
+
+function _lua_add_subsystem(name, subsystem)
+	local subsystem_obj = object.new_object(subsystem, subsystem)
+	Subsystem:add_subsystem(name, subsystem_obj)
+end

@@ -21,6 +21,7 @@ end
 function functions.setup_shortcuts(self)
 	-- add new libs here
 	self.shortcuts['Math'] = "KismetMathLibrary"
+	self.shortcuts['Subsystem'] = 'SubsystemBlueprintLibrary'
 end
 
 function functions.add_lib(self, name, lib)
